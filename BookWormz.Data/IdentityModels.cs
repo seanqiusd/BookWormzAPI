@@ -47,7 +47,7 @@ namespace BookWormz.Data
             return new ApplicationDbContext();
         }
 
-        //public DbSet<Note> Notes { get; set; } for sean branch initial commit
+        public DbSet<Book> Books { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
