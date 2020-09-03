@@ -55,6 +55,8 @@ namespace BookWormz.WebApi.Models
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+
       
         [Required]
         [Display(Name = "Mailing Address")]
