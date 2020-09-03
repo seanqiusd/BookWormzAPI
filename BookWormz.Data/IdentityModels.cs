@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
@@ -33,6 +34,10 @@ namespace BookWormz.Data
         [Required]
         public string Address { get; set; }
         public double ExchangeRating { get; set; }
+
+        public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
+
+        public virtual ICollection<UserReview> UserReviews { get; set; } = new List<UserReview>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
