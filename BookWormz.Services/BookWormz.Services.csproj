@@ -54,11 +54,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExchangeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookWormz.Data\BookWormz.Data.csproj">
+      <Project>{E0DEECC2-78F7-45F7-9315-CF92DED16763}</Project>
+      <Name>BookWormz.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookWormz.Models\BookWormz.Models.csproj">
+      <Project>{0AF0700A-4708-4E74-B7D9-0A3BEAC48591}</Project>
+      <Name>BookWormz.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
