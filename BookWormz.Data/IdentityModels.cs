@@ -53,6 +53,8 @@ namespace BookWormz.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Exchange> Exchanges { get; set; }
+        public DbSet<UserReview> UserReviews { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

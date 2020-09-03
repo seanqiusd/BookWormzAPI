@@ -14,7 +14,7 @@ namespace BookWormz.Data
         public int Id { get; set; }
 
         [ForeignKey(nameof(Reviewer))]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public virtual ApplicationUser Reviewer { get; set; }
 
         [ForeignKey(nameof(Exchange))]
