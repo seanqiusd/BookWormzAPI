@@ -23,5 +23,7 @@ namespace BookWormz.Data
 
         [Required]
         public double ExchangeRating { get; set; }
+
+        public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
     }
 }

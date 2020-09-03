@@ -36,6 +36,8 @@ namespace BookWormz.Data
 
         public int NumberAvailable { get; set; }
 
+        public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
+
     }
     public enum BookGenre {Fantasy, Adventure, Romance, Contemporary, Dystopian, Mystery, Horror, Thriller, Paranormal, HistoricalFiction, ScienceFiction, Memoir, Cooking, Art, SelfHelp, Development, Motivational, Health, History, Travel, Guide, FamiliesandRelationships, Humor, Children }
 }
