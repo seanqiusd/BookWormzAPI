@@ -9,7 +9,7 @@ namespace BookWormz.Data
 {
     public class Book
     {
-        [Required]
+        [Key]
         public string ISBN { get; set; }
 
         [Required]
