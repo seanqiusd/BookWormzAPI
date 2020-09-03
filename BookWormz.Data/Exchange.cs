@@ -13,10 +13,16 @@ namespace BookWormz.Data
         [Key]
         public int Id { get; set; }
 
-
-        [ForeignKey(nameof(SenderId))]
+        
+        // Book
+        [ForeignKey(nameof(Book))]
         public string BookId { get; set; }
-        public virtual ApplicationUser SenderId {get; set;}
+        public virtual Book Book { get; set; }
+
+
+        [ForeignKey(nameof(SenderUser))]
+        public Guid SenderId { get; set; }
+        public virtual ApplicationUser SenderUser { get; set; }
 
 
         public bool IsAvailable { get; set; }
@@ -27,7 +33,7 @@ namespace BookWormz.Data
 
 
         [ForeignKey(nameof(ReceiverUser))]
-        public int? ReceiverId { get; set; }
+        public Guid? ReceiverId { get; set; }
         public virtual ApplicationUser ReceiverUser { get; set; }
 
     }
