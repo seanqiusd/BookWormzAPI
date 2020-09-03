@@ -1,11 +1,12 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 
 namespace BookWormz.Data
 {
@@ -19,6 +20,24 @@ namespace BookWormz.Data
             // Add custom user claims here
             return userIdentity;
         }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
+        [Required]
+        public string Address { get; set; }
+        public double ExchangeRating { get; set; }
+
+        public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
+
+        public virtual ICollection<UserReview> UserReviews { get; set; } = new List<UserReview>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -33,7 +52,9 @@ namespace BookWormz.Data
             return new ApplicationDbContext();
         }
 
-        //public DbSet<Note> Notes { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Exchange> Exchanges { get; set; }
+        public DbSet<UserReview> UserReviews { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
