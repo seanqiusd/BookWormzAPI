@@ -22,7 +22,6 @@ namespace BookWormz.Data
         public virtual Exchange Exchange { get; set; }
 
         [Required]
-
         public double ExchangeRating { get; set; }
     }
 }
