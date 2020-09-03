@@ -91,6 +91,10 @@
     <Compile Include="Migrations\202009031916519_FirstMigration.Designer.cs">
       <DependentUpon>202009031916519_FirstMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009031955482_seantwo initial add migration.cs" />
+    <Compile Include="Migrations\202009031955482_seantwo initial add migration.Designer.cs">
+      <DependentUpon>202009031955482_seantwo initial add migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserReview.cs" />
@@ -102,6 +106,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202009031916519_FirstMigration.resx">
       <DependentUpon>202009031916519_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009031955482_seantwo initial add migration.resx">
+      <DependentUpon>202009031955482_seantwo initial add migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
