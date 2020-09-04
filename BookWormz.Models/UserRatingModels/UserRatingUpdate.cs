@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models.UserRatingModels
 {
-    class UserRatingUpdate
+    public class UserRatingUpdate
     {
         [Required]
         [Display(Name = "Exchange Rating score")]
