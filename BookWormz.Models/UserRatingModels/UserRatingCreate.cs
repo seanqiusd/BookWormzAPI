@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models.UserRatingModels
 {
-    class UserRatingCreate
+    public class UserRatingCreate
     {
         [Required]
         [Display(Name = "Exchange Id Number")]

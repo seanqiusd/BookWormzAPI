@@ -58,6 +58,9 @@
     <Compile Include="ExchangeDetail.cs" />
     <Compile Include="ExchangeListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRatingModels\UserRatingCreate.cs" />
+    <Compile Include="UserRatingModels\UserRatingDetail.cs" />
+    <Compile Include="UserRatingModels\UserRatingListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
