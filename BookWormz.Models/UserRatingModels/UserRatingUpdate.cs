@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models.UserRatingModels
 {
-    public class UserRatingCreate
+    class UserRatingUpdate
     {
         [Required]
-        [Display(Name = "Exchange Id Number")]
-        public int ExchangeId { get; set; }
-
-        [Required]
-        [Display(Name = "User Id to be rated")]
-        public string UserId { get; set; }
-
-        [Required]
         [Display(Name = "Exchange Rating score")]
-        [Range(1,10)]
+        [Range(1, 10)]
         public double ExchangeRating { get; set; }
+
+        [Required]
+        public int ExchangeId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models.UserRatingModels
 {
-    class UserRatingDetail
+    public class UserRatingDetail
     {
         [Display(Name = "Exchange Id Number")]
         public int ExchangeId { get; set; }
