@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookCreate.cs" />
+    <Compile Include="BookDetail.cs" />
+    <Compile Include="BookListItem.cs" />
     <Compile Include="ExchangeCreate.cs" />
     <Compile Include="ExchangeDetail.cs" />
     <Compile Include="ExchangeListItem.cs" />
@@ -62,6 +65,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookWormz.Data\BookWormz.Data.csproj">
+      <Project>{E0DEECC2-78F7-45F7-9315-CF92DED16763}</Project>
+      <Name>BookWormz.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
