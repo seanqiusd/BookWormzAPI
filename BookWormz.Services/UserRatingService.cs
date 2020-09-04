@@ -8,12 +8,19 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Services
 {
-    class UserRatingServices
+    public class UserRatingService
     {
+        private readonly string _userId;
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
+        public UserRatingService(string userId)
+        {
+            _userId = userId; //To Be used later for verifying Reviewer info.
+        }
 
         public bool CreateRating(UserRatingCreate model)
         {
+            //TODO Add functionality so only one review per exchange
             UserReview entity = new UserReview
             {
                 UserId = model.UserId,
@@ -60,6 +67,23 @@ namespace BookWormz.Services
                 ExchangeRating = RatingEntity.ExchangeRating
             };
             return rating;
+        }
+
+        public bool UpdateUserRating(UserRatingUpdate model)
+        {
+            var entity = _context.UserReviews.Single(e => e.ExchangeId == model.ExchangeId);
+
+            entity.ExchangeRating = model.ExchangeRating;
+
+            return _context.SaveChanges() == 1;
+        }
+
+        public bool DeleteUserRating(int id)
+        {
+            var entity = _context.UserReviews.Single(e => e.Id == id);
+            _context.UserReviews.Remove(entity);
+
+            return _context.SaveChanges() == 1;
         }
     }
 }

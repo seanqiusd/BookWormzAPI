@@ -56,7 +56,7 @@
   <ItemGroup>
     <Compile Include="ExchangeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserRatingServices.cs" />
+    <Compile Include="UserRatingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
