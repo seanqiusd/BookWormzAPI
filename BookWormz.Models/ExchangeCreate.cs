@@ -8,8 +8,6 @@ namespace BookWormz.Models
 {
     public class ExchangeCreate
     {
-        public int Id { get; set; }
-
         public string BookId { get; set; }
 
         public DateTime Posted { get; set; }
