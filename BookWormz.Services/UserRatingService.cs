@@ -21,20 +21,20 @@ namespace BookWormz.Services
         public bool CreateRating(UserRatingCreate model)
         {
             //TODO Add functionality so only one review per exchange
-            UserReview entity = new UserReview
+            UserRating entity = new UserRating
             {
                 UserId = _context.Exchanges.Single(e => e.Id == model.ExchangeId).SenderId,
                 ExchangeId = model.ExchangeId,
                 ExchangeRating = model.ExchangeRating
             };
 
-            _context.UserReviews.Add(entity);
+            _context.UserRatings.Add(entity);
             return _context.SaveChanges() == 1;
         }
 
         public List<UserRatingListItem> GetAllUserRatings()
         {
-            var RatingEntities = _context.UserReviews.ToList();
+            var RatingEntities = _context.UserRatings.ToList();
             var RatingList = RatingEntities.Select(r => new UserRatingListItem
             {
                 UserId = r.UserId,
@@ -46,7 +46,7 @@ namespace BookWormz.Services
 
         public List<UserRatingDetail> GetUserRatingsByUserId(string userId)
         {
-            var RatingEntities = _context.UserReviews.ToList();
+            var RatingEntities = _context.UserRatings.ToList();
             var RatingList = RatingEntities.Where(r => r.UserId == userId).Select(r => new UserRatingDetail
             {
                 UserId = r.UserId,
@@ -58,7 +58,7 @@ namespace BookWormz.Services
 
         public UserRatingDetail GetRatingOfExchange(int exchangeId)
         {
-            var RatingEntities = _context.UserReviews.ToList();
+            var RatingEntities = _context.UserRatings.ToList();
             var RatingEntity = RatingEntities.Single(r => r.ExchangeId == exchangeId);
             var rating = new UserRatingDetail
             {
@@ -71,7 +71,7 @@ namespace BookWormz.Services
 
         public bool UpdateUserRating(UserRatingUpdate model)
         {
-            var entity = _context.UserReviews.Single(e => e.ExchangeId == model.ExchangeId);
+            var entity = _context.UserRatings.Single(e => e.ExchangeId == model.ExchangeId);
 
             entity.ExchangeRating = model.ExchangeRating;
 
@@ -80,8 +80,8 @@ namespace BookWormz.Services
 
         public bool DeleteUserRating(int id)
         {
-            var entity = _context.UserReviews.Single(e => e.Id == id);
-            _context.UserReviews.Remove(entity);
+            var entity = _context.UserRatings.Single(e => e.Id == id);
+            _context.UserRatings.Remove(entity);
 
             return _context.SaveChanges() == 1;
         }

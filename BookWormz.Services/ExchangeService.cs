@@ -55,7 +55,6 @@ namespace BookWormz.Services
                         SentDate = e.SentDate,
                         //ReceiverId = e.ReceiverId,
                         ReceiverId = e.ReceiverUser.FirstName
-
                     }
                     ) ;
                 return query.ToArray();
