@@ -34,7 +34,7 @@ namespace BookWormz.Data
         [Required]
         public string Address { get; set; }
 
-        [Required]
+        //[Required]
         public double? ExchangeRating
         {
             get

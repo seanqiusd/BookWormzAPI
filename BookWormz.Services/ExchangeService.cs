@@ -26,7 +26,8 @@ namespace BookWormz.Services
                     BookId = model.BookId,
                     Posted = model.Posted,
                     SentDate = model.SentDate,
-                    ReceiverId = model.ReceiverUser
+                    ReceiverId = model.ReceiverUser,
+                    IsAvailable = true
                 };
 
             using (var ctx = new ApplicationDbContext())
