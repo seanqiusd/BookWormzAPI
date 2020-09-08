@@ -32,6 +32,7 @@ namespace BookWormz.WebApi.Models
         public bool HasRegistered { get; set; }
 
         public string LoginProvider { get; set; }
+        public string Exchanges { get; internal set; }
     }
 
     public class UserLoginInfoViewModel
