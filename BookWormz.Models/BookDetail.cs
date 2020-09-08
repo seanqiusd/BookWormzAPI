@@ -17,7 +17,7 @@ namespace BookWormz.Models
         public string BookTitle { get; set; }
 
         [Display(Name = "Author's First Name")]
-        public string AuthorFistName { get; set; }
+        public string AuthorFirstName { get; set; }
 
         [Display(Name = "Author's Last Name")]
         public string AuthorLastName { get; set; }
