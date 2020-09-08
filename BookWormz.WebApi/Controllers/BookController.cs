@@ -73,11 +73,11 @@ namespace BookWormz.WebApi.Controllers
 
         // Put --Update a book detail via ISBN
         //[HttpPut]
-        public IHttpActionResult Put([FromUri] string id, [FromBody] Book newBook)
+        public IHttpActionResult Put([FromUri] string ISBN, [FromBody] Book newBook)
         {
             if (ModelState.IsValid)
             {
-                Book book = _context.Books.Find(id);
+                Book book = _context.Books.Find(ISBN);
                     if (book == null)
                 {
                     return BadRequest("Book not found");
