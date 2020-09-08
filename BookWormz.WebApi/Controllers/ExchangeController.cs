@@ -75,6 +75,22 @@ namespace BookWormz.WebApi.Controllers
             return NotFound();
         }
 
+        //Request Book By ExchangeId
+        [Route("ExchangeRequest")]
+        [HttpPut]
+        public IHttpActionResult RequestExchange(int id)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+            if (exchange == null)
+            {
+                return BadRequest("Exchange not found");
+            }
+            exchange.IsAvailable = false;
+            exchange.ReceiverId = User.Identity.GetUserId();
+            _context.SaveChanges();
+            return Ok("Book Requested");
+        }
+
 
         // Delete by ID
         public IHttpActionResult Delete(int id)
