@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Channels;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 
 namespace BookWormz.WebApi.Controllers
 {
@@ -64,7 +65,7 @@ namespace BookWormz.WebApi.Controllers
             {
                 return InternalServerError();
             }
-            return Ok();
+            return Ok($"ISBN: {ISBN} has been deleted");
         }
 
 
