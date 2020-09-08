@@ -33,7 +33,20 @@ namespace BookWormz.Data
         }
         [Required]
         public string Address { get; set; }
-        public double ExchangeRating { get; set; }
+        public double? ExchangeRating
+        {
+            get
+            {
+                if (UserReviews.Count < 5)
+                    return null;
+                double eR = 0;
+                foreach (UserReview userReview in UserReviews)
+                {
+                    eR += userReview.ExchangeRating;
+                }
+                return eR / UserReviews.Count;
+            }
+        }
 
         public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
 
