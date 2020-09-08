@@ -39,20 +39,20 @@ namespace BookWormz.Data
         {
             get
             {
-                if (UserReviews.Count < 5)
+                if (UserRatings.Count < 5)
                     return null;
                 double eR = 0;
-                foreach (UserReview userReview in UserReviews)
+                foreach (UserRating userRating in UserRatings)
                 {
-                    eR += userReview.ExchangeRating;
+                    eR += userRating.ExchangeRating;
                 }
-                return eR / UserReviews.Count;
+                return eR / UserRatings.Count;
             }
         }
 
         public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
 
-        public virtual ICollection<UserReview> UserReviews { get; set; } = new List<UserReview>();
+        public virtual ICollection<UserRating> UserRatings { get; set; } = new List<UserRating>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -69,7 +69,7 @@ namespace BookWormz.Data
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-        public DbSet<UserReview> UserReviews { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
