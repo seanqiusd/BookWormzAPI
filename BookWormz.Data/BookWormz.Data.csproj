@@ -107,6 +107,10 @@
     <Compile Include="Migrations\202009081707334_AddingExchangeRating.Designer.cs">
       <DependentUpon>202009081707334_AddingExchangeRating.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009081748417_addedLogicToNumberAvailable.cs" />
+    <Compile Include="Migrations\202009081748417_addedLogicToNumberAvailable.Designer.cs">
+      <DependentUpon>202009081748417_addedLogicToNumberAvailable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserReview.cs" />
@@ -130,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009081707334_AddingExchangeRating.resx">
       <DependentUpon>202009081707334_AddingExchangeRating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009081748417_addedLogicToNumberAvailable.resx">
+      <DependentUpon>202009081748417_addedLogicToNumberAvailable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
