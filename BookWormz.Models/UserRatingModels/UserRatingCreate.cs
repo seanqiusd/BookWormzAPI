@@ -14,10 +14,6 @@ namespace BookWormz.Models.UserRatingModels
         public int ExchangeId { get; set; }
 
         [Required]
-        [Display(Name = "User Id to be rated")]
-        public string UserId { get; set; }
-
-        [Required]
         [Display(Name = "Exchange Rating score")]
         [Range(1,10)]
         public double ExchangeRating { get; set; }
