@@ -19,7 +19,7 @@ namespace BookWormz.Models
         public string BookTitle { get; set; }
 
        [Required]
-        public string AuthorFistName { get; set; }
+        public string AuthorFirstName { get; set; }
 
        [Required]
         public string AuthorLastName { get; set; }
