@@ -26,7 +26,7 @@ namespace BookWormz.Services
                 {
                     ISBN = book.ISBN,
                     BookTitle = book.BookTitle,
-                    AuthorFirstName = book.AuthorFistName,
+                    AuthorFirstName = book.AuthorFirstName,
                     AuthorLastName = book.AuthorLastName,
                     GenreOfBook = book.GenreOfBook,
                     Description = book.Description,
@@ -54,7 +54,7 @@ namespace BookWormz.Services
                         {
                             ISBN = e.ISBN,
                             BookTitle = e.BookTitle,
-                            AuthorFistName = e.AuthorFirstName,
+                            AuthorFirstName = e.AuthorFirstName,
                             AuthorLastName = e.AuthorLastName,
                             GenreOfBook = e.GenreOfBook,
                             Description = e.Description
