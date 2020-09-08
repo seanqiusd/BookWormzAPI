@@ -33,6 +33,8 @@ namespace BookWormz.Data
         }
         [Required]
         public string Address { get; set; }
+
+        [Required]
         public double? ExchangeRating
         {
             get
