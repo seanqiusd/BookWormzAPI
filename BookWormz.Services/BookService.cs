@@ -25,7 +25,7 @@ namespace BookWormz.Services
                 {
                     ISBN = book.ISBN,
                     BookTitle = book.BookTitle,
-                    AuthorFirstName = book.AuthorFistName,
+                    AuthorFirstName = book.AuthorFirstName,
                     AuthorLastName = book.AuthorLastName,
                     GenreOfBook = book.GenreOfBook,
                     Description = book.Description,

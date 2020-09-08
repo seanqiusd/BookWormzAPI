@@ -47,6 +47,7 @@ namespace BookWormz.Services
                         e =>
                     new ExchangeListItem
                     {
+                        Id = e.Id,
                         BookId = e.BookId,
                         Posted = e.Posted,
                         SentDate = e.SentDate
