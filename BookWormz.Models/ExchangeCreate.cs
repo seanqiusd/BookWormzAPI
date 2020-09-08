@@ -13,5 +13,7 @@ namespace BookWormz.Models
         public DateTime Posted { get; set; }
 
         public DateTime? SentDate { get; set; }
+
+        public string ReceiverUser { get; set; }
     }
 }

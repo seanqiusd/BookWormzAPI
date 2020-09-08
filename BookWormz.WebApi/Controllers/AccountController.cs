@@ -319,6 +319,15 @@ namespace BookWormz.WebApi.Controllers
             return logins;
         }
 
+        [Route("GetUserRating")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetUserRating()
+        {
+            var context = new ApplicationDbContext();
+            double? exchangeRating = context.Users.Find(User.Identity.GetUserId()).ExchangeRating;
+            return Ok(exchangeRating);
+        }
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]

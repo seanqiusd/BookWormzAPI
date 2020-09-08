@@ -47,7 +47,7 @@ namespace BookWormz.Services
             {
                 var query =
                     ctx
-                    .Books
+                    .Books.ToList()
                     .Select(
                         e =>
                         new BookListItem
@@ -57,7 +57,8 @@ namespace BookWormz.Services
                             AuthorFirstName = e.AuthorFirstName,
                             AuthorLastName = e.AuthorLastName,
                             GenreOfBook = e.GenreOfBook,
-                            Description = e.Description
+                            Description = e.Description,
+                            NumberAvailable = e.NumberAvailable
                         }
                         );
                 return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api
@@ -79,7 +80,8 @@ namespace BookWormz.Services
                     AuthorFirstName = entity.AuthorFirstName,
                     AuthorLastName = entity.AuthorLastName,
                     GenreOfBook = entity.GenreOfBook,
-                    Description = entity.Description
+                    Description = entity.Description,
+                    NumberAvailable = entity.NumberAvailable
                 };
             }
             

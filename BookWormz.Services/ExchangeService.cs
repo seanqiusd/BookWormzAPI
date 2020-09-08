@@ -25,7 +25,8 @@ namespace BookWormz.Services
                 {
                     BookId = model.BookId,
                     Posted = model.Posted,
-                    SentDate = model.SentDate
+                    SentDate = model.SentDate,
+                    ReceiverId = model.ReceiverUser
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -50,7 +51,10 @@ namespace BookWormz.Services
                         Id = e.Id,
                         BookId = e.BookId,
                         Posted = e.Posted,
-                        SentDate = e.SentDate
+                        SentDate = e.SentDate,
+                        //ReceiverId = e.ReceiverId,
+                        ReceiverId = e.ReceiverUser.FirstName
+                        
                     }
                     );
                 return query.ToArray();
