@@ -23,5 +23,8 @@ namespace BookWormz.Models
 
         [Display(Name = "Receiver ID")]
         public string ReceiverId { get; set; }
+
+        [Display(Name = "Is Available")]
+        public bool IsAvailable { get; set; }
     }
 }
