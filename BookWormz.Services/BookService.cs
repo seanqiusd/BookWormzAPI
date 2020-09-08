@@ -18,6 +18,7 @@ namespace BookWormz.Services
             _userId = userId;
         }
 
+        // Post -- Create
         public bool CreateBook(BookCreate book)
         {
             var entity =
@@ -39,6 +40,7 @@ namespace BookWormz.Services
 
         }
 
+        // Get --All
         public IEnumerable<BookListItem> GetBooks()
         {
             using (var ctx = new ApplicationDbContext())
@@ -58,11 +60,12 @@ namespace BookWormz.Services
                             Description = e.Description
                         }
                         );
-                return query.ToArray();
+                return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api
                     
             }
         }
 
+        // Get --single book
         public BookDetail GetBookDetail(string ISBN)
         {
             using (var ctx = new ApplicationDbContext())
@@ -82,6 +85,22 @@ namespace BookWormz.Services
             
 
         }
+
+        // Delete
+        public bool  DeleteBook(string ISBN)
+        {
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity = ctx.Books.Single(e => e.ISBN == ISBN);
+                ctx.Books.Remove(entity);
+
+                return ctx.SaveChanges() == 1;
+
+            }
+
+        }
+
 
 
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Remoting.Channels;
 using System.Web.Http;
 
 namespace BookWormz.WebApi.Controllers
@@ -53,6 +54,19 @@ namespace BookWormz.WebApi.Controllers
             var book = bookService.GetBookDetail(ISBN);
             return Ok(book);
         }
+
+
+        // Delete a book
+        public IHttpActionResult Delete(string ISBN)
+        {
+            var service = CreateBookService();
+            if (!service.DeleteBook(ISBN))
+            {
+                return InternalServerError();
+            }
+            return Ok();
+        }
+
 
     }
 }
