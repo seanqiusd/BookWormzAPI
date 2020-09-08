@@ -73,7 +73,7 @@ namespace BookWormz.Services
             {
                 var entity = ctx.Books.Single(e => e.ISBN == ISBN);
 
-                return new BookDetail
+                var detailedBook = new BookDetail
                 {
                     ISBN = entity.ISBN,
                     BookTitle = entity.BookTitle,
@@ -83,6 +83,11 @@ namespace BookWormz.Services
                     Description = entity.Description,
                     NumberAvailable = entity.NumberAvailable
                 };
+                foreach(Exchange exchange in entity.Exchanges)
+                {
+                    detailedBook.ExchangeListItems.Add(new ExchangeListItem { BookId = exchange.BookId, Id = exchange.Id, Posted = exchange.Posted, IsAvailable = exchange.IsAvailable, ReceiverId = exchange.ReceiverId, SentDate = exchange.SentDate });
+                }
+                return detailedBook;
             }
             
 
