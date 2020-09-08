@@ -10,9 +10,9 @@ namespace BookWormz.Services
 {
     public class ExchangeService
     {
-        private readonly Guid _userId;
+        private readonly string _userId;
 
-        public ExchangeService(Guid userId)
+        public ExchangeService(string userId)
         {
             _userId = userId;
         }
@@ -23,7 +23,6 @@ namespace BookWormz.Services
             var entity =
                 new Exchange()
                 {
-                    Id = model.Id,
                     BookId = model.BookId,
                     Posted = model.Posted,
                     SentDate = model.SentDate
@@ -31,7 +30,7 @@ namespace BookWormz.Services
 
             using (var ctx = new ApplicationDbContext())
             {
-                entity.ReceiverUser = ctx.Users.Where(e => e.Id = _userId).First();
+                entity.SenderUser = ctx.Users.Where(e => e.Id == _userId).First();
                 ctx.Exchanges.Add(entity);
                 return ctx.SaveChanges() == 1;
             }
@@ -44,12 +43,11 @@ namespace BookWormz.Services
                 var query =
                     ctx
                     .Exchanges
-                    .Where(e => e.ReceiverId == _userId)
                     .Select(
                         e =>
                     new ExchangeListItem
                     {
-                        BookId = e.Id,
+                        BookId = e.BookId,
                         Posted = e.Posted,
                         SentDate = e.SentDate
                     }
