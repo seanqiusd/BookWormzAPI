@@ -17,7 +17,7 @@ namespace BookWormz.WebApi.Controllers
 
         private ExchangeService CreateExchangeService()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
             var exchangeService = new ExchangeService(userId);
             return exchangeService;
         }
@@ -81,7 +81,7 @@ namespace BookWormz.WebApi.Controllers
         {
             Exchange exchange = _context.Exchanges.Find(id);
 
-            if (exchanges == null)
+            if (exchange == null)
             {
                 return NotFound();
             }
