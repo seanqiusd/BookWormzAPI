@@ -23,7 +23,7 @@ namespace BookWormz.Services
             //TODO Add functionality so only one review per exchange
             UserReview entity = new UserReview
             {
-                UserId = model.UserId,
+                UserId = _context.Exchanges.Single(e => e.Id == model.ExchangeId).SenderId,
                 ExchangeId = model.ExchangeId,
                 ExchangeRating = model.ExchangeRating
             };
@@ -59,7 +59,7 @@ namespace BookWormz.Services
         public UserRatingDetail GetRatingOfExchange(int exchangeId)
         {
             var RatingEntities = _context.UserReviews.ToList();
-            var RatingEntity = RatingEntities.Where(r => r.ExchangeId == exchangeId).First();
+            var RatingEntity = RatingEntities.Single(r => r.ExchangeId == exchangeId);
             var rating = new UserRatingDetail
             {
                 UserId = RatingEntity.UserId,
