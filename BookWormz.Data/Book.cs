@@ -34,10 +34,20 @@ namespace BookWormz.Data
         [Required]
         public string Description { get; set; }
 
-        public int NumberAvailable { get; set; }
+        public int NumberAvailable
+        {
+            get
+            {
+                int numAvailable = 0;
+                foreach (Exchange exchange in Exchanges)
+                    if (exchange.IsAvailable)
+                        numAvailable++;
+                return numAvailable;
+            }
+        }
 
         public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
 
     }
-    public enum BookGenre {Fantasy, Adventure, Romance, Contemporary, Dystopian, Mystery, Horror, Thriller, Paranormal, HistoricalFiction, ScienceFiction, Memoir, Cooking, Art, SelfHelp, Development, Motivational, Health, History, Travel, Guide, FamiliesandRelationships, Humor, Children }
+    public enum BookGenre { Fantasy, Adventure, Romance, Contemporary, Dystopian, Mystery, Horror, Thriller, Paranormal, HistoricalFiction, ScienceFiction, Memoir, Cooking, Art, SelfHelp, Development, Motivational, Health, History, Travel, Guide, FamiliesandRelationships, Humor, Children }
 }

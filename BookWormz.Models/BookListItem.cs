@@ -28,6 +28,7 @@ namespace BookWormz.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-
+        [Display(Name = "Number Available")]
+        public int NumberAvailable { get; set; }
     }
 }
