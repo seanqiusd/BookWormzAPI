@@ -66,7 +66,7 @@ namespace BookWormz.Services
             }
         }
 
-        // Get --single book
+        // Get --single book by isbn (id)
         public BookDetail GetBookDetail(string ISBN)
         {
             using (var ctx = new ApplicationDbContext())
@@ -77,7 +77,7 @@ namespace BookWormz.Services
                 {
                     ISBN = entity.ISBN,
                     BookTitle = entity.BookTitle,
-                    AuthorFistName = entity.AuthorFirstName,
+                    AuthorFirstName = entity.AuthorFirstName,
                     AuthorLastName = entity.AuthorLastName,
                     GenreOfBook = entity.GenreOfBook,
                     Description = entity.Description,
@@ -102,6 +102,12 @@ namespace BookWormz.Services
             }
 
         }
+
+
+
+
+
+
 
 
 

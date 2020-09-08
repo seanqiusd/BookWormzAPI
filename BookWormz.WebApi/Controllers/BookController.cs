@@ -2,6 +2,7 @@
 using BookWormz.Models;
 using BookWormz.Services;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace BookWormz.WebApi.Controllers
 {
     public class BookController : ApiController
     {
+        private ApplicationDbContext _context = new ApplicationDbContext(); // this'll save db when trying to save in controller instead of services...specifically this is for bookupdate
         private BookService CreateBookService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
@@ -66,6 +68,29 @@ namespace BookWormz.WebApi.Controllers
                 return InternalServerError();
             }
             return Ok($"ISBN: {ISBN} has been deleted");
+        }
+
+
+        // Put --Update a book detail via ISBN
+        //[HttpPut]
+        public IHttpActionResult Put([FromUri] string ISBN, [FromBody] Book newBook)
+        {
+            if (ModelState.IsValid)
+            {
+                Book book = _context.Books.Find(ISBN);
+                    if (book == null)
+                {
+                    return BadRequest("Book not found");
+                }
+                book.BookTitle = newBook.BookTitle;
+                book.AuthorFirstName = newBook.AuthorFirstName;
+                book.AuthorLastName = newBook.AuthorLastName;
+                book.GenreOfBook = newBook.GenreOfBook;
+                book.Description = newBook.Description;
+                _context.SaveChanges();
+                return Ok($"{newBook.BookTitle} has been updated");
+            }
+            return NotFound();
         }
 
 
