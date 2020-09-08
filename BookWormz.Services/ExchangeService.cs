@@ -19,14 +19,15 @@ namespace BookWormz.Services
 
         public bool CreateExchange(ExchangeCreate model)
         {
-            
+
             var entity =
                 new Exchange()
                 {
                     BookId = model.BookId,
-                    Posted = model.Posted,
+                    Posted = DateTime.Now,
                     SentDate = model.SentDate,
-                    ReceiverId = model.ReceiverUser
+                    ReceiverId = model.ReceiverUser,
+                    IsAvailable = true
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -54,9 +55,9 @@ namespace BookWormz.Services
                         SentDate = e.SentDate,
                         //ReceiverId = e.ReceiverId,
                         ReceiverId = e.ReceiverUser.FirstName
-                        
+
                     }
-                    );
+                    ) ;
                 return query.ToArray();
             }
         }
