@@ -408,17 +408,19 @@ namespace BookWormz.UI
             string userInput = Console.ReadLine();
 
             HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "$https://localhost:44331/api/UserRating/{id}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/UserRating/{userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await httpClient.DeleteAsync(userInput);
+            var response = await httpClient.DeleteAsync($"https://localhost:44331/api/UserRating/{userInput}");
 
-            //if (await _context.SaveChangesAsync() == 1)
+            await _context.SaveChangesAsync();
+
             if (response.IsSuccessStatusCode)
-                Console.WriteLine("Book was deleted");
+                Console.WriteLine("Rating Deleted");
             else
-                Console.WriteLine("Book could not be deleted");
+                Console.WriteLine("Error rating not deleted");
         }
 
         //private static async Task DeleteBook()
