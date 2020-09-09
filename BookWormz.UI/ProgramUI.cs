@@ -1,4 +1,5 @@
-﻿using BookWormz.Data;
+﻿using AspNetCore.Http.Extensions;
+using BookWormz.Data;
 using BookWormz.WebApi.Controllers;
 using Newtonsoft.Json;
 using System;
@@ -15,11 +16,11 @@ namespace BookWormz.UI
     {
         private bool _isRunning = true;
 
-        private readonly BookController _bookController = new BookController();
-        private List<Book> book = new List<Book>();
-        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+        //private readonly BookController _bookController = new BookController();
+        //private List<Book> book = new List<Book>();
+        //private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
-        private readonly HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public void Start()
         {
@@ -54,7 +55,7 @@ namespace BookWormz.UI
                     default:
                         return;
                 }
-                Console.Write("Press any key to return");
+                Console.Write("Press any key to return\n");
                 Console.ReadKey();
             }
         }
@@ -62,7 +63,6 @@ namespace BookWormz.UI
         private HttpResponseMessage CallAPI()
         {
             HttpClient httpClient = new HttpClient();
-            //using (var client = new HttpClient())
 
             httpClient.DefaultRequestHeaders.Authorization =
               new AuthenticationHeaderValue("Bearer", "EBCWE2br-EPiikuYJSIdekgB5NviWv7BbwrSxMsuPiOPn7xMg0U94vOXZcbxLOuyw4gYlVZbmsR2fXJYCPYJwEtc9pmK3ero-EUyflAiAKh0dSTTAWvevNsmjJFAnqS_F7hrYMLk0stMlFheyqPmmGk51WNxb3zgzdmgLgvbDJNchtZPX0C-w_E4WLKNJKLBNJ5N7LmVHC6T6STSFILeXQKLdpP-wsv3LR504RkE1JxeNWGJI6coSHg7rNDbVZMczlZW_IBG_wuZ8pfQA1RluykrVTdTsmoJfIKcj07S9zQK967AZ8CGoTPWrpv3Qpq8hE5AtIEpS6IqmUMHQRlMDOzdMwWtzi82HZmSyTM1bj0c2EGRA7H6QHa0HFRHgojHgxr2dv1a1VfIj-4Gpgszs7c0zFKN3HMXuHjYfDEomzGMVVRaKGw0Ox8C9NERcIqW08nql2o4rkA-332Kg7GksqUQDiGTyAJhH_4T-XZUTDU");
@@ -93,8 +93,11 @@ namespace BookWormz.UI
             }
         }
 
-        private void AddBook()
+        private static async Task AddBook()
         {
+
+            // --------------------------------------------- Input Data --------------------------------
+
             Console.Clear();
             Console.Write("ISBN: ");
             Dictionary<string, string> book = new Dictionary<string, string>
@@ -117,16 +120,74 @@ namespace BookWormz.UI
             Console.Write("Description: ");
             book.Add("Description", Console.ReadLine());
 
-            HttpContent httpContent = new FormUrlEncodedContent(book);
+            // --------------------------------------------- Attempt 1 - no worky --------------------------------
+
+            // New HTTP Client and HEADERS
+            //HttpClient httpClient = new HttpClient();
+
+            //httpClient.DefaultRequestHeaders.Authorization =
+            //  new AuthenticationHeaderValue("Bearer", "EBCWE2br-EPiikuYJSIdekgB5NviWv7BbwrSxMsuPiOPn7xMg0U94vOXZcbxLOuyw4gYlVZbmsR2fXJYCPYJwEtc9pmK3ero-EUyflAiAKh0dSTTAWvevNsmjJFAnqS_F7hrYMLk0stMlFheyqPmmGk51WNxb3zgzdmgLgvbDJNchtZPX0C-w_E4WLKNJKLBNJ5N7LmVHC6T6STSFILeXQKLdpP-wsv3LR504RkE1JxeNWGJI6coSHg7rNDbVZMczlZW_IBG_wuZ8pfQA1RluykrVTdTsmoJfIKcj07S9zQK967AZ8CGoTPWrpv3Qpq8hE5AtIEpS6IqmUMHQRlMDOzdMwWtzi82HZmSyTM1bj0c2EGRA7H6QHa0HFRHgojHgxr2dv1a1VfIj-4Gpgszs7c0zFKN3HMXuHjYfDEomzGMVVRaKGw0Ox8C9NERcIqW08nql2o4rkA-332Kg7GksqUQDiGTyAJhH_4T-XZUTDU");
+
+            //// Convert to JSON data
+            //var dataAsString = JsonConvert.SerializeObject(book);
+            //var dataContent = new StringContent(dataAsString);
+
+            //HttpResponseMessage responseTwo = await httpClient.PostAsJsonAsync("https://localhost:44331/api/Book", dataContent);
+
+            //// Success or fail
+            //if (responseTwo.IsSuccessStatusCode)
+            //{
+            //    Uri ncrUrl = responseTwo.Headers.Location;
+            //    Console.WriteLine("The book was added");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("The book was not added");
+            //}
 
 
-            var response = CallAPI();
-            response = _httpClient.PostAsync("https://localhost:44331/api/Book", httpContent).Result;
+            // --------------------------------------------- Attempt 2 - no worky --------------------------------
+
+            // New HTTP Client and HEADERS
+            HttpClient httpClient = new HttpClient();
+
+            //httpClient.DefaultRequestHeaders.Authorization =
+            //  new AuthenticationHeaderValue("Bearer", "EBCWE2br-EPiikuYJSIdekgB5NviWv7BbwrSxMsuPiOPn7xMg0U94vOXZcbxLOuyw4gYlVZbmsR2fXJYCPYJwEtc9pmK3ero-EUyflAiAKh0dSTTAWvevNsmjJFAnqS_F7hrYMLk0stMlFheyqPmmGk51WNxb3zgzdmgLgvbDJNchtZPX0C-w_E4WLKNJKLBNJ5N7LmVHC6T6STSFILeXQKLdpP-wsv3LR504RkE1JxeNWGJI6coSHg7rNDbVZMczlZW_IBG_wuZ8pfQA1RluykrVTdTsmoJfIKcj07S9zQK967AZ8CGoTPWrpv3Qpq8hE5AtIEpS6IqmUMHQRlMDOzdMwWtzi82HZmSyTM1bj0c2EGRA7H6QHa0HFRHgojHgxr2dv1a1VfIj-4Gpgszs7c0zFKN3HMXuHjYfDEomzGMVVRaKGw0Ox8C9NERcIqW08nql2o4rkA-332Kg7GksqUQDiGTyAJhH_4T-XZUTDU");
+
+
+            //HttpContent httpContent = new FormUrlEncodedContent(book);
+
+            //var dataAsString = JsonConvert.SerializeObject(book);
+            //var dataContent = new StringContent(dataAsString);
+            ////_httpClient.BaseAddress = new Uri("https://localhost:44331/api/Book");
+
+            //var response = await _httpClient.PostAsync("https://localhost:44331/api/Book", dataContent);
+            //// ------- OR -----------
+            ////var response = _httpClient.PostAsync("https://localhost:44331/api/Book", dataContent).Result;
+            //if (response.IsSuccessStatusCode)
+            //    Console.WriteLine("\n" +
+            //        "Your book was added");
+            //else
+            //    Console.WriteLine("\n" +
+            //        "There was a problem adding your book");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Book");
+
+            var dataAsString = JsonConvert.SerializeObject(book);
+            var dataContent = new StringContent(dataAsString);
+
+            request.Content = dataContent;
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "EBCWE2br-EPiikuYJSIdekgB5NviWv7BbwrSxMsuPiOPn7xMg0U94vOXZcbxLOuyw4gYlVZbmsR2fXJYCPYJwEtc9pmK3ero-EUyflAiAKh0dSTTAWvevNsmjJFAnqS_F7hrYMLk0stMlFheyqPmmGk51WNxb3zgzdmgLgvbDJNchtZPX0C-w_E4WLKNJKLBNJ5N7LmVHC6T6STSFILeXQKLdpP-wsv3LR504RkE1JxeNWGJI6coSHg7rNDbVZMczlZW_IBG_wuZ8pfQA1RluykrVTdTsmoJfIKcj07S9zQK967AZ8CGoTPWrpv3Qpq8hE5AtIEpS6IqmUMHQRlMDOzdMwWtzi82HZmSyTM1bj0c2EGRA7H6QHa0HFRHgojHgxr2dv1a1VfIj-4Gpgszs7c0zFKN3HMXuHjYfDEomzGMVVRaKGw0Ox8C9NERcIqW08nql2o4rkA-332Kg7GksqUQDiGTyAJhH_4T-XZUTDU");
+
+            var response = await httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
-                Console.WriteLine("Success");
+                Console.WriteLine("\n" +
+                    "Your book was added");
             else
-                Console.WriteLine("Fail");
+                Console.WriteLine("\n" +
+                    "There was a problem adding your book");
         }
+
     }
 }
+
 
