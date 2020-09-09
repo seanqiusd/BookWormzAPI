@@ -83,7 +83,7 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                     "6.) View Exchange Ratings\n" +
+                    "6.) View Exchange Ratings\n" +
                     "7.) Add Exchange Rating\n" +
                     "8.) Update Exchange Rating\n" +
                     "9.) Delete Exchange Rating\n" +
@@ -100,8 +100,7 @@ namespace BookWormz.UI
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":
-                       
+                    case "1":                       
                         ViewAllBooks();
                         break;
 
@@ -702,7 +701,9 @@ namespace BookWormz.UI
         // Update Ratings by ID
         private static async Task UpdateRatings()
         {
-            Console.WriteLine("Enter the Rating ID to update: \n");
+            Console.Clear();
+
+            Console.Write("Enter the Rating ID to update:");
             string userInput = Console.ReadLine();
 
             Console.Write("Exchange ID: ");
@@ -813,5 +814,3 @@ namespace BookWormz.UI
 //var response = await httpClient.SendAsync(tokenRequest);
 //var tokenString = await response.Content.ReadAsStringAsync();
 //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
-
-
