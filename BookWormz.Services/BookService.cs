@@ -87,6 +87,8 @@ namespace BookWormz.Services
                 {
                     detailedBook.ExchangeListItems.Add(new ExchangeSmListItem { Id = exchange.Id, IsAvailable = exchange.IsAvailable, Posted = exchange.Posted, SenderName = exchange.SenderUser.FirstName, SenderRating = exchange.SenderUser.ExchangeRating });
                 }
+
+
                 return detailedBook;
             }
             
