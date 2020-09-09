@@ -20,7 +20,7 @@ namespace BookWormz.UI
 
         //private readonly BookController _bookController = new BookController();
         //private List<Book> book = new List<Book>();
-        //private readonly ApplicationDbContext _context = new ApplicationDbContext();
+        private static readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         private static readonly HttpClient _httpClient = new HttpClient();
 
@@ -47,7 +47,9 @@ namespace BookWormz.UI
                     "--- Books ---\n" +
                     "3.) View all Books\n" +
                     "4.) Find Book by ID\n" +
-                    "5.) Add Book\n");
+                    "5.) Add Book\n" +
+                    "6.) Delete Book by ISBN\n" +
+                    "7.) Delete Rating\n");
 
                 Console.Write("Enter a #: ");
 
@@ -72,6 +74,14 @@ namespace BookWormz.UI
 
                     case "5":
                         AddBook();
+                        break;
+
+                    case "6":
+                        // DeleteBook();
+                        break;
+
+                    case "7":
+                        DeleteRating();
                         break;
 
                     default:
@@ -115,12 +125,12 @@ namespace BookWormz.UI
             }
         }
 
-        private HttpResponseMessage FindBookByID()
-        {
-            HttpClient httpClient = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Book");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-        }
+        //private HttpResponseMessage FindBookByID()
+        //{
+        //    HttpClient httpClient = new HttpClient();
+        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Book");
+        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+        //}
 
         //private static async Task AddBook()
         //{
@@ -390,6 +400,45 @@ namespace BookWormz.UI
             else
                 Console.WriteLine("There was a problem adding your book");
         }
+
+        private static async Task DeleteRating()
+        {
+            Console.Clear();
+            Console.Write("Enter Rating ID to delete: ");
+            string userInput = Console.ReadLine();
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/UserRating");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var response2 = await httpClient.DeleteAsync(userInput);
+
+            if (await _context.SaveChangesAsync() == 1)
+                Console.WriteLine("Book was deleted");
+            else
+                Console.WriteLine("Book could not be deleted");
+        }
+
+        //private static async Task DeleteBook()
+        //{
+        //    Console.Clear();
+        //    Console.Write("Enter ISBN to delete: ");
+        //    string userInput = Console.ReadLine();
+
+        //    HttpClient httpClient = new HttpClient();
+
+        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/Book");
+        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+        //    Book entity = await _context.Books.FindAsync(userInput);
+
+        //    var response2 = await httpClient.DeleteAsync(entity);
+
+        //    if (await _context.SaveChangesAsync() == 1)
+        //        Console.WriteLine("Book was deleted");
+        //    else
+        //        Console.WriteLine("Book could not be deleted");
+        //}
     }
 
     // Created this helper class for getting the token.
