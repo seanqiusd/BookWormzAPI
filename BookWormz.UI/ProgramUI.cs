@@ -26,14 +26,14 @@ namespace BookWormz.UI
 
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        public void Start()
+        public async void Start()
         {
             while (!_loggedIn)
-                RunLoginMenu();
+                await RunLoginMenu();
             RunMenu();
         }
 
-        private async void RunLoginMenu()
+        private async Task RunLoginMenu()
         {
             Console.Clear();
             Console.WriteLine(
@@ -48,15 +48,18 @@ namespace BookWormz.UI
             {
                 case "1":
                     Task register = Register();
+                    Console.WriteLine("processing");
+                    register.Wait();
                     break;
 
                 case "2":
                     Task login = Login();
+                    Console.WriteLine("processing");
+                    login.Wait();
+                    await login;
                     break;
                 case "3":
-                    _isRunning = false;
-                    _loggedIn = true;
-                    return;
+                    break;
                 default:
                     return;
             }
@@ -383,6 +386,8 @@ namespace BookWormz.UI
             else
                 Console.WriteLine("\n" +
                     "I have failed you");
+
+            return;
         }
 
         private static async Task Login()
@@ -420,6 +425,8 @@ namespace BookWormz.UI
             else
                 Console.WriteLine("\n" +
                     "Login failed");
+
+            return;
         }
 
         private static async Task AddBook()
