@@ -16,6 +16,8 @@ namespace BookWormz.UI
     {
         private bool _isRunning = true;
 
+        private static string _token;
+
         //private readonly BookController _bookController = new BookController();
         //private List<Book> book = new List<Book>();
         //private readonly ApplicationDbContext _context = new ApplicationDbContext();
@@ -36,8 +38,16 @@ namespace BookWormz.UI
                 Console.WriteLine(
                     "-- BookWormz API --\n" +
                     "\n" +
-                    "1.) View all Books\n" +
-                    "2.) Add book\n");
+                    "\n" +
+                    "--- Register/Login ---\n" +
+                    "1.) Register\n" +
+                    "2.) Login\n" +
+                    "\n" +
+                    "\n" +
+                    "--- Books ---\n" +
+                    "3.) View all Books\n" +
+                    "4.) Find Book by ID\n" +
+                    "5.) Add Book\n");
 
                 Console.Write("Enter a #: ");
 
@@ -45,10 +55,22 @@ namespace BookWormz.UI
                 switch (userInput)
                 {
                     case "1":
-                        ViewAllBooks();
+                        Register();
                         break;
 
                     case "2":
+                        Login();
+                        break;
+
+                    case "3":
+                        ViewAllBooks();
+                        break;
+
+                    case "4":
+                        // Find Book by Id
+                        break;
+
+                    case "5":
                         AddBook();
                         break;
 
@@ -91,6 +113,13 @@ namespace BookWormz.UI
                         $"\n");
                 }
             }
+        }
+
+        private HttpResponseMessage FindBookByID()
+        {
+            HttpClient httpClient = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Book");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
         }
 
         //private static async Task AddBook()
@@ -220,6 +249,76 @@ namespace BookWormz.UI
         //    public string Value { get; set; }
         //}
 
+        private static async Task Register()
+        {
+            Console.Clear();
+            Console.Write("Email: ");
+            Dictionary<string, string> register = new Dictionary<string, string>
+            {
+                {"Email", Console.ReadLine() }
+            };
+            Console.Write("Password: ");
+            register.Add("Password", Console.ReadLine());
+
+            Console.Write("Confirm Password: ");
+            register.Add("ConfirmPassword", Console.ReadLine());
+
+            Console.Write("First Name: ");
+            register.Add("FirstName", Console.ReadLine());
+
+            Console.Write("Last Name: ");
+            register.Add("LastName", Console.ReadLine());
+
+            Console.Write("Address: ");
+            register.Add("Address", Console.ReadLine());
+
+            HttpClient httpClient = new HttpClient();
+
+            var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
+            registerRequest.Content = new FormUrlEncodedContent(register.AsEnumerable());
+           var response = await httpClient.SendAsync(registerRequest);
+         
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Much success, you are now registered. Please go back and login\n" +
+                    "");
+            else
+                Console.WriteLine("I have failed you");
+        }
+
+        private static async Task Login()
+        {
+            Console.Clear();
+            Console.Write("Grant Type, please type password: ");
+            Dictionary<string, string> login = new Dictionary<string, string>
+            {
+                {"grant_type", Console.ReadLine() }
+            };
+            Console.Write("Email: ");
+            login.Add("Username", Console.ReadLine());
+
+            Console.Write("Password: ");
+            login.Add("Password", Console.ReadLine());
+
+            HttpClient httpClient = new HttpClient();
+
+            var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
+            tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
+            var response = await httpClient.SendAsync(tokenRequest);
+            var tokenString = await response.Content.ReadAsStringAsync();
+            var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
+            _token = token;
+            
+          
+
+            tokenRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Success, you are logged in with a token");
+            else
+                Console.WriteLine("Login failed");
+        }
+
         private static async Task AddBook()
         {
 
@@ -258,14 +357,13 @@ namespace BookWormz.UI
             //    {"Address", "123 Main St" }
             //};
 
-            var login = new Dictionary<string, string>()
-            {
-                {"grant_type", "password" },
-                {"Username", "hustin@hustin.com" },
-                {"Password", "Test1!" }
-            };
+            //var login = new Dictionary<string, string>()
+            //{
+            //    {"grant_type", "password" },
+            //    {"Username", "hustin@hustin.com" },
+            //    {"Password", "Test1!" }
+            //};
 
-            HttpClient httpClient = new HttpClient();
 
             //Used this to register an account. Didn't need after first test.
             //var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
@@ -273,16 +371,18 @@ namespace BookWormz.UI
             //await httpClient.SendAsync(registerRequest);
 
             // Get the token from the API
-            var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
-            tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
-            var response = await httpClient.SendAsync(tokenRequest);
-            var tokenString = await response.Content.ReadAsStringAsync();
-            var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
+            //var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
+            //tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
+            //var response = await httpClient.SendAsync(tokenRequest);
+            //var tokenString = await response.Content.ReadAsStringAsync();
+            //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
 
             // Post a Book
+            HttpClient httpClient = new HttpClient();
+
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Book");
             request.Content = new FormUrlEncodedContent(book.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             var response2 = await httpClient.SendAsync(request);
 
             if (response2.IsSuccessStatusCode)
