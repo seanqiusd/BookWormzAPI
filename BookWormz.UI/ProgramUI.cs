@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Http.Extensions;
 using BookWormz.Data;
+using BookWormz.Models;
 using BookWormz.WebApi.Controllers;
 using Newtonsoft.Json;
 using System;
@@ -40,21 +41,30 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Register/Login ---\n" +
+                    "\n" +
                     "1.) Register\n" +
                     "2.) Login\n" +
                     "\n" +
                     "\n" +
                     "--- Books ---\n" +
+                    "\n" +
                     "3.) View all Books\n" +
                     "4.) Find Book by ID\n" +
                     "5.) Add Book\n" +
-                    "6.) Delete Book by ISBN\n" +
+                    "6.) Update Book\n" +
+                    "7.) Delete Book by ISBN\n" +
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "7.) Add Exchange Rating\n" +
-                    "8.) Delete Exchange Rating\n" +
-                    "9.) View Exchange Ratings\n");
+                    "\n" +
+                    "8.) Add Exchange Rating\n" +
+                    "9.) Delete Exchange Rating\n" +
+                    "10.) View Exchange Ratings\n" +
+                    "\n" +
+                    "\n" +
+                    "--- Exchanges ---\n" +
+                    "\n" +
+                    "11.) Create Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -82,19 +92,27 @@ namespace BookWormz.UI
                         break;
 
                     case "6":
-                        DeleteBook();
+                        UpdateBook();
                         break;
 
                     case "7":
-                        AddRating();
+                        DeleteBook();
                         break;
 
                     case "8":
-                        DeleteRating();
+                        AddRating();
                         break;
 
                     case "9":
+                        DeleteRating();
+                        break;
+
+                    case "10":
                         GetExchanges();
+                        break;
+
+                    case "11":
+                        AddExchange();
                         break;
                     default:
                         return;
@@ -151,10 +169,12 @@ namespace BookWormz.UI
             if (response.IsSuccessStatusCode)
             {
                 BookDetail book = await response.Content.ReadAsAsync<BookDetail>();
-                Console.WriteLine(book.BookTitle);
-                Console.WriteLine(book.AuthorFirstName);
-                Console.WriteLine(book.AuthorLastName);
-                Console.WriteLine(book.ISBN);
+                Console.WriteLine($"\n" +
+                    $"ISBN: {book.ISBN}");
+                Console.WriteLine($"Title: {book.BookTitle}");
+                Console.WriteLine($"Author First Name: {book.AuthorFirstName}");
+                Console.WriteLine($"Author Last Name: {book.AuthorLastName}");
+                Console.WriteLine($"Description: {book.Description}\n");
                 foreach (ExchangeSmListItem e in book.ExchangeListItems)
                 {
                     Console.WriteLine();
@@ -407,6 +427,49 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem adding your book");
         }
 
+
+        // Update Book by ISBN
+        private static async Task UpdateBook()
+        {
+            Console.Clear();
+
+            Console.Write("ISBN of the book to update: ");
+            string userInput = Console.ReadLine();
+
+            Console.Write("Book Title: ");
+            Dictionary<string, string> book = new Dictionary<string, string>
+            {
+                {"BookTitle", Console.ReadLine() }
+
+            };
+
+            Console.Write("Author First Name: ");
+            book.Add("AuthorFirstName", Console.ReadLine());
+
+            Console.Write("Author Last Name: ");
+            book.Add("AuthorLastName", Console.ReadLine());
+
+            Console.Write("Genre Type: ");
+            book.Add("GenreOfBook", Console.ReadLine());
+
+            Console.Write("Description: ");
+            book.Add("Description", Console.ReadLine());
+
+
+            // Post a Book
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Book?ISBN={userInput}");
+            request.Content = new FormUrlEncodedContent(book.AsEnumerable());
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your book was updated");
+            else
+                Console.WriteLine("There was a problem updating your book");
+        }
+
         
         // Get Ratings
         private static async Task GetExchanges()
@@ -446,6 +509,32 @@ namespace BookWormz.UI
                         $"\n");
                 }
             }
+        }
+
+
+        // Add Exchange
+        public static async Task AddExchange()
+        {
+            Console.Clear();
+            Console.Write("Book ISBN: ");
+                Dictionary<string, string> exchange = new Dictionary<string, string>
+                {
+                    {"BookId", Console.ReadLine() }
+                };
+            Console.Write("Receiver User (ID): ");
+            exchange.Add("ReceiverUser", Console.ReadLine());
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Exchange");
+            request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your Exchange was created");
+            else
+                Console.WriteLine("There was a problem creating your exchange");
         }
 
 
