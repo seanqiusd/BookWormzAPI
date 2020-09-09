@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB9EA858-4BFC-43D2-98AD-2214DA6ECF38}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BookWormz.Services</RootNamespace>
-    <AssemblyName>BookWormz.Services</AssemblyName>
+    <ProjectGuid>{CF65ADEB-4953-4EBD-A890-42C454972694}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>BookWormz.UI</RootNamespace>
+    <AssemblyName>BookWormz.UI</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,23 +36,10 @@
     <Reference Include="AspNetCore.Http.Extensions, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AspNetCore.Http.Extensions.1.0.1\lib\netstandard2.0\AspNetCore.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,10 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BookService.cs" />
-    <Compile Include="ExchangeService.cs" />
+    <Compile Include="APITest.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgramUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserRatingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -71,12 +60,20 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BookWormz.Data\BookWormz.Data.csproj">
-      <Project>{E0DEECC2-78F7-45F7-9315-CF92DED16763}</Project>
+      <Project>{e0deecc2-78f7-45f7-9315-cf92ded16763}</Project>
       <Name>BookWormz.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\BookWormz.Models\BookWormz.Models.csproj">
-      <Project>{0AF0700A-4708-4E74-B7D9-0A3BEAC48591}</Project>
+      <Project>{0af0700a-4708-4e74-b7d9-0a3beac48591}</Project>
       <Name>BookWormz.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookWormz.Services\BookWormz.Services.csproj">
+      <Project>{cb9ea858-4bfc-43d2-98ad-2214da6ecf38}</Project>
+      <Name>BookWormz.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookWormz.WebApi\BookWormz.WebApi.csproj">
+      <Project>{55f5ee4b-7d17-4d4f-8d44-881c962baa69}</Project>
+      <Name>BookWormz.WebApi</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

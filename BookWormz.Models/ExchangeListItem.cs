@@ -20,5 +20,11 @@ namespace BookWormz.Models
 
         [Display(Name = "Sent Date")]
         public DateTime? SentDate { get; set; }
+
+        [Display(Name = "Receiver ID")]
+        public string ReceiverId { get; set; }
+
+        [Display(Name = "Is Available")]
+        public bool IsAvailable { get; set; }
     }
 }

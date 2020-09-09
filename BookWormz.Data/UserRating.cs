@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Data
 {
-    public class UserReview
+    public class UserRating
     {
         [Key]
         public int Id { get; set; }

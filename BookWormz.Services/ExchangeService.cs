@@ -10,28 +10,74 @@ namespace BookWormz.Services
 {
     public class ExchangeService
     {
-        private readonly Guid _userId;
+        private readonly string _userId;
 
-        public ExchangeService(Guid userId)
+        public ExchangeService(string userId)
         {
             _userId = userId;
         }
 
-        //public bool CreateExchange(ExchangeCreate model)
-        //{
-        //    var entity =
-        //        new Exchange()
-        //        {
-        //            Id = model.Id,
-        //            BookId = model.BookId,
-        //            Posted = model.Posted,
-        //            SentDate = model.SentDate
-        //        };
+        public bool CreateExchange(ExchangeCreate model)
+        {
 
-        //    using (var ctx = new ApplicationDbContext())
-        //    {
-        //        //entity.
-        //    }
-        //}
+            var entity =
+                new Exchange()
+                {
+                    BookId = model.BookId,
+                    Posted = DateTime.Now,
+                    SentDate = model.SentDate,
+                    ReceiverId = model.ReceiverUser,
+                    IsAvailable = true
+                };
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                entity.SenderUser = ctx.Users.Where(e => e.Id == _userId).First();
+                ctx.Exchanges.Add(entity);
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
+        public IEnumerable<ExchangeListItem> GetExchanges()
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                    .Exchanges
+                    .Select(
+                        e =>
+                    new ExchangeListItem
+                    {
+                        Id = e.Id,
+                        BookId = e.BookId,
+                        Posted = e.Posted,
+                        SentDate = e.SentDate,
+                        //ReceiverId = e.ReceiverId,
+                        ReceiverId = e.ReceiverUser.FirstName
+                    }
+                    ) ;
+                return query.ToArray();
+            }
+        }
+
+        public ExchangeDetail GetExchangeById(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                    .Exchanges
+                    .Single(e => e.Id == id);
+                return
+                    new ExchangeDetail
+                    {
+                        Id = entity.Id,
+                        BookId = entity.BookId,
+                        Posted = entity.Posted,
+                        SentDate = entity.SentDate
+                    };
+            }
+        }
     }
 }

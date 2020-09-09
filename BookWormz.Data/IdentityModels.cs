@@ -33,11 +33,27 @@ namespace BookWormz.Data
         }
         [Required]
         public string Address { get; set; }
-        public double ExchangeRating { get; set; }
+
+
+        //[Required]
+        public double? ExchangeRating
+        {
+            get
+            {
+                if (UserRatings.Count < 5)
+                    return null;
+                double eR = 0;
+                foreach (UserRating userRating in UserRatings)
+                {
+                    eR += userRating.ExchangeRating;
+                }
+                return eR / UserRatings.Count;
+            }
+        }
 
         public virtual ICollection<Exchange> Exchanges { get; set; } = new List<Exchange>();
 
-        public virtual ICollection<UserReview> UserReviews { get; set; } = new List<UserReview>();
+        public virtual ICollection<UserRating> UserRatings { get; set; } = new List<UserRating>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -54,7 +70,7 @@ namespace BookWormz.Data
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-        public DbSet<UserReview> UserReviews { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
