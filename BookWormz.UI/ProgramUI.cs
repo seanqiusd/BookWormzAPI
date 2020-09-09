@@ -49,7 +49,11 @@ namespace BookWormz.UI
                     "4.) Find Book by ID\n" +
                     "5.) Add Book\n" +
                     "6.) Delete Book by ISBN\n" +
-                    "7.) Delete Rating\n");
+                    "\n" +
+                    "\n" +
+                    "--- Ratings ---\n" +
+                    "7.) Rate an Exchange\n" +
+                    "8.) Delete an Exchange Rating\n");
 
                 Console.Write("Enter a #: ");
 
@@ -77,10 +81,14 @@ namespace BookWormz.UI
                         break;
 
                     case "6":
-                        // DeleteBook();
+                        DeleteBook();
                         break;
 
                     case "7":
+                        AddRating();
+                        break;
+
+                    case "8":
                         DeleteRating();
                         break;
 
@@ -355,37 +363,7 @@ namespace BookWormz.UI
 
             Console.Write("Description: ");
             book.Add("Description", Console.ReadLine());
-
-            // Used this to create register a user. Didn't need after first test.
-            //var user = new Dictionary<string, string>()
-            //{
-            //    {"Email", "test1@test.com" },
-            //    {"Password", "tesTing1$" },
-            //    {"ConfirmPassword", "tesTing1$" },
-            //    {"FirstName", "Hustin" },
-            //    {"LastName", "Jeffers" },
-            //    {"Address", "123 Main St" }
-            //};
-
-            //var login = new Dictionary<string, string>()
-            //{
-            //    {"grant_type", "password" },
-            //    {"Username", "hustin@hustin.com" },
-            //    {"Password", "Test1!" }
-            //};
-
-
-            //Used this to register an account. Didn't need after first test.
-            //var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
-            //registerRequest.Content = new FormUrlEncodedContent(user.AsEnumerable());
-            //await httpClient.SendAsync(registerRequest);
-
-            // Get the token from the API
-            //var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
-            //tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
-            //var response = await httpClient.SendAsync(tokenRequest);
-            //var tokenString = await response.Content.ReadAsStringAsync();
-            //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
+          
 
             // Post a Book
             HttpClient httpClient = new HttpClient();
@@ -401,6 +379,38 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem adding your book");
         }
 
+        private static async Task AddRating()
+        {
+            Console.Clear();
+            Console.Write("Exchange ID: ");
+            Dictionary<string, string> rating = new Dictionary<string, string>();
+
+            string exchangeIdInput = Console.ReadLine();
+            rating.Add("ExchangeId", exchangeIdInput);
+
+            Console.Write("Exchange Rating: ");
+            string exchangeRatingInput = Console.ReadLine();
+            rating.Add("ExchangeRating", exchangeRatingInput);
+
+
+
+
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/UserRating");
+            request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange Rating was added");
+            else
+                Console.WriteLine("There was a problem adding your Exchange Rating");
+
+        }
+
+        // Delete User Rating by ID
         private static async Task DeleteRating()
         {
             Console.Clear();
@@ -410,41 +420,42 @@ namespace BookWormz.UI
             HttpClient httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/UserRating/{userInput}");
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/UserRating/{userInput}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await httpClient.DeleteAsync($"https://localhost:44331/api/UserRating/{userInput}");
+            var response = await httpClient.SendAsync(request);
 
-            await _context.SaveChangesAsync();
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Rating Deleted");
             else
                 Console.WriteLine("Error rating not deleted");
+
         }
 
-        //private static async Task DeleteBook()
-        //{
-        //    Console.Clear();
-        //    Console.Write("Enter ISBN to delete: ");
-        //    string userInput = Console.ReadLine();
+        // Delete Book by ISBN
+        private static async Task DeleteBook()
+        {
+            Console.Clear();
+            Console.Write("Enter ISBN to delete: ");
+            string userInput = Console.ReadLine();
 
-        //    HttpClient httpClient = new HttpClient();
+            HttpClient httpClient = new HttpClient();
 
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/Book");
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-        //    Book entity = await _context.Books.FindAsync(userInput);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Book?ISBN={userInput}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //Book entity = await _context.Books.FindAsync(userInput);
 
-        //    var response2 = await httpClient.DeleteAsync(entity);
+            var response = await httpClient.SendAsync(request);
 
-        //    if (await _context.SaveChangesAsync() == 1)
-        //        Console.WriteLine("Book was deleted");
-        //    else
-        //        Console.WriteLine("Book could not be deleted");
-        //}
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Book was deleted");
+            else
+                Console.WriteLine("Book could not be deleted");
+        }
     }
 
-    // Created this helper class for getting the token.
+    // Helper class for token
     public class Token
     {
         [JsonProperty("access_token")]
@@ -453,6 +464,35 @@ namespace BookWormz.UI
 }
 
 
+// Used this to create register a user. Didn't need after first test.
+//var user = new Dictionary<string, string>()
+//{
+//    {"Email", "test1@test.com" },
+//    {"Password", "tesTing1$" },
+//    {"ConfirmPassword", "tesTing1$" },
+//    {"FirstName", "Hustin" },
+//    {"LastName", "Jeffers" },
+//    {"Address", "123 Main St" }
+//};
 
+//var login = new Dictionary<string, string>()
+//{
+//    {"grant_type", "password" },
+//    {"Username", "hustin@hustin.com" },
+//    {"Password", "Test1!" }
+//};
+
+
+//Used this to register an account. Didn't need after first test.
+//var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
+//registerRequest.Content = new FormUrlEncodedContent(user.AsEnumerable());
+//await httpClient.SendAsync(registerRequest);
+
+// Get the token from the API
+//var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
+//tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
+//var response = await httpClient.SendAsync(tokenRequest);
+//var tokenString = await response.Content.ReadAsStringAsync();
+//var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
 
 
