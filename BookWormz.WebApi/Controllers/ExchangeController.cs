@@ -78,7 +78,7 @@ namespace BookWormz.WebApi.Controllers
         //Request Book By ExchangeId
         [Route("api/Exchange/ExchangeRequest")]
         [HttpPut]
-        public IHttpActionResult RequestExchange([FromUri]int id)
+        public IHttpActionResult RequestExchange(int id)
         {
             Exchange exchange = _context.Exchanges.Find(id);
             if (exchange == null)

@@ -31,6 +31,6 @@ namespace BookWormz.Models
         [Display(Name ="Number Available")]
         public int NumberAvailable { get; set; }
 
-        public List<ExchangeListItem> ExchangeListItems { get; set; } = new List<ExchangeListItem>();
+        public List<ExchangeSmListItem> ExchangeListItems { get; set; } = new List<ExchangeSmListItem>();
     }
 }

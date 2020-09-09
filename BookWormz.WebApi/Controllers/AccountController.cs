@@ -332,6 +332,7 @@ namespace BookWormz.WebApi.Controllers
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        
         {
             if (!ModelState.IsValid)
             {
