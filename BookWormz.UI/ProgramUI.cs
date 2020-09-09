@@ -37,17 +37,12 @@ namespace BookWormz.UI
                 Console.Clear();
 
                 Console.WriteLine(
-                    "-- BookWormz API --\n" +
-                    "\n" +
-                    "\n" +
                     "--- Register/Login ---\n" +
-                    "\n" +
                     "1.) Register\n" +
                     "2.) Login\n" +
                     "\n" +
                     "\n" +
                     "--- Books ---\n" +
-                    "\n" +
                     "3.) View all Books\n" +
                     "4.) Find Book by ID\n" +
                     "5.) Add Book\n" +
@@ -56,15 +51,17 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "\n" +
-                    "8.) Add Exchange Rating\n" +
-                    "9.) Delete Exchange Rating\n" +
-                    "10.) View Exchange Ratings\n" +
+                    "8.) View Exchange Ratings\n" +
+                    "9.) Add Exchange Rating\n" +
+                    "10.) Update Exchange Rating\n" +
+                    "11.) Delete Exchange Rating\n" +
                     "\n" +
                     "\n" +
                     "--- Exchanges ---\n" +
-                    "\n" +
-                    "11.) Create Exchange\n");
+                    "12.) View Exchanges\n" +
+                    "13.) Add Exchange\n" +
+                    "14.) Update Exchange\n" +
+                    "15.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -100,20 +97,37 @@ namespace BookWormz.UI
                         break;
 
                     case "8":
-                        AddRating();
+                        GetRatingByID();
                         break;
 
                     case "9":
-                        DeleteRating();
+                        AddRating();
                         break;
 
                     case "10":
-                        GetExchanges();
+                        UpdateRatings();
                         break;
 
                     case "11":
+                        DeleteRating();
+                        break;
+
+                    case "12":
+                        GetExchanges();
+                        break;
+
+                    case "13":
                         AddExchange();
                         break;
+
+                    case "14":
+                        UpdateExchange();
+                        break;
+
+                    case "15":
+                        DeleteExchange();
+                        break;
+
                     default:
                         return;
                 }
@@ -513,7 +527,7 @@ namespace BookWormz.UI
 
 
         // Add Exchange
-        public static async Task AddExchange()
+        private static async Task AddExchange()
         {
             Console.Clear();
             Console.Write("Book ISBN: ");
@@ -538,6 +552,86 @@ namespace BookWormz.UI
         }
 
 
+
+        // Update Exchange by ID
+        private static async Task UpdateExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange ID to update: ");
+            string userInput = Console.ReadLine();
+
+
+            Console.Write("Book ISBN: ");
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+                {
+                    {"BookId", Console.ReadLine() }
+                };
+            Console.Write("Receiver User (ID): ");
+            exchange.Add("ReceiverUser", Console.ReadLine());
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Exchange/{userInput}");
+            request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your Exchange was updated");
+            else
+                Console.WriteLine("There was a problem updating your exchange");
+        }
+
+
+        // Delete Exchange by ID
+        private static async Task DeleteExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange ID to delete: ");
+            string userInput = Console.ReadLine();
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Exchange/{userInput}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange was deleted");
+            else
+                Console.WriteLine("There was a problem deleting your exchange");
+        }
+
+
+
+        // Get Ratings
+        private static async Task GetRatingByID()
+        {
+            Console.Clear();
+            Console.Write("Enter Rating ID: ");
+            string userInput = Console.ReadLine();
+
+            HttpClient httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/UserRating/{userInput}");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:44331/api/UserRating/{userInput}");
+            if (response.IsSuccessStatusCode)
+            {
+                UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
+                Console.WriteLine($"\n" +
+                    $"ID: {userRating.Id}\n" +
+                    $"User ID: {userRating.UserId}\n" +
+                    $"Exchange ID: {userRating.ExchangeId}\n" +
+                    $"Exchange Rating: {userRating.ExchangeRating}\n");
+            }
+        }
+
+    
+
+        // Add Rating
         private static async Task AddRating()
         {
 
@@ -571,6 +665,37 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem adding your Exchange Rating");
 
         }
+
+
+        // Update Ratings by ID
+        private static async Task UpdateRatings()
+        {
+            Console.WriteLine("Enter the Rating ID to update: \n");
+            string userInput = Console.ReadLine();
+
+            Console.Write("Exchange ID: ");
+            Dictionary<string, string> rating = new Dictionary<string, string>();
+
+            string exchangeIdInput = Console.ReadLine();
+            rating.Add("ExchangeId", exchangeIdInput);
+
+            Console.Write("Exchange Rating: ");
+            string exchangeRatingInput = Console.ReadLine();
+            rating.Add("ExchangeRating", exchangeRatingInput);
+
+            HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/UserRating/{userInput}");
+            request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange Rating was updated");
+            else
+                Console.WriteLine("There was a problem updating your Exchange Rating");
+        }
+
 
         // Delete User Rating by ID
         private static async Task DeleteRating()
