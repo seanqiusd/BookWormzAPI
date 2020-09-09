@@ -299,10 +299,9 @@ namespace BookWormz.UI
         private static async Task Login()
         {
             Console.Clear();
-            Console.Write("Grant Type, please type password: ");
             Dictionary<string, string> login = new Dictionary<string, string>
             {
-                {"grant_type", Console.ReadLine() }
+                {"grant_type", "password" }
             };
             Console.Write("Email: ");
             login.Add("Username", Console.ReadLine());
@@ -409,12 +408,13 @@ namespace BookWormz.UI
 
             HttpClient httpClient = new HttpClient();
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/UserRating");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/UserRating/");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response2 = await httpClient.DeleteAsync(userInput);
+            var response = await httpClient.DeleteAsync(userInput);
 
-            if (await _context.SaveChangesAsync() == 1)
+            //if (await _context.SaveChangesAsync() == 1)
+            if (response.IsSuccessStatusCode)
                 Console.WriteLine("Book was deleted");
             else
                 Console.WriteLine("Book could not be deleted");
