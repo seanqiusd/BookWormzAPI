@@ -48,8 +48,7 @@ namespace BookWormz.UI
             {
                 case "1":
                     Task register = Register();
-                    Console.WriteLine("\n" +
-                        "processing\n");
+                    Console.WriteLine("\nprocessing\n");
                     register.Wait();
                     break;
 
@@ -101,7 +100,7 @@ namespace BookWormz.UI
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":
+                    case "1":                       
                         ViewAllBooks();
                         break;
 
@@ -654,7 +653,7 @@ namespace BookWormz.UI
             {
                 UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
                 Console.WriteLine($"\n" +
-                    $"ID: {userRating.Id}\n" +
+                    $"ID: {userInput}\n" +
                     $"User ID: {userRating.UserId}\n" +
                     $"Exchange ID: {userRating.ExchangeId}\n" +
                     $"Exchange Rating: {userRating.ExchangeRating}\n");
@@ -704,7 +703,7 @@ namespace BookWormz.UI
         {
             Console.Clear();
 
-            Console.Write("Enter the Rating ID to update: \n");
+            Console.Write("Enter the Rating ID to update:");
             string userInput = Console.ReadLine();
 
             Console.Write("Exchange ID: ");

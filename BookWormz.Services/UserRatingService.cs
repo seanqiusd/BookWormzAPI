@@ -56,10 +56,10 @@ namespace BookWormz.Services
             return RatingList;
         }
 
-        public UserRatingDetail GetRatingOfExchange(int exchangeId)
+        public UserRatingDetail GetRatingOfExchange(int Id)
         {
             var RatingEntities = _context.UserRatings.ToList();
-            var RatingEntity = RatingEntities.Single(r => r.ExchangeId == exchangeId);
+            var RatingEntity = RatingEntities.Single(r => r.Id == Id);
             var rating = new UserRatingDetail
             {
                 UserId = RatingEntity.UserId,

@@ -32,7 +32,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetRatingByExchangeId(int id)
+        public IHttpActionResult GetRatingById(int id)
         {
             var service = CreateRatingService();
             var rating = service.GetRatingOfExchange(id);
