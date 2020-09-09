@@ -42,20 +42,19 @@ namespace BookWormz.UI
                "\n" +
                "1.) Register\n" +
                "2.) Login\n" +
-               "3.) Exit\n");
-            Console.Write("Enter a number: ");
+               "3.) Exit");
+            Console.Write("Enter a number:");
             switch (Console.ReadLine())
             {
                 case "1":
                     Task register = Register();
-                    Console.WriteLine("\n" +
-                        "processing\n");
+                    Console.WriteLine("processing");
                     register.Wait();
                     break;
 
                 case "2":
                     Task login = Login();
-                    Console.WriteLine("\nprocessing\n");
+                    Console.WriteLine("processing");
                     login.Wait();
                     await login;
                     break;
@@ -75,26 +74,31 @@ namespace BookWormz.UI
                 Console.Clear();
 
                 Console.WriteLine(
+                    "--- Register/Login ---\n" +
+                    "1.) Register\n" +
+                    "2.) Login\n" +
+                    "\n" +
+                    "\n" +
                     "--- Books ---\n" +
-                    "1.) View all Books\n" +
-                    "2.) Find Book by ID\n" +
-                    "3.) Add Book\n" +
-                    "4.) Update Book\n" +
-                    "5.) Delete Book by ISBN\n" +
+                    "3.) View all Books\n" +
+                    "4.) Find Book by ID\n" +
+                    "5.) Add Book\n" +
+                    "6.) Update Book\n" +
+                    "7.) Delete Book by ISBN\n" +
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "6.) View Exchange Ratings\n" +
-                    "7.) Add Exchange Rating\n" +
-                    "8.) Update Exchange Rating\n" +
-                    "9.) Delete Exchange Rating\n" +
+                    "8.) View Exchange Ratings\n" +
+                    "9.) Add Exchange Rating\n" +
+                    "10.) Update Exchange Rating\n" +
+                    "11.) Delete Exchange Rating\n" +
                     "\n" +
                     "\n" +
                     "--- Exchanges ---\n" +
-                    "10.) View Exchanges\n" +
-                    "11.) Add Exchange\n" +
-                    "12.) Update Exchange\n" +
-                    "13.) Delete Exchange\n");
+                    "12.) View Exchanges\n" +
+                    "13.) Add Exchange\n" +
+                    "14.) Update Exchange\n" +
+                    "15.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -102,54 +106,62 @@ namespace BookWormz.UI
                 switch (userInput)
                 {
                     case "1":
-                        ViewAllBooks();
+                        Register();
                         break;
 
                     case "2":
-                        FindBookByID();
+                        Login();
                         break;
 
                     case "3":
-                        AddBook();
+                        ViewAllBooks();
                         break;
 
                     case "4":
-                        UpdateBook();
+                        FindBookByID();
                         break;
 
                     case "5":
-                        DeleteBook();
+                        AddBook();
                         break;
 
                     case "6":
-                        GetRatingByID();
+                        UpdateBook();
                         break;
 
                     case "7":
-                        AddRating();
+                        DeleteBook();
                         break;
 
                     case "8":
-                        UpdateRatings();
+                        GetRatingByID();
                         break;
 
                     case "9":
-                        DeleteRating();
+                        AddRating();
                         break;
 
                     case "10":
-                        GetExchanges();
+                        UpdateRatings();
                         break;
 
                     case "11":
-                        AddExchange();
+                        DeleteRating();
                         break;
 
                     case "12":
-                        UpdateExchange();
+                        GetExchanges();
                         break;
 
                     case "13":
+                        AddExchange();
+                        break;
+
+                    case "14":
+                        UpdateExchange();
+                        break;
+
+                    case "15":
                         DeleteExchange();
                         break;
 
@@ -654,7 +666,7 @@ namespace BookWormz.UI
             {
                 UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
                 Console.WriteLine($"\n" +
-                    $"ID: {userRating.Id}\n" +
+                    $"ID: {userInput}\n" +
                     $"User ID: {userRating.UserId}\n" +
                     $"Exchange ID: {userRating.ExchangeId}\n" +
                     $"Exchange Rating: {userRating.ExchangeRating}\n");
@@ -702,9 +714,7 @@ namespace BookWormz.UI
         // Update Ratings by ID
         private static async Task UpdateRatings()
         {
-            Console.Clear();
-
-            Console.Write("Enter the Rating ID to update: \n");
+            Console.WriteLine("Enter the Rating ID to update: \n");
             string userInput = Console.ReadLine();
 
             Console.Write("Exchange ID: ");
@@ -815,3 +825,5 @@ namespace BookWormz.UI
 //var response = await httpClient.SendAsync(tokenRequest);
 //var tokenString = await response.Content.ReadAsStringAsync();
 //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
+
+
