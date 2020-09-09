@@ -16,6 +16,7 @@ namespace BookWormz.UI
     public class ProgramUI
     {
         private bool _isRunning = true;
+        private static bool _loggedIn = false;
 
         private static string _token;
 
@@ -25,9 +26,45 @@ namespace BookWormz.UI
 
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        public void Start()
+        public async void Start()
         {
+            while (!_loggedIn)
+                await RunLoginMenu();
             RunMenu();
+        }
+
+        private async Task RunLoginMenu()
+        {
+            Console.Clear();
+            Console.WriteLine(
+               "-- BookWormz API --\n" +
+               "\n" +
+               "\n" +
+               "1.) Register\n" +
+               "2.) Login\n" +
+               "3.) Exit");
+            Console.Write("Enter a number:");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Task register = Register();
+                    Console.WriteLine("processing");
+                    register.Wait();
+                    break;
+
+                case "2":
+                    Task login = Login();
+                    Console.WriteLine("processing");
+                    login.Wait();
+                    await login;
+                    break;
+                case "3":
+                    break;
+                default:
+                    return;
+            }
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
         }
 
         private void RunMenu()
@@ -353,8 +390,8 @@ namespace BookWormz.UI
 
             var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
             registerRequest.Content = new FormUrlEncodedContent(register.AsEnumerable());
-           var response = await httpClient.SendAsync(registerRequest);
-         
+            var response = await httpClient.SendAsync(registerRequest);
+
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("\n" +
@@ -363,6 +400,8 @@ namespace BookWormz.UI
             else
                 Console.WriteLine("\n" +
                     "I have failed you");
+
+            return;
         }
 
         private static async Task Login()
@@ -386,17 +425,22 @@ namespace BookWormz.UI
             var tokenString = await response.Content.ReadAsStringAsync();
             var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
             _token = token;
-            
-          
+
+
 
             tokenRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             if (response.IsSuccessStatusCode)
+            {
                 Console.WriteLine("\n" +
                     "Success, you are logged in with a token");
+                _loggedIn = true;
+            }
             else
                 Console.WriteLine("\n" +
                     "Login failed");
+
+            return;
         }
 
         private static async Task AddBook()
@@ -425,7 +469,7 @@ namespace BookWormz.UI
 
             Console.Write("Description: ");
             book.Add("Description", Console.ReadLine());
-          
+
 
             // Post a Book
             HttpClient httpClient = new HttpClient();
@@ -484,7 +528,7 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem updating your book");
         }
 
-        
+
         // Get Ratings
         private static async Task GetExchanges()
         {
@@ -531,7 +575,7 @@ namespace BookWormz.UI
         {
             Console.Clear();
             Console.Write("Book ISBN: ");
-                Dictionary<string, string> exchange = new Dictionary<string, string>
+            Dictionary<string, string> exchange = new Dictionary<string, string>
                 {
                     {"BookId", Console.ReadLine() }
                 };
