@@ -138,49 +138,29 @@ namespace BookWormz.UI
             }
         }
 
-        //private static async Task DeleteBook()
-        //{
-        //    Console.Clear();
-        //    Console.Write("Enter ISBN to delete: ");
-        //    string userInput = Console.ReadLine();
-
-        //    HttpClient httpClient = new HttpClient();
-
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Book?ISBN={userInput}");
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-        //    //Book entity = await _context.Books.FindAsync(userInput);
-
-        //    var response = await httpClient.SendAsync(request);
-
-        //    if (response.IsSuccessStatusCode)
-        //        Console.WriteLine("Book was deleted");
-        //    else
-        //        Console.WriteLine("Book could not be deleted");
-        //}
-
         private static async Task FindBookByID()
         {
             Console.Clear();
             Console.Write("Enter ISBN: ");
             string userInput = Console.ReadLine();
-
             HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/Book?ISBN={userInput}");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-
-            var response = await httpClient.SendAsync(request);
-
-            if (response != null)
+            HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:44331/api/Book?ISBN={userInput}");
+            if (response.IsSuccessStatusCode)
             {
-                var json = response.Content.ReadAsStringAsync().Result;
-                var list = JsonConvert.DeserializeObject<List<Book>>(json);
-
-                foreach (Book book in list)
+                BookDetail book = await response.Content.ReadAsAsync<BookDetail>();
+                Console.WriteLine(book.BookTitle);
+                Console.WriteLine(book.AuthorFirstName);
+                Console.WriteLine(book.AuthorLastName);
+                Console.WriteLine(book.ISBN);
+                foreach (ExchangeSmListItem e in book.ExchangeListItems)
                 {
-                    Console.WriteLine($"ISBN: {book.ISBN} \n" +
-                        $"Title: {book.BookTitle}\n" +
-                        $"Author: {book.AuthorLastName}\n" +
-                        $"Description: {book.Description}");
+                    Console.WriteLine();
+                    Console.WriteLine(e.Id);
+                    Console.WriteLine(e.IsAvailable);
+                    Console.WriteLine(e.Posted);
                 }
             }
         }
