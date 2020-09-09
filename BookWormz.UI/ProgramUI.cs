@@ -670,7 +670,9 @@ namespace BookWormz.UI
         // Update Ratings by ID
         private static async Task UpdateRatings()
         {
-            Console.WriteLine("Enter the Rating ID to update: \n");
+            Console.Clear();
+
+            Console.Write("Enter the Rating ID to update: \n");
             string userInput = Console.ReadLine();
 
             Console.Write("Exchange ID: ");
@@ -781,5 +783,3 @@ namespace BookWormz.UI
 //var response = await httpClient.SendAsync(tokenRequest);
 //var tokenString = await response.Content.ReadAsStringAsync();
 //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
-
-
