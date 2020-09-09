@@ -69,11 +69,12 @@ namespace BookWormz.Services
             return rating;
         }
 
-        public bool UpdateUserRating(UserRatingUpdate model)
+        public bool UpdateUserRating(UserRatingUpdate model, int id)
         {
-            var entity = _context.UserRatings.Single(e => e.ExchangeId == model.ExchangeId);
+            var entity = _context.UserRatings.Single(e => e.Id == id);
 
             entity.ExchangeRating = model.ExchangeRating;
+            entity.ExchangeId = model.ExchangeId;
 
             return _context.SaveChanges() == 1;
         }
