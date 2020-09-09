@@ -48,13 +48,13 @@ namespace BookWormz.WebApi.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult UpdateUserRating(UserRatingUpdate updatedRating)
+        public IHttpActionResult UpdateUserRating([FromUri] int id, [FromBody] UserRatingUpdate updatedRating)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var service = CreateRatingService();
 
-            if (!service.UpdateUserRating(updatedRating))
+            if (!service.UpdateUserRating(updatedRating, id))
                 return InternalServerError();
             return Ok("Rating Updated");
         }
