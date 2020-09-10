@@ -24,6 +24,7 @@ namespace BookWormz.UI
         //private List<Book> book = new List<Book>();
         private static readonly ApplicationDbContext _context = new ApplicationDbContext();
 
+        //Using httpClient field to carry authorization once user is logged in
         private static readonly HttpClient _httpClient = new HttpClient();
 
         public async void Start()
@@ -429,6 +430,8 @@ namespace BookWormz.UI
             {
                 Console.WriteLine("\n" +
                     "Success, you are logged in with a token");
+
+                //If loggin is successful using token to authorize http client
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
                 _loggedIn = true;
             }
