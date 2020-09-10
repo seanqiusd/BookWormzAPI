@@ -21,11 +21,16 @@ namespace BookWormz.Services
         public int CreateRating(UserRatingCreate model)
         {
             var exchange = _context.Exchanges.Single(e => e.Id == model.ExchangeId);
+            //If Reciever Id is null the exchange has nto been completed
             if (exchange.ReceiverId is null)
                 return 2;
-
+            //Only the reciever should be able to rate exchange
             if (_userId != exchange.ReceiverId)
                 return 3;
+            //Every exchange Should Only Have One Rating
+            if (_context.UserRatings.Where(r => r.ExchangeId == model.ExchangeId).Count() >= 1)
+                return 4;
+
 
             UserRating entity = new UserRating
             {

@@ -37,6 +37,8 @@ namespace BookWormz.WebApi.Controllers
                     return BadRequest("Exchange has no RecieverId");
                 case 3:
                     return BadRequest("Only the reciever can rate exchanges");
+                case 4:
+                    return BadRequest("Exchange has already been rated, if you would like to modify rating please use update method");
                 default:
                     return InternalServerError();
             }
