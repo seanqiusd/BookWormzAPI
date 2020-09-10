@@ -11,6 +11,9 @@ using System.Web.Http;
 
 namespace BookWormz.WebApi.Controllers
 {
+    /// <summary>
+    /// CRUD for Exchange entities
+    /// </summary>
     public class ExchangeController : ApiController
     {
         private ApplicationDbContext _context = new ApplicationDbContext();
@@ -23,6 +26,10 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get all
+        /// <summary>
+        /// Get All Exchange items
+        /// </summary>
+        /// <returns>returns ExchangeListItem models</returns>
         public IHttpActionResult Get()
         {
             ExchangeService exchangeService = CreateExchangeService();
@@ -32,6 +39,11 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Create
+        /// <summary>
+        /// Post new exchange
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <returns></returns>
         public IHttpActionResult Post(ExchangeCreate exchange)
         {
             if (!ModelState.IsValid)
@@ -47,6 +59,11 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Get by ID
+        /// <summary>
+        /// Get detailed information about individual exchange
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ExchangeDetail model</returns>
         public IHttpActionResult Get(int id)
         {
             ExchangeService exchangeService = CreateExchangeService();
@@ -56,6 +73,12 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Put by ID
+        /// <summary>
+        /// Update exchange by exchange ID
+        /// </summary>
+        /// <param name="id">Id of exchange to update</param>
+        /// <param name="newExchange">Updated exchange information</param>
+        /// <returns></returns>
         public IHttpActionResult Put([FromUri] int id, [FromBody] Exchange newExchange)
         {
             if (ModelState.IsValid)
@@ -76,6 +99,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         //Request Book By ExchangeId
+        /// <summary>
+        /// Request available exchange
+        /// </summary>
+        /// <param name="id">Id of requested exchange</param>
+        /// <returns></returns>
         [Route("api/Exchange/ExchangeRequest")]
         [HttpPut]
         public IHttpActionResult RequestExchange(int id)
@@ -96,6 +124,11 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Delete by ID
+        /// <summary>
+        /// Delete Exchange by ID
+        /// </summary>
+        /// <param name="id">Id of exchange to be deleted</param>
+        /// <returns></returns>
         public IHttpActionResult Delete(int id)
         {
             Exchange exchange = _context.Exchanges.Find(id);

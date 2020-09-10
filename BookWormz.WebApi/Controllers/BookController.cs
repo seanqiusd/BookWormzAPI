@@ -15,10 +15,17 @@ using System.Web.UI.WebControls;
 
 namespace BookWormz.WebApi.Controllers
 {
+
+    /// <summary>
+    /// Crud for Book Entities
+    /// </summary>
+
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
+
     public class BookController : ApiController
     {
         private ApplicationDbContext _context = new ApplicationDbContext(); // this'll save db when trying to save in controller instead of services...specifically this is for bookupdate
+
         private BookService CreateBookService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
@@ -28,7 +35,10 @@ namespace BookWormz.WebApi.Controllers
 
         // get all books
 
-        //[Route("GetAllBooks")]
+        /// <summary>
+        /// Get All Books
+        /// </summary>
+        /// <returns>Returns BookListItem Object of all books in database</returns>
         public IHttpActionResult Get()
         {
             BookService bookService = CreateBookService();
@@ -38,8 +48,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // creates book
-
-        //[Route("CreateBook")]
+        /// <summary>
+        /// Create new Book in Database
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
         public IHttpActionResult Post(BookCreate book)
         {
             
@@ -57,7 +70,12 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get single book details
-        //[Route("GetSingleBookDetailsByISBN")]
+
+        /// <summary>
+        /// Get Detailed information from single book item
+        /// </summary>
+        /// <param name="ISBN"></param>
+        /// <returns>Returns BookDetail model</returns>
         public IHttpActionResult Get(string ISBN)
         {
             BookService bookService = CreateBookService();
@@ -67,7 +85,11 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Delete a book
-        //[Route("DeleteBookByISBN")]
+        /// <summary>
+        /// Remove Book From Database
+        /// </summary>
+        /// <param name="ISBN"></param>
+        /// <returns></returns>
         public IHttpActionResult Delete(string ISBN)
         {
             var service = CreateBookService();
@@ -81,7 +103,12 @@ namespace BookWormz.WebApi.Controllers
 
         // Put --Update a book detail via ISBN
         //[HttpPut]
-        //[Route("UpdateBookByISBN")]
+        /// <summary>
+        /// Update Existing Book In Database
+        /// </summary>
+        /// <param name="ISBN"></param>
+        /// <param name="newBook"></param>
+        /// <returns></returns>
         public IHttpActionResult Put([FromUri] string ISBN, [FromBody] Book newBook)
         {
             if (ModelState.IsValid)
