@@ -93,7 +93,8 @@ namespace BookWormz.UI
                     "10.) View Exchanges\n" +
                     "11.) Add Exchange\n" +
                     "12.) Update Exchange\n" +
-                    "13.) Delete Exchange\n");
+                    "13.) Request Exchange\n" +
+                    "14.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -149,6 +150,9 @@ namespace BookWormz.UI
                         break;
 
                     case "13":
+                        RequestExchange();
+                        break;
+                    case "14":
                         DeleteExchange();
                         break;
 
@@ -611,6 +615,27 @@ namespace BookWormz.UI
                 Console.WriteLine("Your Exchange was updated");
             else
                 Console.WriteLine("There was a problem updating your exchange");
+        }
+
+        //Request Exchange
+        private static async Task RequestExchange()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            Console.Clear();
+            Console.Write("Enter Exchange Id to request: ");
+            string userInput = Console.ReadLine();
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+            {
+                {"id", userInput }
+            };
+            HttpContent content = new FormUrlEncodedContent(exchange);
+
+            var response = await _httpClient.PutAsync($"https://localhost:44331/api/Exchange/ExchangeRequest?id={userInput}", content);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Book Requested");
+            else 
+                Console.WriteLine("There was a problem with your exchange");
         }
 
 
