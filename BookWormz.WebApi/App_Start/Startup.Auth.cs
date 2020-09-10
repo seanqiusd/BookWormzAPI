@@ -15,6 +15,7 @@ using System.Web.Http.Cors;
 
 namespace BookWormz.WebApi
 {
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
