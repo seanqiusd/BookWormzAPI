@@ -57,6 +57,18 @@ namespace BookWormz.Services
             return RatingList;
         }
 
+        public List<UserRatingListItem> GetMyRatings()
+        {
+            var RatingEntities = _context.UserRatings.Where(u => u.UserId == _userId).ToList();
+            var RatingList = RatingEntities.Select(r => new UserRatingListItem
+            {
+                UserId = r.UserId,
+                ExchangeId = r.ExchangeId,
+                ExchangeRating = r.ExchangeRating
+            }).ToList();
+            return RatingList;
+        }
+
         public List<UserRatingDetail> GetUserRatingsByUserId(string userId)
         {
             var RatingEntities = _context.UserRatings.ToList();

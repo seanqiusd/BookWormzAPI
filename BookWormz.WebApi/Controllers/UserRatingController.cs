@@ -55,6 +55,18 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
+        /// Gets all ratings of the logged in user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetMyRating()
+        {
+            var service = CreateRatingService();
+            var ratings = service.GetMyRatings();
+            return Ok(ratings);
+        }
+
+        /// <summary>
         /// Get user Rating By exchange Id
         /// </summary>
         /// <param name="id">Exchange Id of rating to lookup</param>

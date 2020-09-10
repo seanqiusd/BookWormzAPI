@@ -605,6 +605,12 @@
             <param name="rating"> Rating Paramaters </param>
             <returns></returns>
         </member>
+        <member name="M:BookWormz.WebApi.Controllers.UserRatingController.GetMyRating">
+            <summary>
+            Gets all ratings of the logged in user
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.GetRatingByExchangeId(System.Int32)">
             <summary>
             Get user Rating By exchange Id
