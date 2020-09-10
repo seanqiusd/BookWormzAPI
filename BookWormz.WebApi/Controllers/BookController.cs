@@ -27,6 +27,8 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // get all books
+
+        //[Route("GetAllBooks")]
         public IHttpActionResult Get()
         {
             BookService bookService = CreateBookService();
@@ -36,6 +38,8 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // creates book
+
+        //[Route("CreateBook")]
         public IHttpActionResult Post(BookCreate book)
         {
             
@@ -53,6 +57,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get single book details
+        //[Route("GetSingleBookDetailsByISBN")]
         public IHttpActionResult Get(string ISBN)
         {
             BookService bookService = CreateBookService();
@@ -62,6 +67,7 @@ namespace BookWormz.WebApi.Controllers
 
 
         // Delete a book
+        //[Route("DeleteBookByISBN")]
         public IHttpActionResult Delete(string ISBN)
         {
             var service = CreateBookService();
@@ -75,6 +81,7 @@ namespace BookWormz.WebApi.Controllers
 
         // Put --Update a book detail via ISBN
         //[HttpPut]
+        //[Route("UpdateBookByISBN")]
         public IHttpActionResult Put([FromUri] string ISBN, [FromBody] Book newBook)
         {
             if (ModelState.IsValid)

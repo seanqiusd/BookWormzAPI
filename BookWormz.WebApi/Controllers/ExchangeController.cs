@@ -85,6 +85,9 @@ namespace BookWormz.WebApi.Controllers
             {
                 return BadRequest("Exchange not found");
             }
+            if (exchange.IsAvailable == false)
+                return BadRequest("Book Not available");
+
             exchange.IsAvailable = false;
             exchange.ReceiverId = User.Identity.GetUserId();
             _context.SaveChanges();
