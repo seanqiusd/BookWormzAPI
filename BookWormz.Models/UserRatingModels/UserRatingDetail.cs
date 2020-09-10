@@ -9,6 +9,8 @@ namespace BookWormz.Models.UserRatingModels
 {
     public class UserRatingDetail
     {
+        public int Id { get; set; }
+
         [Display(Name = "Exchange Id Number")]
         public int ExchangeId { get; set; }
 

@@ -83,7 +83,7 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "6.) View Exchange Ratings\n" +
+                    "6.) View Exchange Rating\n" +
                     "7.) Add Exchange Rating\n" +
                     "8.) Update Exchange Rating\n" +
                     "9.) Delete Exchange Rating\n" +
@@ -672,7 +672,7 @@ namespace BookWormz.UI
         private static async Task GetRatingByID()
         {
             Console.Clear();
-            Console.Write("Enter Rating ID: ");
+            Console.Write("Enter ID of exchange: ");
             string userInput = Console.ReadLine();
 
             //HttpClient httpClient = new HttpClient();
@@ -686,11 +686,14 @@ namespace BookWormz.UI
             if (response.IsSuccessStatusCode)
             {
                 UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
-                Console.WriteLine($"\n" +
-                    $"ID: {userInput}\n" +
-                    $"User ID: {userRating.UserId}\n" +
-                    $"Exchange ID: {userRating.ExchangeId}\n" +
-                    $"Exchange Rating: {userRating.ExchangeRating}\n");
+                if (userRating != null)
+                    Console.WriteLine($"\n" +
+                        $"ID: {userRating.Id}\n" +
+                        $"User ID: {userRating.UserId}\n" +
+                        $"Exchange ID: {userRating.ExchangeId}\n" +
+                        $"Exchange Rating: {userRating.ExchangeRating}\n");
+                else
+                    Console.WriteLine("Exchange hasn't been rated");
             }
         }
 
@@ -700,7 +703,7 @@ namespace BookWormz.UI
         private static async Task AddRating()
         {
 
-            GetExchanges();
+            GetExchanges().Wait();
 
             Console.WriteLine("Enter your Exchange ID and Rating below\n");
             Console.Write("Exchange ID: ");
