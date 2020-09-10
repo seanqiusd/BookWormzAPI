@@ -46,10 +46,10 @@ namespace BookWormz.WebApi.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult GetRatingById(int id)
+        public IHttpActionResult GetRatingByExchangeId(int id)
         {
             var service = CreateRatingService();
-            var rating = service.GetRatingOfExchange(id);
+            var rating = service.GetRatingOfExchangeByExchangeId(id);
             return Ok(rating);
         }
 
@@ -68,7 +68,7 @@ namespace BookWormz.WebApi.Controllers
                 return BadRequest(ModelState);
             var service = CreateRatingService();
 
-            switch (service.UpdateUserRating(updatedRating, id))
+            switch (service.UpdateUserRatingByExchangeId(updatedRating, id))
             {
                 case 0:
                     return Ok("Rating Added");
