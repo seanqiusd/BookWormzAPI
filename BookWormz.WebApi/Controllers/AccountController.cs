@@ -17,11 +17,13 @@ using BookWormz.WebApi.Models;
 using BookWormz.WebApi.Providers;
 using BookWormz.WebApi.Results;
 using BookWormz.Data;
+using System.Web.Http.Cors;
 
 namespace BookWormz.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

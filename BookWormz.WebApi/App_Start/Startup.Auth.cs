@@ -11,6 +11,7 @@ using Owin;
 using BookWormz.WebApi.Providers;
 using BookWormz.WebApi.Models;
 using BookWormz.Data;
+using System.Web.Http.Cors;
 
 namespace BookWormz.WebApi
 {

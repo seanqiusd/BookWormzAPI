@@ -10,10 +10,12 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Channels;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.UI.WebControls;
 
 namespace BookWormz.WebApi.Controllers
 {
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class BookController : ApiController
     {
         private ApplicationDbContext _context = new ApplicationDbContext(); // this'll save db when trying to save in controller instead of services...specifically this is for bookupdate
