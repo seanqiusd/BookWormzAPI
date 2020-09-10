@@ -53,6 +53,7 @@ namespace BookWormz.Services
                         BookId = e.BookId,
                         Posted = e.Posted,
                         SentDate = e.SentDate,
+                        IsAvailable = e.IsAvailable,
                         //ReceiverId = e.ReceiverId,
                         ReceiverId = e.ReceiverUser.FirstName
                     }
