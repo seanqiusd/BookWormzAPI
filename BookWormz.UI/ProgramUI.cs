@@ -83,7 +83,7 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "6.) View Exchange Ratings\n" +
+                    "6.) View Exchange Rating\n" +
                     "7.) Add Exchange Rating\n" +
                     "8.) Update Exchange Rating\n" +
                     "9.) Delete Exchange Rating\n" +
@@ -93,7 +93,8 @@ namespace BookWormz.UI
                     "10.) View Exchanges\n" +
                     "11.) Add Exchange\n" +
                     "12.) Update Exchange\n" +
-                    "13.) Delete Exchange\n");
+                    "13.) Request Exchange\n" +
+                    "14.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -149,11 +150,14 @@ namespace BookWormz.UI
                         break;
 
                     case "13":
+                        RequestExchange();
+                        break;
+                    case "14":
                         DeleteExchange();
                         break;
 
                     default:
-                        return;
+                        continue;
                 }
                 //Console.Write("Press any key to return\n");
                 Console.ReadKey();
@@ -162,13 +166,13 @@ namespace BookWormz.UI
 
         private HttpResponseMessage CallAPI()
         {
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
-            // fix
-            httpClient.DefaultRequestHeaders.Authorization =
-              new AuthenticationHeaderValue("Bearer", _token);
+            //// fix
+            //httpClient.DefaultRequestHeaders.Authorization =
+            //  new AuthenticationHeaderValue("Bearer", _token);
 
-            Task<HttpResponseMessage> getTask = httpClient.GetAsync("https://localhost:44331/api/Book");
+            Task<HttpResponseMessage> getTask = _httpClient.GetAsync("https://localhost:44331/api/Book");
             HttpResponseMessage response = getTask.Result;
 
             return response;
@@ -199,11 +203,13 @@ namespace BookWormz.UI
             Console.Clear();
             Console.Write("Enter ISBN: ");
             string userInput = Console.ReadLine();
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/Book?ISBN={userInput}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:44331/api/Book?ISBN={userInput}");
+            //HttpClient httpClient = new HttpClient();
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/Book?ISBN={userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/Book?ISBN={userInput}");
+
             if (response.IsSuccessStatusCode)
             {
                 BookDetail book = await response.Content.ReadAsAsync<BookDetail>();
@@ -213,12 +219,13 @@ namespace BookWormz.UI
                 Console.WriteLine($"Author First Name: {book.AuthorFirstName}");
                 Console.WriteLine($"Author Last Name: {book.AuthorLastName}");
                 Console.WriteLine($"Description: {book.Description}\n");
+                Console.WriteLine("Exchanges for this book");
                 foreach (ExchangeSmListItem e in book.ExchangeListItems)
                 {
                     Console.WriteLine();
-                    Console.WriteLine(e.Id);
-                    Console.WriteLine(e.IsAvailable);
-                    Console.WriteLine(e.Posted);
+                    Console.WriteLine($"exchange Id: {e.Id}\n" +
+                        $"Exchanger Rating: {e.SenderRating}\n" +
+                        $"Is book still available: {e.IsAvailable}");
                 }
             }
         }
@@ -373,11 +380,11 @@ namespace BookWormz.UI
             Console.Write("Address: ");
             register.Add("Address", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
             registerRequest.Content = new FormUrlEncodedContent(register.AsEnumerable());
-            var response = await httpClient.SendAsync(registerRequest);
+            var response = await _httpClient.SendAsync(registerRequest);
 
 
             if (response.IsSuccessStatusCode)
@@ -404,11 +411,11 @@ namespace BookWormz.UI
             Console.Write("Password: ");
             login.Add("Password", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
             tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
-            var response = await httpClient.SendAsync(tokenRequest);
+            var response = await _httpClient.SendAsync(tokenRequest);
             var tokenString = await response.Content.ReadAsStringAsync();
             var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
             _token = token;
@@ -417,10 +424,12 @@ namespace BookWormz.UI
 
             tokenRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("\n" +
                     "Success, you are logged in with a token");
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
                 _loggedIn = true;
             }
             else
@@ -459,12 +468,12 @@ namespace BookWormz.UI
 
 
             // Post a Book
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Book");
             request.Content = new FormUrlEncodedContent(book.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response2 = await httpClient.SendAsync(request);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response2 = await _httpClient.SendAsync(request);
 
             if (response2.IsSuccessStatusCode)
                 Console.WriteLine("Your book was added");
@@ -502,12 +511,13 @@ namespace BookWormz.UI
 
 
             // Post a Book
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Book?ISBN={userInput}");
             request.Content = new FormUrlEncodedContent(book.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Your book was updated");
@@ -534,11 +544,12 @@ namespace BookWormz.UI
 
             Console.Clear();
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Exchange");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response != null)
             {
@@ -569,12 +580,12 @@ namespace BookWormz.UI
             Console.Write("Receiver User (ID): ");
             exchange.Add("ReceiverUser", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Exchange");
             request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Your Exchange was created");
@@ -600,17 +611,38 @@ namespace BookWormz.UI
             Console.Write("Receiver User (ID): ");
             exchange.Add("ReceiverUser", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Exchange/{userInput}");
             request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Your Exchange was updated");
             else
                 Console.WriteLine("There was a problem updating your exchange");
+        }
+
+        //Request Exchange
+        private static async Task RequestExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange Id to request: ");
+            string userInput = Console.ReadLine();
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+            {
+                {"id", userInput }
+            };
+            HttpContent content = new FormUrlEncodedContent(exchange);
+
+            var response = await _httpClient.PutAsync($"https://localhost:44331/api/Exchange/ExchangeRequest?id={userInput}", content);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Book Requested");
+            else 
+                Console.WriteLine("There was a problem with your exchange");
         }
 
 
@@ -621,12 +653,12 @@ namespace BookWormz.UI
             Console.Write("Enter Exchange ID to delete: ");
             string userInput = Console.ReadLine();
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Exchange/{userInput}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Exchange was deleted");
@@ -640,23 +672,28 @@ namespace BookWormz.UI
         private static async Task GetRatingByID()
         {
             Console.Clear();
-            Console.Write("Enter Rating ID: ");
+            Console.Write("Enter ID of exchange: ");
             string userInput = Console.ReadLine();
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/UserRating/{userInput}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:44331/api/UserRating/{userInput}");
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/UserRating/{userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/UserRating/{userInput}");
             if (response.IsSuccessStatusCode)
             {
                 UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
-                Console.WriteLine($"\n" +
-                    $"ID: {userInput}\n" +
-                    $"User ID: {userRating.UserId}\n" +
-                    $"Exchange ID: {userRating.ExchangeId}\n" +
-                    $"Exchange Rating: {userRating.ExchangeRating}\n");
+                if (userRating != null)
+                    Console.WriteLine($"\n" +
+                        $"ID: {userRating.Id}\n" +
+                        $"User ID: {userRating.UserId}\n" +
+                        $"Exchange ID: {userRating.ExchangeId}\n" +
+                        $"Exchange Rating: {userRating.ExchangeRating}\n");
+                else
+                    Console.WriteLine("Exchange hasn't been rated");
             }
         }
 
@@ -666,7 +703,7 @@ namespace BookWormz.UI
         private static async Task AddRating()
         {
 
-            GetExchanges();
+            GetExchanges().Wait();
 
             Console.WriteLine("Enter your Exchange ID and Rating below\n");
             Console.Write("Exchange ID: ");
@@ -683,12 +720,12 @@ namespace BookWormz.UI
 
 
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/UserRating");
             request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Exchange Rating was added");
@@ -716,12 +753,13 @@ namespace BookWormz.UI
             string exchangeRatingInput = Console.ReadLine();
             rating.Add("ExchangeRating", exchangeRatingInput);
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/UserRating/{userInput}");
             request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await httpClient.SendAsync(request);
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Exchange Rating was updated");
@@ -737,13 +775,13 @@ namespace BookWormz.UI
             Console.Write("Enter Rating ID to delete: ");
             string userInput = Console.ReadLine();
 
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //HttpClient httpClient = new HttpClient();
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/UserRating/{userInput}");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
 
             if (response.IsSuccessStatusCode)
@@ -760,13 +798,14 @@ namespace BookWormz.UI
             Console.Write("Enter ISBN to delete: ");
             string userInput = Console.ReadLine();
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Book?ISBN={userInput}");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             //Book entity = await _context.Books.FindAsync(userInput);
 
-            var response = await httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Book was deleted");

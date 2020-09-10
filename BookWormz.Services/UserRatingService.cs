@@ -69,12 +69,15 @@ namespace BookWormz.Services
             return RatingList;
         }
 
-        public UserRatingDetail GetRatingOfExchange(int Id)
+        public UserRatingDetail GetRatingOfExchangeByExchangeId(int Id)
         {
             var RatingEntities = _context.UserRatings.ToList();
-            var RatingEntity = RatingEntities.Single(r => r.Id == Id);
+            if (RatingEntities.Where(r => r.ExchangeId == Id).Count() != 1)
+                return null;
+            var RatingEntity = RatingEntities.Single(r => r.ExchangeId == Id);
             var rating = new UserRatingDetail
             {
+                Id = RatingEntity.Id,
                 UserId = RatingEntity.UserId,
                 ExchangeId = RatingEntity.ExchangeId,
                 ExchangeRating = RatingEntity.ExchangeRating
@@ -82,9 +85,9 @@ namespace BookWormz.Services
             return rating;
         }
 
-        public int UpdateUserRating(UserRatingUpdate model, int id)
+        public int UpdateUserRatingByExchangeId(UserRatingUpdate model, int id)
         {
-            var entity = _context.UserRatings.Single(e => e.Id == id);
+            var entity = _context.UserRatings.Single(e => e.ExchangeId == id);
 
             if (entity is null)
                 return 2;
