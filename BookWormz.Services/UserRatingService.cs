@@ -18,9 +18,15 @@ namespace BookWormz.Services
             _userId = userId; //To Be used later for verifying Reviewer info.
         }
 
-        public bool CreateRating(UserRatingCreate model)
+        public int CreateRating(UserRatingCreate model)
         {
-            //TODO Add functionality so only one review per exchange
+            var exchange = _context.Exchanges.Single(e => e.Id == model.ExchangeId);
+            if (exchange.ReceiverId is null)
+                return 2;
+
+            if (_userId != exchange.ReceiverId)
+                return 3;
+
             UserRating entity = new UserRating
             {
                 UserId = _context.Exchanges.Single(e => e.Id == model.ExchangeId).SenderId,
@@ -29,7 +35,9 @@ namespace BookWormz.Services
             };
 
             _context.UserRatings.Add(entity);
-            return _context.SaveChanges() == 1;
+            if (_context.SaveChanges() == 1)
+                return 0;
+            else return 1;
         }
 
         public List<UserRatingListItem> GetAllUserRatings()
@@ -69,14 +77,21 @@ namespace BookWormz.Services
             return rating;
         }
 
-        public bool UpdateUserRating(UserRatingUpdate model, int id)
+        public int UpdateUserRating(UserRatingUpdate model, int id)
         {
             var entity = _context.UserRatings.Single(e => e.Id == id);
+
+            if (entity is null)
+                return 2;
+            if (entity.Exchange.ReceiverId != _userId)
+                return 3;
 
             entity.ExchangeRating = model.ExchangeRating;
             entity.ExchangeId = model.ExchangeId;
 
-            return _context.SaveChanges() == 1;
+            if (_context.SaveChanges() == 1)
+                return 0;
+            return 1;
         }
 
         public bool DeleteUserRating(int id)
