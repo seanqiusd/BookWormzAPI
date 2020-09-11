@@ -59,8 +59,8 @@ namespace BookWormz.WebApi.Models
 
       
         [Required]
-        [Display(Name = "Mailing Address")]
-        public string Address { get; set; }
+        [Display(Name = "State")]
+        public string State { get; set; }
     }
 
     public class RegisterExternalBindingModel

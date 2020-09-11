@@ -118,7 +118,6 @@ namespace BookWormz.WebApi.Controllers
                 case 1:
                     return InternalServerError();
 
-
                 case 2:
                     return NotFound();
 

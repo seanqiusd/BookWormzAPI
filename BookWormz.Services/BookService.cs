@@ -17,7 +17,6 @@ namespace BookWormz.Services
         {
             _userId = userId;
         }
-
         // Post -- Create
         public bool CreateBook(BookCreate book)
         {
@@ -37,7 +36,6 @@ namespace BookWormz.Services
                 ctx.Books.Add(entity);
                 return ctx.SaveChanges() == 1;
             }
-
         }
 
         // Get --All
@@ -61,8 +59,7 @@ namespace BookWormz.Services
                             NumberAvailable = e.NumberAvailable
                         }
                         );
-                return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api
-                    
+                return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api                    
             }
         }
 
@@ -87,27 +84,20 @@ namespace BookWormz.Services
                 {
                     detailedBook.ExchangeListItems.Add(new ExchangeSmListItem { Id = exchange.Id, IsAvailable = exchange.IsAvailable, Posted = exchange.Posted, SenderName = exchange.SenderUser.FirstName, SenderRating = exchange.SenderUser.ExchangeRating });
                 }
-
-
                 return detailedBook;
             }
-            
-
         }
 
         // Delete
         public bool  DeleteBook(string ISBN)
         {
-
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx.Books.Single(e => e.ISBN == ISBN);
                 ctx.Books.Remove(entity);
 
                 return ctx.SaveChanges() == 1;
-
             }
-
         }
     }
 }

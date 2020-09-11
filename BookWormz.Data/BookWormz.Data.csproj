@@ -127,6 +127,10 @@
     <Compile Include="Migrations\202009101828521_fixedcommentclassaddedforeignkey.Designer.cs">
       <DependentUpon>202009101828521_fixedcommentclassaddedforeignkey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009111923131_renamedAddressToState.cs" />
+    <Compile Include="Migrations\202009111923131_renamedAddressToState.Designer.cs">
+      <DependentUpon>202009111923131_renamedAddressToState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reply.cs" />
@@ -163,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009101828521_fixedcommentclassaddedforeignkey.resx">
       <DependentUpon>202009101828521_fixedcommentclassaddedforeignkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009111923131_renamedAddressToState.resx">
+      <DependentUpon>202009111923131_renamedAddressToState.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,6 +12,5 @@ namespace BookWormz.Data
         [ForeignKey(nameof(Comment))]
         public int CommentId { get; set; }
         public virtual Comment Comment { get; set; }
-
     }
 }
