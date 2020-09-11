@@ -10,6 +10,10 @@ using System.Web.Http;
 
 namespace BookWormz.WebApi.Controllers
 {
+
+    /// <summary>
+    /// Crud For Reply Entities
+    /// </summary>
     public class ReplyController : ApiController
     {
         private ReplyService CreateReplyService()
@@ -20,6 +24,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Post --Create reply to comment
+        /// <summary>
+        /// Create New Reply In Database
+        /// </summary>
+        /// <param name="reply"></param>
+        /// <returns></returns>
 
         [HttpPost]
         public IHttpActionResult PostReplyToComment(ReplyCreate reply)
@@ -37,6 +46,10 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get all replies
+        /// <summary>
+        /// Get All Replies
+        /// </summary>
+        /// <returns>Returns ReplyListItem Object Of All Replies In Database</returns>
         public IHttpActionResult Get()
         {
             ReplyService replyService = CreateReplyService();
@@ -45,6 +58,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get reply detail by Id
+        /// <summary>
+        /// Get Detailed Information From Single Reply Item By ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns>Returns ReplyDetail Model</returns>
         public IHttpActionResult Get(int Id)
         {
             ReplyService replyService = CreateReplyService();
@@ -53,6 +71,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Delete reply
+        /// <summary>
+        /// Remove Reply From Database By ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public IHttpActionResult Delete(int Id)
         {
             var service = CreateReplyService();

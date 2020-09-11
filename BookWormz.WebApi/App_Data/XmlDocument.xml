@@ -483,32 +483,32 @@
         </member>
         <member name="T:BookWormz.WebApi.Controllers.AccountController">
             <summary>
-            Create and manage Accounts
+            Create And Manage Accounts
             </summary>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.AccountController.ChangePassword(BookWormz.WebApi.Models.ChangePasswordBindingModel)">
             <summary>
-            Allows for change of password
+            Allows For Change Of Password
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.AccountController.GetUserRating">
             <summary>
-            Get logged in Users UserRating
+            Get Logged In Users UserRating
             </summary>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.AccountController.Register(BookWormz.WebApi.Models.RegisterBindingModel)">
             <summary>
-            Register login
+            Register Login
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
         <member name="T:BookWormz.WebApi.Controllers.BookController">
             <summary>
-            Crud for Book Entities
+            Crud For Book Entities
             </summary>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Get">
@@ -519,17 +519,17 @@
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Post(BookWormz.Models.BookCreate)">
             <summary>
-            Create new Book in Database
+            Create New Book In Database
             </summary>
             <param name="book"></param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Get(System.String)">
             <summary>
-            Get Detailed information from single book item
+            Get Detailed Information From Single Book Item
             </summary>
             <param name="ISBN"></param>
-            <returns>Returns BookDetail model</returns>
+            <returns>Returns BookDetail Model</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Delete(System.String)">
             <summary>
@@ -546,34 +546,66 @@
             <param name="newBook"></param>
             <returns></returns>
         </member>
+        <member name="T:BookWormz.WebApi.Controllers.CommentController">
+            <summary>
+            Crud For Comment Entities
+            </summary>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.Get">
+            <summary>
+            Get All Comments
+            </summary>
+            <returns>Returns CommentListItem Object Of All Comments In Database</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.Post(BookWormz.Models.CommentCreate)">
+            <summary>
+            Create New Comment In Database
+            </summary>
+            <param name="comment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.Get(System.Int32)">
+            <summary>
+            Get Detailed Information From Single Comment Item by ID
+            </summary>
+            <param name="Id"></param>
+            <returns>Returns CommentDetail Model</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.Delete(System.Int32)">
+            <summary>
+            Remove Comment From Database By ID
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
         <member name="T:BookWormz.WebApi.Controllers.ExchangeController">
             <summary>
-            CRUD for Exchange entities
+            Crud For Exchange Entities
             </summary>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Get">
             <summary>
-            Get All Exchange items
+            Get All Exchange Items
             </summary>
-            <returns>returns ExchangeListItem models</returns>
+            <returns>Returns ExchangeListItem Models</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Post(BookWormz.Models.ExchangeCreate)">
             <summary>
-            Post new exchange
+            Post New Exchange
             </summary>
             <param name="exchange"></param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Get(System.Int32)">
             <summary>
-            Get detailed information about individual exchange
+            Get Detailed Information About Individual Exchange
             </summary>
             <param name="id"></param>
             <returns>ExchangeDetail model</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Data.Exchange)">
             <summary>
-            Update exchange by exchange ID
+            Update Exchange By Exchange ID
             </summary>
             <param name="id">Id of exchange to update</param>
             <param name="newExchange">Updated exchange information</param>
@@ -581,53 +613,85 @@
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.RequestExchange(System.Int32)">
             <summary>
-            Request available exchange
+            Request Available Exchange
             </summary>
             <param name="id">Id of requested exchange</param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Delete(System.Int32)">
             <summary>
-            Delete Exchange by ID
+            Delete Exchange By ID
             </summary>
             <param name="id">Id of exchange to be deleted</param>
             <returns></returns>
         </member>
+        <member name="T:BookWormz.WebApi.Controllers.ReplyController">
+            <summary>
+            Crud For Reply Entities
+            </summary>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.PostReplyToComment(BookWormz.Models.ReplyCreate)">
+            <summary>
+            Create New Reply In Database
+            </summary>
+            <param name="reply"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.Get">
+            <summary>
+            Get All Replies
+            </summary>
+            <returns>Returns ReplyListItem Object Of All Replies In Database</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.Get(System.Int32)">
+            <summary>
+            Get Detailed Information From Single Reply Item By ID
+            </summary>
+            <param name="Id"></param>
+            <returns>Returns ReplyDetail Model</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.Delete(System.Int32)">
+            <summary>
+            Remove Reply From Database By ID
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
         <member name="T:BookWormz.WebApi.Controllers.UserRatingController">
             <summary>
-            CRUD for user ratings
+            Crud For User Ratings
             </summary>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.PostRating(BookWormz.Models.UserRatingModels.UserRatingCreate)">
             <summary>
-            Used to Post New Rating
+            Used To Post New Rating
             </summary>
             <param name="rating"> Rating Paramaters </param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.GetMyRating">
             <summary>
-            Gets all ratings of the logged in user
+            Gets All Ratings Of The Logged In User
             </summary>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.GetRatingByExchangeId(System.Int32)">
             <summary>
-            Get user Rating By exchange Id
+            Get User Rating By Exchange ID
             </summary>
             <param name="id">Exchange Id of rating to lookup</param>
             <returns>rating info of selected exchange</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.GetRatingsByUserId(System.String)">
             <summary>
-            Get Ratings for individual Users
+            Get Ratings For Individual Users By UserId
             </summary>
             <param name="userId">Users user Id</param>
             <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.UpdateUserRating(System.Int32,BookWormz.Models.UserRatingModels.UserRatingUpdate)">
             <summary>
-            Update Rating By Exchange Id
+            Update Rating By Exchange ID
             </summary>
             <param name="id">Exchange Id to update rating for</param>
             <param name="updatedRating"></param>
@@ -635,7 +699,7 @@
         </member>
         <member name="M:BookWormz.WebApi.Controllers.UserRatingController.DeleteRating(System.Int32)">
             <summary>
-            Delete Rating by rating Id
+            Delete Rating By Rating ID
             </summary>
             <param name="id">Rating Id to be deleted</param>
             <returns></returns>

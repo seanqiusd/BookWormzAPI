@@ -10,6 +10,10 @@ using System.Web.Http;
 
 namespace BookWormz.WebApi.Controllers
 {
+
+    /// <summary>
+    /// Crud For Comment Entities
+    /// </summary>
     public class CommentController : ApiController
     {
         private CommentService CreateCommentService()
@@ -20,6 +24,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get all comments
+       /// <summary>
+       /// Get All Comments
+       /// </summary>
+       /// <returns>Returns CommentListItem Object Of All Comments In Database</returns>
+        
         public IHttpActionResult Get()
         {
             CommentService commentService = CreateCommentService();
@@ -27,7 +36,13 @@ namespace BookWormz.WebApi.Controllers
             return Ok(comments);
         }
 
+        
         // Post --Create Comment
+        /// <summary>
+        /// Create New Comment In Database
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <returns></returns>
         public IHttpActionResult Post(CommentCreate comment)
         {
             if (!ModelState.IsValid)
@@ -44,6 +59,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get comment detail
+        /// <summary>
+        /// Get Detailed Information From Single Comment Item by ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns>Returns CommentDetail Model</returns>
         public IHttpActionResult Get(int Id)
         {
             CommentService commentService = CreateCommentService();
@@ -52,6 +72,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Delete comment
+        /// <summary>
+        /// Remove Comment From Database By ID
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public IHttpActionResult Delete(int Id)
         {
             var service = CreateCommentService();
