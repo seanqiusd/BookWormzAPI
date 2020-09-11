@@ -33,7 +33,7 @@ namespace BookWormz.Data
             }
         }
         [Required]
-        public string Address { get; set; }
+        public string State { get; set; }
 
 
         //[Required]
