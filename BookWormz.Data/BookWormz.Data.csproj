@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Book.cs" />
+    <Compile Include="Comment.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Migrations\202009031916519_FirstMigration.cs" />
@@ -118,8 +119,17 @@
     <Compile Include="Migrations\202009081936587_RenamedUserRating.Designer.cs">
       <DependentUpon>202009081936587_RenamedUserRating.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009101739300_commentandreplyclassesadded.cs" />
+    <Compile Include="Migrations\202009101739300_commentandreplyclassesadded.Designer.cs">
+      <DependentUpon>202009101739300_commentandreplyclassesadded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009101828521_fixedcommentclassaddedforeignkey.cs" />
+    <Compile Include="Migrations\202009101828521_fixedcommentclassaddedforeignkey.Designer.cs">
+      <DependentUpon>202009101828521_fixedcommentclassaddedforeignkey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reply.cs" />
     <Compile Include="UserRating.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +157,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009081936587_RenamedUserRating.resx">
       <DependentUpon>202009081936587_RenamedUserRating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009101739300_commentandreplyclassesadded.resx">
+      <DependentUpon>202009101739300_commentandreplyclassesadded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009101828521_fixedcommentclassaddedforeignkey.resx">
+      <DependentUpon>202009101828521_fixedcommentclassaddedforeignkey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

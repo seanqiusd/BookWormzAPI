@@ -63,11 +63,17 @@
     <Compile Include="BookCreate.cs" />
     <Compile Include="BookDetail.cs" />
     <Compile Include="BookListItem.cs" />
+    <Compile Include="CommentCreate.cs" />
+    <Compile Include="CommentDetail.cs" />
+    <Compile Include="CommentListItem.cs" />
     <Compile Include="ExchangeCreate.cs" />
     <Compile Include="ExchangeDetail.cs" />
     <Compile Include="ExchangeListItem.cs" />
     <Compile Include="ExchangeSmListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplyCreate.cs" />
+    <Compile Include="ReplyDetail.cs" />
+    <Compile Include="ReplyListItem.cs" />
     <Compile Include="UserRatingModels\UserRatingCreate.cs" />
     <Compile Include="UserRatingModels\UserRatingDetail.cs" />
     <Compile Include="UserRatingModels\UserRatingListItem.cs" />
