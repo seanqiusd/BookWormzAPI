@@ -62,6 +62,7 @@ namespace BookWormz.Services
                             {
                                 var r = new ReplyDetail
                                 {
+                                    Id = reply.Id,
                                     Text = reply.Text
                                 };
                                 listItem.Replies.Add(r);
