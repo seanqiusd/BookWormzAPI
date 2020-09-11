@@ -9,6 +9,7 @@ namespace BookWormz.Models
 {
     public class ReplyCreate : CommentCreate
     {
+        // may need to add ExchangeId here
         [Required]
         public int CommentId { get; set; }
 
