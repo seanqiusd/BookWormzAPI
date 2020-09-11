@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -45,9 +46,9 @@ namespace BookWormz.Data
                 double eR = 0;
                 foreach (UserRating userRating in UserRatings)
                 {
-                    eR += userRating.ExchangeRating;
+                    eR += userRating.ExchangeRating;                    
                 }
-                return eR / UserRatings.Count;
+                return Math.Round(eR / UserRatings.Count, 2);
             }
         }
 
