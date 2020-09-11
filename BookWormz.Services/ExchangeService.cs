@@ -106,5 +106,29 @@ namespace BookWormz.Services
             exchange.ReceiverId = _userId;
             return _context.SaveChanges() == 1 ? 0 : 1;
         }
+
+
+        // Get available books by state
+        public List<ExchangeListItem> GetExchangesByState(string state)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entities = ctx.Exchanges.Where(e => e.SenderUser.State.ToLower() == state.ToLower());
+                List<ExchangeListItem> exchanges = new List<ExchangeListItem>();
+                foreach (var entity in entities)
+                {
+                    var exchangeListItem =
+                       new ExchangeListItem
+                       {
+                           Id = entity.Id,
+                           BookId = entity.BookId,
+                           Posted = entity.Posted,
+                           SentDate = entity.SentDate
+                       };
+                    exchanges.Add(exchangeListItem);
+                }
+                return exchanges;
+            }
+        }
     }
 }
