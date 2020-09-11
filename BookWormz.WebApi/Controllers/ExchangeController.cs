@@ -14,6 +14,7 @@ namespace BookWormz.WebApi.Controllers
     /// <summary>
     /// CRUD for Exchange entities
     /// </summary>
+    [Authorize]
     public class ExchangeController : ApiController
     {
         private ApplicationDbContext _context = new ApplicationDbContext();
@@ -108,18 +109,28 @@ namespace BookWormz.WebApi.Controllers
         [HttpPut]
         public IHttpActionResult RequestExchange(int id)
         {
-            Exchange exchange = _context.Exchanges.Find(id);
-            if (exchange == null)
+            var service = CreateExchangeService();
+            switch (service.RequestExchange(id))
             {
-                return BadRequest("Exchange not found");
-            }
-            if (exchange.IsAvailable == false)
-                return BadRequest("Book Not available");
+                case 0:
+                    return Ok("Book Requested");
 
-            exchange.IsAvailable = false;
-            exchange.ReceiverId = User.Identity.GetUserId();
-            _context.SaveChanges();
-            return Ok("Book Requested");
+                case 1:
+                    return InternalServerError();
+
+
+                case 2:
+                    return NotFound();
+
+                case 3:
+                    return BadRequest("Book Not available");
+
+                case 4:
+                    return BadRequest("You Cannot Request Your Own Book");
+
+                default:
+                    return InternalServerError();
+            }
         }
 
 
