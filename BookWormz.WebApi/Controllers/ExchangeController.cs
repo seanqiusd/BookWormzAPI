@@ -156,5 +156,14 @@ namespace BookWormz.WebApi.Controllers
             return InternalServerError();
         }
 
+        //Get by State
+        [HttpGet]
+        public IHttpActionResult Get(string state)
+        {
+            var exchangeService = CreateExchangeService();
+            var exchanges = exchangeService.GetExchangesByState(state);
+            return Ok(exchanges);
+        }
+
     }
 }

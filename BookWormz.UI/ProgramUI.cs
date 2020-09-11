@@ -84,24 +84,25 @@ namespace BookWormz.UI
                     "3.) Add Book\n" +
                     "4.) Update Book\n" +
                     "5.) Delete Book by ISBN\n" +
+                    "6.) Check available books by State\n" +
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "6.) View Exchange Rating\n" +
-                    "7.) Add Exchange Rating\n" +
-                    "8.) Update Exchange Rating\n" +
-                    "9.) Get My Ratings\n" +
-                    "10.) Delete Exchange Rating\n" +
+                    "7.) View Exchange Rating\n" +
+                    "8.) Add Exchange Rating\n" +
+                    "9.) Update Exchange Rating\n" +
+                    "10.) Get My Ratings\n" +
+                    "11.) Delete Exchange Rating\n" +
                     "\n" +
                     "\n" +
                     "--- Exchanges ---\n" +
-                    "11.) View Exchanges\n" +
-                    "12.) Add Exchange\n" +
-                    "13.) Update Exchange\n" +
-                    "14.) Request Exchange\n" +
-                    "15.) Delete Exchange\n" +
+                    "12.) View Exchanges\n" +
+                    "13.) Add Exchange\n" +
+                    "14.) Update Exchange\n" +
+                    "15.) Request Exchange\n" +
+                    "16.) Delete Exchange\n" +
                     "--- Exit ---\n" +
-                    "16.) Exit Program");
+                    "17.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
@@ -129,44 +130,48 @@ namespace BookWormz.UI
                         break;
 
                     case "6":
-                        GetRatingByID();
+                        AvailabeBooksByState();
                         break;
 
                     case "7":
-                        AddRating();
+                        GetRatingByID();
                         break;
 
                     case "8":
-                        UpdateRatings();
+                        AddRating();
                         break;
 
                     case "9":
-                        GetMyRating();
+                        UpdateRatings();
                         break;
 
                     case "10":
-                        DeleteRating();
+                        GetMyRating();
                         break;
 
                     case "11":
-                        GetExchanges();
+                        DeleteRating();
                         break;
 
                     case "12":
-                        AddExchange();
+                        GetExchanges();
                         break;
 
                     case "13":
+                        AddExchange();
+                        break;
+
+                    case "14":
                         UpdateExchange();
                         break;
-                    case "14":
+                    case "15":
                         RequestExchange();
                         break;
-                    case "15":
+                    case "16":
                         DeleteExchange();
                         break;
 
-                    case "16":
+                    case "17":
                         return;
 
                     default:
@@ -390,8 +395,8 @@ namespace BookWormz.UI
             Console.Write("Last Name: ");
             register.Add("LastName", Console.ReadLine());
 
-            Console.Write("Address: ");
-            register.Add("Address", Console.ReadLine());
+            Console.Write("State: ");
+            register.Add("State", Console.ReadLine());
 
             //HttpClient httpClient = new HttpClient();
 
@@ -538,6 +543,38 @@ namespace BookWormz.UI
                 Console.WriteLine("Your book was updated");
             else
                 Console.WriteLine("There was a problem updating your book");
+        }
+
+
+
+        // Check available books by state
+        private static async Task AvailabeBooksByState()
+        {
+            Console.Clear();
+
+            Console.Write("Enter State: ");
+            string userInput = Console.ReadLine();
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/Exchange?state={userInput}");
+            if (response.IsSuccessStatusCode)
+            {
+                List<ExchangeListItem> bookByState = await response.Content.ReadAsAsync<List<ExchangeListItem>>();
+                if (bookByState.Count == 0)
+                    Console.WriteLine($"No availabe books in {userInput}");
+                else
+                {
+                    foreach (ExchangeListItem book in bookByState)
+                    {
+                        Console.WriteLine($"\n" +
+                            $"Book ISBN: {book.BookId}\n" +
+                            $"Exchange ID: {book.Id}\n" +
+                            $"Book Title: {book.IsAvailable}");
+                    }
+                }
+
+                //else
+                //    Console.WriteLine($"No available books in {userInput}");
+            }
         }
 
 
