@@ -61,7 +61,9 @@ namespace BookWormz.UI
                     await login;
                     break;
                 case "3":
-                    break;
+                    _isRunning = false;
+                    _loggedIn = true;
+                    return;
                 default:
                     return;
             }
@@ -97,7 +99,9 @@ namespace BookWormz.UI
                     "12.) Add Exchange\n" +
                     "13.) Update Exchange\n" +
                     "14.) Request Exchange\n" +
-                    "15.) Delete Exchange\n");
+                    "15.) Delete Exchange\n" +
+                    "--- Exit ---\n" +
+                    "16.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
@@ -161,6 +165,9 @@ namespace BookWormz.UI
                     case "15":
                         DeleteExchange();
                         break;
+
+                    case "16":
+                        return;
 
                     default:
                         continue;
@@ -616,8 +623,9 @@ namespace BookWormz.UI
                 {
                     {"BookId", Console.ReadLine() }
                 };
-            Console.Write("Receiver User (ID): ");
-            exchange.Add("ReceiverUser", Console.ReadLine());
+
+            //Console.Write("Receiver User (ID): ");
+            //exchange.Add("ReceiverUser", Console.ReadLine());
 
             //HttpClient httpClient = new HttpClient();
 
@@ -728,9 +736,8 @@ namespace BookWormz.UI
                 Console.WriteLine("you dont have enough ratings for overall score");
             else
             {
-                double roundable = (double)rating;
                 Console.WriteLine($"\n" +
-                    $"Your overall user rating: {Math.Round(roundable,2)}");
+                    $"Your overall user rating: {rating}");
             }
 
         }

@@ -17,7 +17,6 @@ namespace BookWormz.UI
 
             ProgramUI program = new ProgramUI();
             program.Start();
-            Console.ReadLine();
         }
     }
 }
