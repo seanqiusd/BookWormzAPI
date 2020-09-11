@@ -546,6 +546,17 @@
             <param name="newBook"></param>
             <returns></returns>
         </member>
+        <member name="T:BookWormz.WebApi.Controllers.CommentController">
+            <summary>
+            Crud for Comment Entities
+            </summary>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.Get">
+            <summary>
+            Get All Comments
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:BookWormz.WebApi.Controllers.ExchangeController">
             <summary>
             CRUD for Exchange entities

@@ -12,7 +12,7 @@ using System.Web.Http;
 namespace BookWormz.WebApi.Controllers
 {
     /// <summary>
-    /// CRUD for Exchange entities
+    /// Crud For Exchange Entities
     /// </summary>
     [Authorize]
     public class ExchangeController : ApiController
@@ -28,9 +28,9 @@ namespace BookWormz.WebApi.Controllers
 
         // Get all
         /// <summary>
-        /// Get All Exchange items
+        /// Get All Exchange Items
         /// </summary>
-        /// <returns>returns ExchangeListItem models</returns>
+        /// <returns>Returns ExchangeListItem Models</returns>
         public IHttpActionResult Get()
         {
             ExchangeService exchangeService = CreateExchangeService();
@@ -41,7 +41,7 @@ namespace BookWormz.WebApi.Controllers
 
         // Create
         /// <summary>
-        /// Post new exchange
+        /// Post New Exchange
         /// </summary>
         /// <param name="exchange"></param>
         /// <returns></returns>
@@ -61,7 +61,7 @@ namespace BookWormz.WebApi.Controllers
 
         // Get by ID
         /// <summary>
-        /// Get detailed information about individual exchange
+        /// Get Detailed Information About Individual Exchange
         /// </summary>
         /// <param name="id"></param>
         /// <returns>ExchangeDetail model</returns>
@@ -75,7 +75,7 @@ namespace BookWormz.WebApi.Controllers
 
         // Put by ID
         /// <summary>
-        /// Update exchange by exchange ID
+        /// Update Exchange By Exchange ID
         /// </summary>
         /// <param name="id">Id of exchange to update</param>
         /// <param name="newExchange">Updated exchange information</param>
@@ -101,7 +101,7 @@ namespace BookWormz.WebApi.Controllers
 
         //Request Book By ExchangeId
         /// <summary>
-        /// Request available exchange
+        /// Request Available Exchange
         /// </summary>
         /// <param name="id">Id of requested exchange</param>
         /// <returns></returns>
@@ -135,7 +135,7 @@ namespace BookWormz.WebApi.Controllers
 
         // Delete by ID
         /// <summary>
-        /// Delete Exchange by ID
+        /// Delete Exchange By ID
         /// </summary>
         /// <param name="id">Id of exchange to be deleted</param>
         /// <returns></returns>

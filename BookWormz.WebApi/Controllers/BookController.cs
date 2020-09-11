@@ -17,7 +17,7 @@ namespace BookWormz.WebApi.Controllers
 {
 
     /// <summary>
-    /// Crud for Book Entities
+    /// Crud For Book Entities
     /// </summary>
 
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
@@ -49,7 +49,7 @@ namespace BookWormz.WebApi.Controllers
 
         // creates book
         /// <summary>
-        /// Create new Book in Database
+        /// Create New Book In Database
         /// </summary>
         /// <param name="book"></param>
         /// <returns></returns>
@@ -70,12 +70,11 @@ namespace BookWormz.WebApi.Controllers
         }
 
         // Get single book details
-
         /// <summary>
-        /// Get Detailed information from single book item
+        /// Get Detailed Information From Single Book Item
         /// </summary>
         /// <param name="ISBN"></param>
-        /// <returns>Returns BookDetail model</returns>
+        /// <returns>Returns BookDetail Model</returns>
         public IHttpActionResult Get(string ISBN)
         {
             BookService bookService = CreateBookService();
