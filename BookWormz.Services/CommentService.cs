@@ -23,6 +23,7 @@ namespace BookWormz.Services
             var entity =
                new Comment()
                {
+                  CommenterId = _userId, // this is cool
                   ExchangeId = model.ExchangeId,
                   Text = model.CommentText
                };
@@ -49,14 +50,26 @@ namespace BookWormz.Services
                     .Comments.ToList()
                     .Select(
                         e =>
-                        new CommentListItem
                         {
-                            ExchangeId = e.ExchangeId,
-                            Text = e.Text,
-                            Replies = (ICollection<ReplyDetail>)e.Replies // theory being tested here
-                        }
-                        );
+
+                            var listItem = new CommentListItem
+                            {
+                                Id = e.Id,
+                                ExchangeId = e.ExchangeId,
+                                Text = e.Text,
+                            };
+                            foreach (var reply in e.Replies)
+                            {
+                                var r = new ReplyDetail
+                                {
+                                    Text = reply.Text
+                                };
+                                listItem.Replies.Add(r);
+                            }
+                            return listItem;
+                        });
                 return query.ToArray();
+                        
             }
         }
 
