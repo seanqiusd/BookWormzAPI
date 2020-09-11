@@ -83,10 +83,12 @@ namespace BookWormz.Services
                     Description = entity.Description,
                     NumberAvailable = entity.NumberAvailable
                 };
-                foreach(Exchange exchange in entity.Exchanges)
+                foreach(Exchange exchange in entity.Exchanges)  // To Display All the exchanges
                 {
-                    detailedBook.ExchangeListItems.Add(new ExchangeListItem { BookId = exchange.BookId, Id = exchange.Id, Posted = exchange.Posted, IsAvailable = exchange.IsAvailable, ReceiverId = exchange.ReceiverId, SentDate = exchange.SentDate });
+                    detailedBook.ExchangeListItems.Add(new ExchangeSmListItem { Id = exchange.Id, IsAvailable = exchange.IsAvailable, Posted = exchange.Posted, SenderName = exchange.SenderUser.FirstName, SenderRating = exchange.SenderUser.ExchangeRating });
                 }
+
+
                 return detailedBook;
             }
             

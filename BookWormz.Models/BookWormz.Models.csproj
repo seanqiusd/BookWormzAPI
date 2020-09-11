@@ -66,6 +66,7 @@
     <Compile Include="ExchangeCreate.cs" />
     <Compile Include="ExchangeDetail.cs" />
     <Compile Include="ExchangeListItem.cs" />
+    <Compile Include="ExchangeSmListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserRatingModels\UserRatingCreate.cs" />
     <Compile Include="UserRatingModels\UserRatingDetail.cs" />

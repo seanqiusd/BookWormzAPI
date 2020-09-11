@@ -1,5 +1,7 @@
 ﻿using AspNetCore.Http.Extensions;
 using BookWormz.Data;
+using BookWormz.Models;
+using BookWormz.Models.UserRatingModels;
 using BookWormz.WebApi.Controllers;
 using Newtonsoft.Json;
 using System;
@@ -15,6 +17,7 @@ namespace BookWormz.UI
     public class ProgramUI
     {
         private bool _isRunning = true;
+        private static bool _loggedIn = false;
 
         private static string _token;
 
@@ -22,11 +25,48 @@ namespace BookWormz.UI
         //private List<Book> book = new List<Book>();
         private static readonly ApplicationDbContext _context = new ApplicationDbContext();
 
+        //Using httpClient field to carry authorization once user is logged in
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        public void Start()
+        public async void Start()
         {
+            while (!_loggedIn)
+                await RunLoginMenu();
             RunMenu();
+        }
+
+        private async Task RunLoginMenu()
+        {
+            Console.Clear();
+            Console.WriteLine(
+               "-- BookWormz API --\n" +
+               "\n" +
+               "\n" +
+               "1.) Register\n" +
+               "2.) Login\n" +
+               "3.) Exit\n");
+            Console.Write("Enter a number: ");
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Task register = Register();
+                    Console.WriteLine("\nprocessing\n");
+                    register.Wait();
+                    break;
+
+                case "2":
+                    Task login = Login();
+                    Console.WriteLine("\nprocessing\n");
+                    login.Wait();
+                    await login;
+                    break;
+                case "3":
+                    break;
+                default:
+                    return;
+            }
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
         }
 
         private void RunMenu()
@@ -36,71 +76,109 @@ namespace BookWormz.UI
                 Console.Clear();
 
                 Console.WriteLine(
-                    "-- BookWormz API --\n" +
-                    "\n" +
-                    "\n" +
-                    "--- Register/Login ---\n" +
-                    "1.) Register\n" +
-                    "2.) Login\n" +
-                    "\n" +
-                    "\n" +
                     "--- Books ---\n" +
-                    "3.) View all Books\n" +
-                    "4.) Find Book by ID\n" +
-                    "5.) Add Book\n" +
-                    "6.) Delete Book by ISBN\n" +
-                    "7.) Delete Rating\n");
+                    "1.) View all Books\n" +
+                    "2.) Find Book by ID\n" +
+                    "3.) Add Book\n" +
+                    "4.) Update Book\n" +
+                    "5.) Delete Book by ISBN\n" +
+                    "\n" +
+                    "\n" +
+                    "--- Ratings ---\n" +
+                    "6.) View Exchange Rating\n" +
+                    "7.) Add Exchange Rating\n" +
+                    "8.) Update Exchange Rating\n" +
+                    "9.) Get My Ratings\n" +
+                    "10.) Delete Exchange Rating\n" +
+                    "\n" +
+                    "\n" +
+                    "--- Exchanges ---\n" +
+                    "11.) View Exchanges\n" +
+                    "12.) Add Exchange\n" +
+                    "13.) Update Exchange\n" +
+                    "14.) Request Exchange\n" +
+                    "15.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":
-                        Register();
-                        break;
-
-                    case "2":
-                        Login();
-                        break;
-
-                    case "3":
+                    case "1":                       
                         ViewAllBooks();
                         break;
 
-                    case "4":
-                        // Find Book by Id
+                    case "2":
+                        FindBookByID();
                         break;
 
-                    case "5":
+                    case "3":
                         AddBook();
                         break;
 
+                    case "4":
+                        UpdateBook();
+                        break;
+
+                    case "5":
+                        DeleteBook();
+                        break;
+
                     case "6":
-                        // DeleteBook();
+                        GetRatingByID();
                         break;
 
                     case "7":
+                        AddRating();
+                        break;
+
+                    case "8":
+                        UpdateRatings();
+                        break;
+
+                    case "9":
+                        GetMyRating();
+                        break;
+
+                    case "10":
                         DeleteRating();
                         break;
 
+                    case "11":
+                        GetExchanges();
+                        break;
+
+                    case "12":
+                        AddExchange();
+                        break;
+
+                    case "13":
+                        UpdateExchange();
+                        break;
+                    case "14":
+                        RequestExchange();
+                        break;
+                    case "15":
+                        DeleteExchange();
+                        break;
+
                     default:
-                        return;
+                        continue;
                 }
-                Console.Write("Press any key to return\n");
+                //Console.Write("Press any key to return\n");
                 Console.ReadKey();
             }
         }
 
         private HttpResponseMessage CallAPI()
         {
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
-            // fix
-            httpClient.DefaultRequestHeaders.Authorization =
-              new AuthenticationHeaderValue("Bearer", _token);
+            //// fix
+            //httpClient.DefaultRequestHeaders.Authorization =
+            //  new AuthenticationHeaderValue("Bearer", _token);
 
-            Task<HttpResponseMessage> getTask = httpClient.GetAsync("https://localhost:44331/api/Book");
+            Task<HttpResponseMessage> getTask = _httpClient.GetAsync("https://localhost:44331/api/Book");
             HttpResponseMessage response = getTask.Result;
 
             return response;
@@ -126,12 +204,37 @@ namespace BookWormz.UI
             }
         }
 
-        //private HttpResponseMessage FindBookByID()
-        //{
-        //    HttpClient httpClient = new HttpClient();
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Book");
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-        //}
+        private static async Task FindBookByID()
+        {
+            Console.Clear();
+            Console.Write("Enter ISBN: ");
+            string userInput = Console.ReadLine();
+            //HttpClient httpClient = new HttpClient();
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/Book?ISBN={userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/Book?ISBN={userInput}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                BookDetail book = await response.Content.ReadAsAsync<BookDetail>();
+                Console.WriteLine($"\n" +
+                    $"ISBN: {book.ISBN}");
+                Console.WriteLine($"Title: {book.BookTitle}");
+                Console.WriteLine($"Author First Name: {book.AuthorFirstName}");
+                Console.WriteLine($"Author Last Name: {book.AuthorLastName}");
+                Console.WriteLine($"Description: {book.Description}\n");
+                Console.WriteLine("Exchanges for this book");
+                foreach (ExchangeSmListItem e in book.ExchangeListItems)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"exchange Id: {e.Id}\n" +
+                        $"Exchanger Rating: {e.SenderRating}\n" +
+                        $"Is book still available: {e.IsAvailable}");
+                }
+            }
+        }
 
         //private static async Task AddBook()
         //{
@@ -283,18 +386,22 @@ namespace BookWormz.UI
             Console.Write("Address: ");
             register.Add("Address", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
             registerRequest.Content = new FormUrlEncodedContent(register.AsEnumerable());
-           var response = await httpClient.SendAsync(registerRequest);
-         
+            var response = await _httpClient.SendAsync(registerRequest);
+
 
             if (response.IsSuccessStatusCode)
-                Console.WriteLine("Much success, you are now registered. Please go back and login\n" +
+                Console.WriteLine("\n" +
+                    "Much success, you are now registered. Please go back and login\n" +
                     "");
             else
-                Console.WriteLine("I have failed you");
+                Console.WriteLine("\n" +
+                    "I have failed you");
+
+            return;
         }
 
         private static async Task Login()
@@ -310,23 +417,34 @@ namespace BookWormz.UI
             Console.Write("Password: ");
             login.Add("Password", Console.ReadLine());
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
             tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
-            var response = await httpClient.SendAsync(tokenRequest);
+            var response = await _httpClient.SendAsync(tokenRequest);
             var tokenString = await response.Content.ReadAsStringAsync();
             var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
             _token = token;
-            
-          
+
+
 
             tokenRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+
             if (response.IsSuccessStatusCode)
-                Console.WriteLine("Success, you are logged in with a token");
+            {
+                Console.WriteLine("\n" +
+                    "Success, you are logged in with a token");
+
+                //If loggin is successful using token to authorize http client
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+                _loggedIn = true;
+            }
             else
-                Console.WriteLine("Login failed");
+                Console.WriteLine("\n" +
+                    "Login failed");
+
+            return;
         }
 
         private static async Task AddBook()
@@ -356,44 +474,14 @@ namespace BookWormz.UI
             Console.Write("Description: ");
             book.Add("Description", Console.ReadLine());
 
-            // Used this to create register a user. Didn't need after first test.
-            //var user = new Dictionary<string, string>()
-            //{
-            //    {"Email", "test1@test.com" },
-            //    {"Password", "tesTing1$" },
-            //    {"ConfirmPassword", "tesTing1$" },
-            //    {"FirstName", "Hustin" },
-            //    {"LastName", "Jeffers" },
-            //    {"Address", "123 Main St" }
-            //};
-
-            //var login = new Dictionary<string, string>()
-            //{
-            //    {"grant_type", "password" },
-            //    {"Username", "hustin@hustin.com" },
-            //    {"Password", "Test1!" }
-            //};
-
-
-            //Used this to register an account. Didn't need after first test.
-            //var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
-            //registerRequest.Content = new FormUrlEncodedContent(user.AsEnumerable());
-            //await httpClient.SendAsync(registerRequest);
-
-            // Get the token from the API
-            //var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
-            //tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
-            //var response = await httpClient.SendAsync(tokenRequest);
-            //var tokenString = await response.Content.ReadAsStringAsync();
-            //var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;
 
             // Post a Book
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Book");
             request.Content = new FormUrlEncodedContent(book.AsEnumerable());
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response2 = await httpClient.SendAsync(request);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response2 = await _httpClient.SendAsync(request);
 
             if (response2.IsSuccessStatusCode)
                 Console.WriteLine("Your book was added");
@@ -401,48 +489,370 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem adding your book");
         }
 
+
+        // Update Book by ISBN
+        private static async Task UpdateBook()
+        {
+            Console.Clear();
+
+            Console.Write("ISBN of the book to update: ");
+            string userInput = Console.ReadLine();
+
+            Console.Write("Book Title: ");
+            Dictionary<string, string> book = new Dictionary<string, string>
+            {
+                {"BookTitle", Console.ReadLine() }
+
+            };
+
+            Console.Write("Author First Name: ");
+            book.Add("AuthorFirstName", Console.ReadLine());
+
+            Console.Write("Author Last Name: ");
+            book.Add("AuthorLastName", Console.ReadLine());
+
+            Console.Write("Genre Type: ");
+            book.Add("GenreOfBook", Console.ReadLine());
+
+            Console.Write("Description: ");
+            book.Add("Description", Console.ReadLine());
+
+
+            // Post a Book
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Book?ISBN={userInput}");
+            request.Content = new FormUrlEncodedContent(book.AsEnumerable());
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your book was updated");
+            else
+                Console.WriteLine("There was a problem updating your book");
+        }
+
+
+        // Get Ratings
+        private static async Task GetExchanges()
+        {
+            //Console.Clear();
+
+            //HttpClient httpClient = new HttpClient();
+
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/UserRating");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //var response = await httpClient.SendAsync(request);
+
+            //if (response.IsSuccessStatusCode)
+            //    Console.WriteLine("Here are your Exchange Ratings");
+            //else
+            //    Console.WriteLine("Failed to load Exchange Ratings");
+
+            Console.Clear();
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Exchange");
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response != null)
+            {
+                var json = response.Content.ReadAsStringAsync().Result;
+                var list = JsonConvert.DeserializeObject<List<Exchange>>(json);
+
+                foreach (Exchange exchange in list)
+                {
+                    Console.WriteLine($"Exchange ID: {exchange.Id}\n" +
+                        $"Book ID: {exchange.BookId}\n" +
+                        $"Avaiable: {exchange.IsAvailable}\n" +
+                        $"Receiver of Book: {exchange.ReceiverId}\n" +
+                        $"\n");
+                }
+            }
+        }
+
+
+        // Add Exchange
+        private static async Task AddExchange()
+        {
+            Console.Clear();
+            Console.Write("Book ISBN: ");
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+                {
+                    {"BookId", Console.ReadLine() }
+                };
+            Console.Write("Receiver User (ID): ");
+            exchange.Add("ReceiverUser", Console.ReadLine());
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Exchange");
+            request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your Exchange was created");
+            else
+                Console.WriteLine("There was a problem creating your exchange");
+        }
+
+
+
+        // Update Exchange by ID
+        private static async Task UpdateExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange ID to update: ");
+            string userInput = Console.ReadLine();
+
+
+            Console.Write("Book ISBN: ");
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+                {
+                    {"BookId", Console.ReadLine() }
+                };
+            Console.Write("Receiver User (ID): ");
+            exchange.Add("ReceiverUser", Console.ReadLine());
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/Exchange/{userInput}");
+            request.Content = new FormUrlEncodedContent(exchange.AsEnumerable());
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Your Exchange was updated");
+            else
+                Console.WriteLine("There was a problem updating your exchange");
+        }
+
+        //Request Exchange
+        private static async Task RequestExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange Id to request: ");
+            string userInput = Console.ReadLine();
+            Dictionary<string, string> exchange = new Dictionary<string, string>
+            {
+                {"id", userInput }
+            };
+            HttpContent content = new FormUrlEncodedContent(exchange);
+
+            var response = await _httpClient.PutAsync($"https://localhost:44331/api/Exchange/ExchangeRequest?id={userInput}", content);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Book Requested");
+            else 
+                Console.WriteLine("There was a problem with your exchange");
+        }
+
+
+        // Delete Exchange by ID
+        private static async Task DeleteExchange()
+        {
+            Console.Clear();
+            Console.Write("Enter Exchange ID to delete: ");
+            string userInput = Console.ReadLine();
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Exchange/{userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange was deleted");
+            else
+                Console.WriteLine("There was a problem deleting your exchange");
+        }
+
+
+
+        // Get Rating by Exchange ID
+        private static async Task GetRatingByID()
+        {
+            Console.Clear();
+            Console.Write("Enter ID of exchange: ");
+            string userInput = Console.ReadLine();
+
+            //HttpClient httpClient = new HttpClient();
+
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:44331/api/UserRating/{userInput}");
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/UserRating/{userInput}");
+            if (response.IsSuccessStatusCode)
+            {
+                UserRatingDetail userRating = await response.Content.ReadAsAsync<UserRatingDetail>();
+                if (userRating != null)
+                    Console.WriteLine($"\n" +
+                        $"ID: {userRating.Id}\n" +
+                        $"User ID: {userRating.UserId}\n" +
+                        $"Exchange ID: {userRating.ExchangeId}\n" +
+                        $"Exchange Rating: {userRating.ExchangeRating}\n");
+                else
+                    Console.WriteLine("Exchange hasn't been rated");
+            }
+        }
+
+        //Get Ratings about Logged in user
+        private static async Task GetMyRating()
+        {
+            Console.Clear();
+            HttpResponseMessage ratingsresponse = await _httpClient.GetAsync($"https://localhost:44331/api/UserRating");
+            HttpResponseMessage userresponse = await _httpClient.GetAsync("https://localhost:44331/api/Account/GetUserRating");
+            if (!ratingsresponse.IsSuccessStatusCode || !userresponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine("An error has occured");
+                return;
+            }
+            List<UserRatingListItem> ratings = await ratingsresponse.Content.ReadAsAsync<List<UserRatingListItem>>();
+            double? rating = await userresponse.Content.ReadAsAsync<double?>();
+            foreach(var r in ratings)
+            {
+                Console.WriteLine($"\n" +
+                    $"Exchange Id: {r.ExchangeId}\n" +
+                    $"Exchange Rating: {r.ExchangeRating}\n");
+            }
+            if (rating is null)
+                Console.WriteLine("you dont have enough ratings for overall score");
+            else
+            {
+                double roundable = (double)rating;
+                Console.WriteLine($"\n" +
+                    $"Your overall user rating: {Math.Round(roundable,2)}");
+            }
+
+        }
+
+
+
+        // Add Rating
+        private static async Task AddRating()
+        {
+
+            GetExchanges().Wait();
+
+            Console.WriteLine("Enter your Exchange ID and Rating below\n");
+            Console.Write("Exchange ID: ");
+            Dictionary<string, string> rating = new Dictionary<string, string>();
+
+            string exchangeIdInput = Console.ReadLine();
+            rating.Add("ExchangeId", exchangeIdInput);
+
+            Console.Write("Exchange Rating: ");
+            string exchangeRatingInput = Console.ReadLine();
+            rating.Add("ExchangeRating", exchangeRatingInput);
+
+
+
+
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/UserRating");
+            request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange Rating was added");
+            else
+                Console.WriteLine("There was a problem adding your Exchange Rating");
+
+        }
+
+
+        // Update Ratings by ID
+        private static async Task UpdateRatings()
+        {
+            Console.Clear();
+
+            Console.Write("Enter the Rating ID to update:");
+            string userInput = Console.ReadLine();
+
+            Console.Write("Exchange ID: ");
+            Dictionary<string, string> rating = new Dictionary<string, string>();
+
+            string exchangeIdInput = Console.ReadLine();
+            rating.Add("ExchangeId", exchangeIdInput);
+
+            Console.Write("Exchange Rating: ");
+            string exchangeRatingInput = Console.ReadLine();
+            rating.Add("ExchangeRating", exchangeRatingInput);
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"https://localhost:44331/api/UserRating/{userInput}");
+            request.Content = new FormUrlEncodedContent(rating.AsEnumerable());
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Exchange Rating was updated");
+            else
+                Console.WriteLine("There was a problem updating your Exchange Rating");
+        }
+
+
+        // Delete User Rating by ID
         private static async Task DeleteRating()
         {
             Console.Clear();
             Console.Write("Enter Rating ID to delete: ");
             string userInput = Console.ReadLine();
 
-            HttpClient httpClient = new HttpClient();
+            //HttpClient httpClient = new HttpClient();
+            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "$https://localhost:44331/api/UserRating/{id}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/UserRating/{userInput}");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
-            var response = await httpClient.DeleteAsync(userInput);
+            var response = await _httpClient.SendAsync(request);
 
-            //if (await _context.SaveChangesAsync() == 1)
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Rating Deleted");
+            else
+                Console.WriteLine("Error rating not deleted");
+
+        }
+
+        // Delete Book by ISBN
+        private static async Task DeleteBook()
+        {
+            Console.Clear();
+            Console.Write("Enter ISBN to delete: ");
+            string userInput = Console.ReadLine();
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:44331/api/Book?ISBN={userInput}");
+
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            //Book entity = await _context.Books.FindAsync(userInput);
+
+            var response = await _httpClient.SendAsync(request);
+
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Book was deleted");
             else
                 Console.WriteLine("Book could not be deleted");
         }
-
-        //private static async Task DeleteBook()
-        //{
-        //    Console.Clear();
-        //    Console.Write("Enter ISBN to delete: ");
-        //    string userInput = Console.ReadLine();
-
-        //    HttpClient httpClient = new HttpClient();
-
-        //    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, "https://localhost:44331/api/Book");
-        //    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-        //    Book entity = await _context.Books.FindAsync(userInput);
-
-        //    var response2 = await httpClient.DeleteAsync(entity);
-
-        //    if (await _context.SaveChangesAsync() == 1)
-        //        Console.WriteLine("Book was deleted");
-        //    else
-        //        Console.WriteLine("Book could not be deleted");
-        //}
     }
 
-    // Created this helper class for getting the token.
+    // Helper class for token
     public class Token
     {
         [JsonProperty("access_token")]
@@ -451,6 +861,33 @@ namespace BookWormz.UI
 }
 
 
+// Used this to create register a user. Didn't need after first test.
+//var user = new Dictionary<string, string>()
+//{
+//    {"Email", "test1@test.com" },
+//    {"Password", "tesTing1$" },
+//    {"ConfirmPassword", "tesTing1$" },
+//    {"FirstName", "Hustin" },
+//    {"LastName", "Jeffers" },
+//    {"Address", "123 Main St" }
+//};
+
+//var login = new Dictionary<string, string>()
+//{
+//    {"grant_type", "password" },
+//    {"Username", "hustin@hustin.com" },
+//    {"Password", "Test1!" }
+//};
 
 
+//Used this to register an account. Didn't need after first test.
+//var registerRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Account/Register");
+//registerRequest.Content = new FormUrlEncodedContent(user.AsEnumerable());
+//await httpClient.SendAsync(registerRequest);
 
+// Get the token from the API
+//var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/token");
+//tokenRequest.Content = new FormUrlEncodedContent(login.AsEnumerable());
+//var response = await httpClient.SendAsync(tokenRequest);
+//var tokenString = await response.Content.ReadAsStringAsync();
+//var token = JsonConvert.DeserializeObject<Token>(tokenString).Value;

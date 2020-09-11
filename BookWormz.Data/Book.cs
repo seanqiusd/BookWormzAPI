@@ -28,7 +28,7 @@ namespace BookWormz.Data
             }
         }
 
-        [Required]
+        [Required]        
         public BookGenre GenreOfBook { get; set; } //many eneums test
 
         [Required]
