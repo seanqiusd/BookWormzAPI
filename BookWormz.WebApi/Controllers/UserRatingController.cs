@@ -10,15 +10,24 @@ using System.Web.Http;
 
 namespace BookWormz.WebApi.Controllers
 {
-    [Authorize]
+    /// <summary>
+    /// CRUD for user ratings
+    /// </summary>
+    [Authorize]    
     public class UserRatingController : ApiController
     {
+
         private UserRatingService CreateRatingService()
         {
             var reviewService = new UserRatingService(User.Identity.GetUserId());
             return reviewService;
         }
 
+        /// <summary>
+        /// Used to Post New Rating
+        /// </summary>
+        /// <param name="rating"> Rating Paramaters </param>
+        /// <returns></returns>
         [HttpPost]
         public IHttpActionResult PostRating(UserRatingCreate rating)
         {
@@ -45,14 +54,36 @@ namespace BookWormz.WebApi.Controllers
             
         }
 
+        /// <summary>
+        /// Gets all ratings of the logged in user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetRatingById(int id)
+        public IHttpActionResult GetMyRating()
         {
             var service = CreateRatingService();
-            var rating = service.GetRatingOfExchange(id);
+            var ratings = service.GetMyRatings();
+            return Ok(ratings);
+        }
+
+        /// <summary>
+        /// Get user Rating By exchange Id
+        /// </summary>
+        /// <param name="id">Exchange Id of rating to lookup</param>
+        /// <returns>rating info of selected exchange</returns>
+        [HttpGet]
+        public IHttpActionResult GetRatingByExchangeId(int id)
+        {
+            var service = CreateRatingService();
+            var rating = service.GetRatingOfExchangeByExchangeId(id);
             return Ok(rating);
         }
 
+        /// <summary>
+        /// Get Ratings for individual Users
+        /// </summary>
+        /// <param name="userId">Users user Id</param>
+        /// <returns></returns>
         [HttpGet]
         public IHttpActionResult GetRatingsByUserId(string userId)
         {
@@ -61,6 +92,12 @@ namespace BookWormz.WebApi.Controllers
             return Ok(ratings);
         }
 
+        /// <summary>
+        /// Update Rating By Exchange Id
+        /// </summary>
+        /// <param name="id">Exchange Id to update rating for</param>
+        /// <param name="updatedRating"></param>
+        /// <returns></returns>
         [HttpPut]
         public IHttpActionResult UpdateUserRating([FromUri] int id, [FromBody] UserRatingUpdate updatedRating)
         {
@@ -68,7 +105,7 @@ namespace BookWormz.WebApi.Controllers
                 return BadRequest(ModelState);
             var service = CreateRatingService();
 
-            switch (service.UpdateUserRating(updatedRating, id))
+            switch (service.UpdateUserRatingByExchangeId(updatedRating, id))
             {
                 case 0:
                     return Ok("Rating Added");
@@ -83,6 +120,11 @@ namespace BookWormz.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete Rating by rating Id
+        /// </summary>
+        /// <param name="id">Rating Id to be deleted</param>
+        /// <returns></returns>
         [HttpDelete]
         public IHttpActionResult DeleteRating(int id)
         {

@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Http.Extensions;
 using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.UserRatingModels;
 using BookWormz.WebApi.Controllers;
 using Newtonsoft.Json;
 using System;
@@ -24,6 +25,7 @@ namespace BookWormz.UI
         //private List<Book> book = new List<Book>();
         private static readonly ApplicationDbContext _context = new ApplicationDbContext();
 
+        //Using httpClient field to carry authorization once user is logged in
         private static readonly HttpClient _httpClient = new HttpClient();
 
         public async void Start()
@@ -83,18 +85,19 @@ namespace BookWormz.UI
                     "\n" +
                     "\n" +
                     "--- Ratings ---\n" +
-                    "6.) View Exchange Ratings\n" +
+                    "6.) View Exchange Rating\n" +
                     "7.) Add Exchange Rating\n" +
                     "8.) Update Exchange Rating\n" +
-                    "9.) Delete Exchange Rating\n" +
+                    "9.) Get My Ratings\n" +
+                    "10.) Delete Exchange Rating\n" +
                     "\n" +
                     "\n" +
                     "--- Exchanges ---\n" +
-                    "10.) View Exchanges\n" +
-                    "11.) Add Exchange\n" +
-                    "12.) Update Exchange\n" +
-                    "13.) Request Exchange\n" +
-                    "14.) Delete Exchange\n");
+                    "11.) View Exchanges\n" +
+                    "12.) Add Exchange\n" +
+                    "13.) Update Exchange\n" +
+                    "14.) Request Exchange\n" +
+                    "15.) Delete Exchange\n");
 
                 Console.Write("Enter a #: ");
 
@@ -134,25 +137,28 @@ namespace BookWormz.UI
                         break;
 
                     case "9":
-                        DeleteRating();
+                        GetMyRating();
                         break;
 
                     case "10":
-                        GetExchanges();
+                        DeleteRating();
                         break;
 
                     case "11":
-                        AddExchange();
+                        GetExchanges();
                         break;
 
                     case "12":
-                        UpdateExchange();
+                        AddExchange();
                         break;
 
                     case "13":
-                        RequestExchange();
+                        UpdateExchange();
                         break;
                     case "14":
+                        RequestExchange();
+                        break;
+                    case "15":
                         DeleteExchange();
                         break;
 
@@ -429,6 +435,8 @@ namespace BookWormz.UI
             {
                 Console.WriteLine("\n" +
                     "Success, you are logged in with a token");
+
+                //If loggin is successful using token to authorize http client
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
                 _loggedIn = true;
             }
@@ -668,11 +676,11 @@ namespace BookWormz.UI
 
 
 
-        // Get Ratings
+        // Get Rating by Exchange ID
         private static async Task GetRatingByID()
         {
             Console.Clear();
-            Console.Write("Enter Rating ID: ");
+            Console.Write("Enter ID of exchange: ");
             string userInput = Console.ReadLine();
 
             //HttpClient httpClient = new HttpClient();
@@ -685,22 +693,55 @@ namespace BookWormz.UI
             HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:44331/api/UserRating/{userInput}");
             if (response.IsSuccessStatusCode)
             {
-                UserRating userRating = await response.Content.ReadAsAsync<UserRating>();
-                Console.WriteLine($"\n" +
-                    $"ID: {userInput}\n" +
-                    $"User ID: {userRating.UserId}\n" +
-                    $"Exchange ID: {userRating.ExchangeId}\n" +
-                    $"Exchange Rating: {userRating.ExchangeRating}\n");
+                UserRatingDetail userRating = await response.Content.ReadAsAsync<UserRatingDetail>();
+                if (userRating != null)
+                    Console.WriteLine($"\n" +
+                        $"ID: {userRating.Id}\n" +
+                        $"User ID: {userRating.UserId}\n" +
+                        $"Exchange ID: {userRating.ExchangeId}\n" +
+                        $"Exchange Rating: {userRating.ExchangeRating}\n");
+                else
+                    Console.WriteLine("Exchange hasn't been rated");
             }
         }
 
-    
+        //Get Ratings about Logged in user
+        private static async Task GetMyRating()
+        {
+            Console.Clear();
+            HttpResponseMessage ratingsresponse = await _httpClient.GetAsync($"https://localhost:44331/api/UserRating");
+            HttpResponseMessage userresponse = await _httpClient.GetAsync("https://localhost:44331/api/Account/GetUserRating");
+            if (!ratingsresponse.IsSuccessStatusCode || !userresponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine("An error has occured");
+                return;
+            }
+            List<UserRatingListItem> ratings = await ratingsresponse.Content.ReadAsAsync<List<UserRatingListItem>>();
+            double? rating = await userresponse.Content.ReadAsAsync<double?>();
+            foreach(var r in ratings)
+            {
+                Console.WriteLine($"\n" +
+                    $"Exchange Id: {r.ExchangeId}\n" +
+                    $"Exchange Rating: {r.ExchangeRating}\n");
+            }
+            if (rating is null)
+                Console.WriteLine("you dont have enough ratings for overall score");
+            else
+            {
+                double roundable = (double)rating;
+                Console.WriteLine($"\n" +
+                    $"Your overall user rating: {Math.Round(roundable,2)}");
+            }
+
+        }
+
+
 
         // Add Rating
         private static async Task AddRating()
         {
 
-            GetExchanges();
+            GetExchanges().Wait();
 
             Console.WriteLine("Enter your Exchange ID and Rating below\n");
             Console.Write("Exchange ID: ");
