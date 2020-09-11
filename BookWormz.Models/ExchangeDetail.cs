@@ -20,5 +20,7 @@ namespace BookWormz.Models
 
         [Display(Name ="Sent Date")]
         public DateTime? SentDate { get; set; }
+
+        public virtual ICollection<CommentDetail> Comments { get; set; } = new List<CommentDetail>();
     }
 }

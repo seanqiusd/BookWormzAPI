@@ -70,7 +70,7 @@ namespace BookWormz.Services
                     ctx
                     .Exchanges
                     .Single(e => e.Id == id);
-                return
+                var detailedExchange = 
                     new ExchangeDetail
                     {
                         Id = entity.Id,
@@ -78,6 +78,11 @@ namespace BookWormz.Services
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };
+                foreach (Comment comment in entity.Comments)
+                {
+                    detailedExchange.Comments.Add(new CommentDetail { Id = comment.Id, Text = comment.Text });
+                }
+                return detailedExchange;
             }
         }
     }

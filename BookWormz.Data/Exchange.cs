@@ -36,5 +36,7 @@ namespace BookWormz.Data
         public string ReceiverId { get; set; }
         public virtual ApplicationUser ReceiverUser { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     }
 }
