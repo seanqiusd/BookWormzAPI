@@ -11,6 +11,7 @@ namespace BookWormz.Services
     public class ExchangeService
     {
         private readonly string _userId;
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
 
         public ExchangeService(string userId)
         {
@@ -79,6 +80,26 @@ namespace BookWormz.Services
                         SentDate = entity.SentDate
                     };
             }
+        }
+
+        public int RequestExchange(int id)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+            if (exchange == null)
+            {
+                return 2;
+            }
+            if (exchange.IsAvailable == false)
+                return 3;
+
+            ////Stops user from requesting their own book. 
+            ////Commented out for Testing purposes
+            //if (exchange.SenderId == _userId)
+            //    return 4;
+
+            exchange.IsAvailable = false;
+            exchange.ReceiverId = _userId;
+            return _context.SaveChanges() == 1 ? 0 : 1;
         }
     }
 }

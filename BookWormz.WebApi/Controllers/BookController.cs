@@ -21,7 +21,7 @@ namespace BookWormz.WebApi.Controllers
     /// </summary>
 
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
-
+    [Authorize]
     public class BookController : ApiController
     {
         private ApplicationDbContext _context = new ApplicationDbContext(); // this'll save db when trying to save in controller instead of services...specifically this is for bookupdate
