@@ -84,7 +84,12 @@ namespace BookWormz.Services
                     };
                 foreach (Comment comment in entity.Comments)
                 {
-                    detailedExchange.Comments.Add(new CommentDetail { Id = comment.Id, Text = comment.Text });
+                    if (comment is Reply)
+                        continue;
+                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text, CommentorsName = comment.Commenter.FullName };
+                    foreach (Reply reply in comment.Replies)
+                        commentDetail.Replies.Add(new ReplyDetail { Id = reply.Id, Text = reply.Text });
+                    detailedExchange.Comments.Add(commentDetail);
                 }
                 return detailedExchange;
             }

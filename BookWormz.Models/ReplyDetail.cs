@@ -14,8 +14,5 @@ namespace BookWormz.Models
 
         [Display(Name ="Reply")]
         public string Text { get; set; }
-
-
-
     }
 }
