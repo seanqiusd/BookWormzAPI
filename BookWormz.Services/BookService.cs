@@ -80,7 +80,7 @@ namespace BookWormz.Services
                     Description = entity.Description,
                     NumberAvailable = entity.NumberAvailable
                 };
-                foreach(Exchange exchange in entity.Exchanges)  // To Display All the exchanges
+                foreach (Exchange exchange in entity.Exchanges)  // To Display All the exchanges
                 {
                     detailedBook.ExchangeListItems.Add(new ExchangeSmListItem { Id = exchange.Id, IsAvailable = exchange.IsAvailable, Posted = exchange.Posted, SenderName = exchange.SenderUser.FirstName, SenderRating = exchange.SenderUser.ExchangeRating });
                 }
@@ -88,8 +88,29 @@ namespace BookWormz.Services
             }
         }
 
+        //Update
+        public int UpdateBookByISBN(string ISBN, BookUpdate newBook)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                Book book = ctx.Books.Find(ISBN);
+                if (book == null)
+                {
+                    return 2;
+                }
+                book.BookTitle = newBook.BookTitle;
+                book.AuthorFirstName = newBook.AuthorFirstName;
+                book.AuthorLastName = newBook.AuthorLastName;
+                book.GenreOfBook = newBook.GenreOfBook;
+                book.Description = newBook.Description;
+                if (ctx.SaveChanges() == 1)
+                    return 0;
+                return 1;
+            }
+        }
+
         // Delete
-        public bool  DeleteBook(string ISBN)
+        public bool DeleteBook(string ISBN)
         {
             using (var ctx = new ApplicationDbContext())
             {

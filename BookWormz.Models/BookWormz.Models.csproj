@@ -63,6 +63,7 @@
     <Compile Include="BookCreate.cs" />
     <Compile Include="BookDetail.cs" />
     <Compile Include="BookListItem.cs" />
+    <Compile Include="BookUpdate.cs" />
     <Compile Include="CommentCreate.cs" />
     <Compile Include="CommentDetail.cs" />
     <Compile Include="CommentListItem.cs" />

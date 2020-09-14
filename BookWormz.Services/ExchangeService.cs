@@ -31,6 +31,9 @@ namespace BookWormz.Services
                     IsAvailable = true
                 };
 
+            if (entity.ReceiverId != null)
+                entity.IsAvailable = false;
+
             using (var ctx = new ApplicationDbContext())
             {
                 entity.SenderUser = ctx.Users.Where(e => e.Id == _userId).First();
@@ -87,25 +90,6 @@ namespace BookWormz.Services
             }
         }
 
-        public int RequestExchange(int id)
-        {
-            Exchange exchange = _context.Exchanges.Find(id);
-            if (exchange == null)
-            {
-                return 2;
-            }
-            if (exchange.IsAvailable == false)
-                return 3;
-
-            ////Stops user from requesting their own book. 
-            ////Commented out for Testing purposes
-            //if (exchange.SenderId == _userId)
-            //    return 4;
-
-            exchange.IsAvailable = false;
-            exchange.ReceiverId = _userId;
-            return _context.SaveChanges() == 1 ? 0 : 1;
-        }
 
 
         // Get available books by state
@@ -129,6 +113,73 @@ namespace BookWormz.Services
                 }
                 return exchanges;
             }
+        }
+
+        public int UpdateExchangeById(int id, ExchangeCreate newExchange)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+            if (exchange == null)
+            {
+                return 2;
+            }
+            if (exchange.SenderId != _userId)
+            {
+                return 3;
+            }
+            
+            exchange.BookId = newExchange.BookId;
+            exchange.Posted = newExchange.Posted;
+            exchange.SentDate = newExchange.SentDate;
+            exchange.ReceiverId = newExchange.ReceiverUser;
+
+            if (newExchange.ReceiverUser == null)
+                exchange.IsAvailable = true;
+            else
+                exchange.IsAvailable = false;
+            
+            var num = _context.SaveChanges();
+            if (num == 1)           
+                return 0;
+            //If no changes are saved
+            if (num == 0)
+                return 4;
+            return 1;
+        }
+        public int RequestExchange(int id)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+            if (exchange == null)
+            {
+                return 2;
+            }
+            if (exchange.IsAvailable == false)
+                return 3;
+
+            ////Stops user from requesting their own book. 
+            ////Commented out for Testing purposes
+            //if (exchange.SenderId == _userId)
+            //    return 4;
+
+            exchange.IsAvailable = false;
+            exchange.ReceiverId = _userId;
+            return _context.SaveChanges() == 1 ? 0 : 1;
+        }
+
+        public int DeleteExchangeById(int id)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+
+            if (exchange == null)
+            {
+                return 2;
+            }
+
+            _context.Exchanges.Remove(exchange);
+            if (_context.SaveChanges() == 1)
+            {
+                return 0;
+            }
+            return 1;
         }
     }
 }

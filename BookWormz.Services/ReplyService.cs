@@ -34,7 +34,7 @@ namespace BookWormz.Services
                         return false;
 
                 ctx.Comments.Add(entity);
-                return ctx.SaveChanges() == 1; // should this be set to == 2? we did this for socmedia for some reason
+                return ctx.SaveChanges() == 1; 
 
             }
 

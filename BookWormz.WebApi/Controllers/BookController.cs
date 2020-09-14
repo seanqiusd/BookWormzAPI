@@ -24,8 +24,6 @@ namespace BookWormz.WebApi.Controllers
     [Authorize]
     public class BookController : ApiController
     {
-        private ApplicationDbContext _context = new ApplicationDbContext(); // this'll save db when trying to save in controller instead of services...specifically this is for bookupdate
-
         private BookService CreateBookService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
@@ -109,24 +107,24 @@ namespace BookWormz.WebApi.Controllers
         /// <param name="ISBN"></param>
         /// <param name="newBook"></param>
         /// <returns></returns>
-        public IHttpActionResult Put([FromUri] string ISBN, [FromBody] Book newBook)
+        public IHttpActionResult Put([FromUri] string ISBN, [FromBody] BookUpdate newBook)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Book book = _context.Books.Find(ISBN);
-                    if (book == null)
-                {
-                    return BadRequest("Book not found");
-                }
-                book.BookTitle = newBook.BookTitle;
-                book.AuthorFirstName = newBook.AuthorFirstName;
-                book.AuthorLastName = newBook.AuthorLastName;
-                book.GenreOfBook = newBook.GenreOfBook;
-                book.Description = newBook.Description;
-                _context.SaveChanges();
-                return Ok($"{newBook.BookTitle} has been updated");
+                return BadRequest(ModelState);
             }
-            return NotFound();
+            var service = CreateBookService();
+            switch(service.UpdateBookByISBN(ISBN, newBook))
+            {
+                case 0:
+                    return Ok($"{newBook.BookTitle} has been updated");
+                case 1:
+                    return InternalServerError();
+                case 2:
+                    return BadRequest("Book not found");
+                default:
+                    return InternalServerError();
+            }
         }
 
 
