@@ -1,5 +1,6 @@
 ﻿using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.ReplyModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,19 @@ namespace BookWormz.Services
                     Replies = AddReplies(entity.Replies)
                 };
                 return detailedReply;
+            }
+        }
+
+        // Put -- Update Reply by Id
+        public bool UpdateReply(int id, ReplyUpdate reply)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity = ctx.Replies.Single(e => e.Id == id);
+
+                entity.Text = reply.CommentText;
+
+                return ctx.SaveChanges() == 1;
             }
         }
 

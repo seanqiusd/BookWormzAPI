@@ -87,6 +87,19 @@ namespace BookWormz.Services
             }
         }
 
+        // Put -- Update Comment by Id
+        public bool UpdateComment(int id, CommentUpdate comment)
+        {
+            using(var ctx = new ApplicationDbContext())
+            {
+                var entity = ctx.Comments.Single(e => e.Id == id);
+
+                entity.Text = comment.CommentText;
+
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
         // Delete a comment
         public bool DeleteComment(int Id)
         {
