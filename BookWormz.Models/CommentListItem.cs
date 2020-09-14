@@ -16,7 +16,11 @@ namespace BookWormz.Models
         [Display(Name = "Text")]
         public string Text { get; set; }
 
-        public virtual ICollection<ReplyDetail> Replies { get; set; } = new List<ReplyDetail>();
+        [Display(Name = "Commenter")]
+        public string CommenterName { get; set; }
+
+        [Display(Name = "Number Of Replies")]
+        public int NumberOfReplies { get; set; }
 
 
     }

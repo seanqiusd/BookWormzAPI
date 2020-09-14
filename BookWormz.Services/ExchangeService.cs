@@ -88,7 +88,11 @@ namespace BookWormz.Services
                     if (comment is Reply)
                         continue;
                     //Add comments and their replies
-                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text, CommentorsName = comment.Commenter.FullName, Replies = AddReplies(comment.Replies) };
+                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text,
+                        //Using ternary incase of null commenter
+                        CommentorsName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
+                        //Using recursive Method to populate replies
+                        Replies = AddReplies(comment.Replies) };
                     detailedExchange.Comments.Add(commentDetail);
                 }
                 return detailedExchange;
@@ -197,7 +201,8 @@ namespace BookWormz.Services
 
             foreach (var reply in replies)
             {
-                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text, CommentorsName = reply.Commenter.FullName };
+                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text,
+                    CommentorsName = reply.Commenter != null ? reply.Commenter.FullName : "Unknown"};
                 DetailedReply.Replies = AddReplies(reply.Replies);
                 DetailedReplies.Add(DetailedReply);
             }

@@ -54,6 +54,7 @@ namespace BookWormz.Services
                         {
                             ExchangeId = e.ExchangeId,
                             Text = e.Text,
+                            RepliersName = e.Commenter != null ? e.Commenter.FullName : "unknown"
                         }
                         );
                 return query.ToArray();
@@ -71,7 +72,9 @@ namespace BookWormz.Services
                 var detailedReply = new ReplyDetail
                 {
                     Id = entity.Id,
-                    Text = entity.Text
+                    Text = entity.Text,
+                    CommentorsName = entity.Commenter != null ? entity.Commenter.FullName : "unknown",
+                    Replies = AddReplies(entity.Replies)
                 };
                 return detailedReply;
             }
@@ -87,6 +90,31 @@ namespace BookWormz.Services
 
                 return ctx.SaveChanges() == 1;
             }
+        }
+
+
+
+        //Recursive function to Add replies
+        private List<ReplyDetail> AddReplies(ICollection<Reply> replies)
+        {
+            if (replies.Count == 0)
+                return new List<ReplyDetail>();
+
+            var DetailedReplies = new List<ReplyDetail>();
+
+            foreach (var reply in replies)
+            {
+                var DetailedReply = new ReplyDetail
+                {
+                    Id = reply.Id,
+                    Text = reply.Text,
+                    //Using ternary incase of comment not having author(corrupt data)
+                    CommentorsName = (reply.Comment != null ? reply.Commenter.FullName : "Unknown")
+                };
+                DetailedReply.Replies = AddReplies(reply.Replies);
+                DetailedReplies.Add(DetailedReply);
+            }
+            return DetailedReplies;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace BookWormz.Services
                         return false;
 
                 ctx.Comments.Add(entity);
-                return ctx.SaveChanges() == 1; // Should this be set to 2, socmedia did this for some reason
+                return ctx.SaveChanges() == 1;
                     
             }
         }
@@ -57,16 +57,10 @@ namespace BookWormz.Services
                                 Id = e.Id,
                                 ExchangeId = e.ExchangeId,
                                 Text = e.Text,
+                                CommenterName = e.Commenter != null ? e.Commenter.FullName : "Unknown",
+                                NumberOfReplies = e.Replies.Count()                               
                             };
-                            foreach (var reply in e.Replies)
-                            {
-                                var r = new ReplyDetail
-                                {
-                                    Id = reply.Id,
-                                    Text = reply.Text
-                                };
-                                listItem.Replies.Add(r);
-                            }
+                            
                             return listItem;
                         });
                 return query.ToArray();
@@ -85,7 +79,8 @@ namespace BookWormz.Services
                 {
                     Id = entity.Id,
                     Text = entity.Text,
-                    CommentorsName = entity.Commenter.FullName,
+                    //Using ternary incase of nulled commenter
+                    CommentorsName = entity.Commenter != null ? entity.Commenter.FullName : "Unknown",
                     Replies = AddReplies(entity.Replies)
                 };
                 return detailedComment;
@@ -115,7 +110,9 @@ namespace BookWormz.Services
 
             foreach(var reply in replies)
             {
-                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text, CommentorsName = reply.Commenter.FullName };
+                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text,
+                    //Using ternary incase of comment not having author(corrupt data)
+                    CommentorsName = (reply.Comment != null ? reply.Commenter.FullName : "Unknown") };
                 DetailedReply.Replies = AddReplies(reply.Replies);
                 DetailedReplies.Add(DetailedReply);
             }
