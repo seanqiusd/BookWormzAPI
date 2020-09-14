@@ -1,4 +1,5 @@
 ﻿using BookWormz.Models;
+using BookWormz.Models.ReplyModels;
 using BookWormz.Services;
 using Microsoft.AspNet.Identity;
 using System;
@@ -68,6 +69,22 @@ namespace BookWormz.WebApi.Controllers
             ReplyService replyService = CreateReplyService();
             var reply = replyService.GetReplyDetail(Id);
             return Ok(reply);
+        }
+
+        /// <summary>
+        /// Update Reply text By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reply"></param>
+        /// <returns></returns>
+        //Update reply
+        [HttpPut]
+        public IHttpActionResult UpdateReply([FromUri] int id, [FromBody] ReplyUpdate reply)
+        {
+            var service = CreateReplyService();
+            if (service.UpdateReply(id, reply))
+                return Ok("Reply Updated");
+            return InternalServerError();
         }
 
         // Delete reply

@@ -571,6 +571,14 @@
             <param name="Id"></param>
             <returns>Returns CommentDetail Model</returns>
         </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.UpdateComment(System.Int32,BookWormz.Models.CommentUpdate)">
+            <summary>
+            Update Comment Text By Id
+            </summary>
+            <param name="id"></param>
+            <param name="commentUpdate"></param>
+            <returns></returns>
+        </member>
         <member name="M:BookWormz.WebApi.Controllers.CommentController.Delete(System.Int32)">
             <summary>
             Remove Comment From Database By ID
@@ -656,6 +664,14 @@
             </summary>
             <param name="Id"></param>
             <returns>Returns ReplyDetail Model</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.UpdateReply(System.Int32,BookWormz.Models.ReplyModels.ReplyUpdate)">
+            <summary>
+            Update Reply text By Id
+            </summary>
+            <param name="id"></param>
+            <param name="reply"></param>
+            <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ReplyController.Delete(System.Int32)">
             <summary>
