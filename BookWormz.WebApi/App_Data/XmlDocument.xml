@@ -511,18 +511,18 @@
             Crud For Book Entities
             </summary>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.BookController.Get">
-            <summary>
-            Get All Books
-            </summary>
-            <returns>Returns BookListItem Object of all books in database</returns>
-        </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Post(BookWormz.Models.BookCreate)">
             <summary>
             Create New Book In Database
             </summary>
             <param name="book"></param>
             <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.BookController.Get">
+            <summary>
+            Get All Books
+            </summary>
+            <returns>Returns BookListItem Object of all books in database</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Get(System.String)">
             <summary>
@@ -531,19 +531,19 @@
             <param name="ISBN"></param>
             <returns>Returns BookDetail Model</returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.BookController.Delete(System.String)">
-            <summary>
-            Remove Book From Database
-            </summary>
-            <param name="ISBN"></param>
-            <returns></returns>
-        </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Put(System.String,BookWormz.Models.BookUpdate)">
             <summary>
             Update Existing Book In Database
             </summary>
             <param name="ISBN"></param>
             <param name="newBook"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.BookController.Delete(System.String)">
+            <summary>
+            Remove Book From Database
+            </summary>
+            <param name="ISBN"></param>
             <returns></returns>
         </member>
         <member name="T:BookWormz.WebApi.Controllers.CommentController">

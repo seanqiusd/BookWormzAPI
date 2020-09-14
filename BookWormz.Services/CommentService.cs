@@ -84,12 +84,10 @@ namespace BookWormz.Services
                 var detailedComment = new CommentDetail
                 {
                     Id = entity.Id,
-                    Text = entity.Text
+                    Text = entity.Text,
+                    CommentorsName = entity.Commenter.FullName,
+                    Replies = AddReplies(entity.Replies)
                 };
-                foreach (Comment comment in entity.Replies)
-                {
-                    detailedComment.Replies.Add(new ReplyDetail{ Id = comment.Id, Text = comment.Text });
-                }
                 return detailedComment;
             }
         }
@@ -104,6 +102,24 @@ namespace BookWormz.Services
 
                 return ctx.SaveChanges() == 1;
             }
+        }
+
+
+        //Recursive function to Add replies
+        private List<ReplyDetail> AddReplies (ICollection<Reply> replies)
+        {            
+            if (replies.Count == 0)
+                return new List<ReplyDetail>();
+
+            var DetailedReplies = new List<ReplyDetail>();
+
+            foreach(var reply in replies)
+            {
+                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text, CommentorsName = reply.Commenter.FullName };
+                DetailedReply.Replies = AddReplies(reply.Replies);
+                DetailedReplies.Add(DetailedReply);
+            }
+            return DetailedReplies;
         }
 
 

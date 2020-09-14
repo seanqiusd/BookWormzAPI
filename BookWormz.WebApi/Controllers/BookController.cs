@@ -31,20 +31,6 @@ namespace BookWormz.WebApi.Controllers
             return bookService;
         }
 
-        // get all books
-
-        /// <summary>
-        /// Get All Books
-        /// </summary>
-        /// <returns>Returns BookListItem Object of all books in database</returns>
-        public IHttpActionResult Get()
-        {
-            BookService bookService = CreateBookService();
-            var books = bookService.GetBooks();
-            return Ok(books);
-
-        }
-
         // creates book
         /// <summary>
         /// Create New Book In Database
@@ -67,6 +53,20 @@ namespace BookWormz.WebApi.Controllers
             return Ok($"{book.BookTitle} added");
         }
 
+        // get all books
+
+        /// <summary>
+        /// Get All Books
+        /// </summary>
+        /// <returns>Returns BookListItem Object of all books in database</returns>
+        public IHttpActionResult Get()
+        {
+            BookService bookService = CreateBookService();
+            var books = bookService.GetBooks();
+            return Ok(books);
+
+        }
+
         // Get single book details
         /// <summary>
         /// Get Detailed Information From Single Book Item
@@ -80,24 +80,6 @@ namespace BookWormz.WebApi.Controllers
             var book = bookService.GetBookDetail(ISBN);
             return Ok(book);
         }
-
-
-        // Delete a book
-        /// <summary>
-        /// Remove Book From Database
-        /// </summary>
-        /// <param name="ISBN"></param>
-        /// <returns></returns>
-        public IHttpActionResult Delete(string ISBN)
-        {
-            var service = CreateBookService();
-            if (!service.DeleteBook(ISBN))
-            {
-                return InternalServerError();
-            }
-            return Ok($"ISBN: {ISBN} has been deleted");
-        }
-
 
         // Put --Update a book detail via ISBN
         //[HttpPut]
@@ -127,6 +109,20 @@ namespace BookWormz.WebApi.Controllers
             }
         }
 
-
+        // Delete a book
+        /// <summary>
+        /// Remove Book From Database
+        /// </summary>
+        /// <param name="ISBN"></param>
+        /// <returns></returns>
+        public IHttpActionResult Delete(string ISBN)
+        {
+            var service = CreateBookService();
+            if (!service.DeleteBook(ISBN))
+            {
+                return InternalServerError();
+            }
+            return Ok($"ISBN: {ISBN} has been deleted");
+        }
     }
 }

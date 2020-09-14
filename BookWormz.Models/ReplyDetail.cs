@@ -15,7 +15,9 @@ namespace BookWormz.Models
         [Display(Name ="Reply")]
         public string Text { get; set; }
 
+        [Display(Name ="Commentor's Name")]
+        public string CommentorsName { get; set; }
 
-
+        public List<ReplyDetail> Replies { get; set; } = new List<ReplyDetail>();
     }
 }

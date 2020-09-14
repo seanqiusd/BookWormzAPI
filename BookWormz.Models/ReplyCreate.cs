@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models
 {
-    public class ReplyCreate : CommentCreate
+    public class ReplyCreate 
     {
-        // may need to add ExchangeId here
         [Required]
         public int CommentId { get; set; }
+
+        [Required]
+        [MaxLength(8000)]
+        public string CommentText { get; set; }
 
     }
 }

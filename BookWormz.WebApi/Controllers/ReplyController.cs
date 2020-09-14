@@ -18,7 +18,7 @@ namespace BookWormz.WebApi.Controllers
     {
         private ReplyService CreateReplyService()
         {
-            var userId = Guid.Parse(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
             var replyService = new ReplyService(userId);
             return replyService;
         }

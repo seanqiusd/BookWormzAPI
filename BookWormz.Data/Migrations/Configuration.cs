@@ -51,10 +51,10 @@ namespace BookWormz.Data.Migrations
             new UserRating() { Id = 89, ExchangeId = 75, ExchangeRating = 4 }
             );
 
-            context.Comments.AddOrUpdate(x => x.Id,
-                new Comment() { Id = 91, ExchangeId = 76, Text = "This is a seeded comment" },
-                new Comment() { Id = 92, ExchangeId = 76, Text = "This is another seeded comment" }
-                );
+            //context.Comments.AddOrUpdate(x => x.Id,
+            //    new Comment() { Id = 91, ExchangeId = 76, Text = "This is a seeded comment" },
+            //    new Comment() { Id = 92, ExchangeId = 76, Text = "This is another seeded comment" }
+            //    );
 
         }
     }
