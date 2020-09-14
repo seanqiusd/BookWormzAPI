@@ -86,9 +86,7 @@ namespace BookWormz.Services
                 {
                     if (comment is Reply)
                         continue;
-                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text, CommentorsName = comment.Commenter.FullName };
-                    foreach (Reply reply in comment.Replies)
-                        commentDetail.Replies.Add(new ReplyDetail { Id = reply.Id, Text = reply.Text });
+                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text, CommentorsName = comment.Commenter.FullName, Replies = AddReplies(comment.Replies) };
                     detailedExchange.Comments.Add(commentDetail);
                 }
                 return detailedExchange;
@@ -185,6 +183,23 @@ namespace BookWormz.Services
                 return 0;
             }
             return 1;
+        }
+
+        //Recursive function to Add replies
+        private List<ReplyDetail> AddReplies(ICollection<Reply> replies)
+        {
+            if (replies.Count == 0)
+                return new List<ReplyDetail>();
+
+            var DetailedReplies = new List<ReplyDetail>();
+
+            foreach (var reply in replies)
+            {
+                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text, CommentorsName = reply.Commenter.FullName };
+                DetailedReply.Replies = AddReplies(reply.Replies);
+                DetailedReplies.Add(DetailedReply);
+            }
+            return DetailedReplies;
         }
     }
 }

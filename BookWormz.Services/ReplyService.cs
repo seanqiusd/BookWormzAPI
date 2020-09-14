@@ -10,9 +10,9 @@ namespace BookWormz.Services
 {
     public class ReplyService
     {
-        private readonly Guid _userId;
+        private readonly string _userId;
 
-        public ReplyService(Guid userId)
+        public ReplyService(string userId)
         {
             _userId = userId;
         }
@@ -24,14 +24,14 @@ namespace BookWormz.Services
             {
                 Text = model.CommentText,
                 CommentId = model.CommentId,
-                ExchangeId = model.ExchangeId
+                //Using user Id to identify commenter
+                CommenterId = _userId
             };
 
             using (var ctx = new ApplicationDbContext())
             {
-                foreach (Reply reply in ctx.Replies)
-                    if (reply.Id == entity.ExchangeId)
-                        return false;
+                // grabbing exchange Id from comment
+                entity.ExchangeId = ctx.Comments.Single(e => e.Id == entity.CommentId).ExchangeId;                
 
                 ctx.Comments.Add(entity);
                 return ctx.SaveChanges() == 1; 
