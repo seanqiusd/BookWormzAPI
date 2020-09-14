@@ -84,8 +84,10 @@ namespace BookWormz.Services
                     };
                 foreach (Comment comment in entity.Comments)
                 {
+                    //If comment is Reply it will attach to its comment so can be skipped
                     if (comment is Reply)
                         continue;
+                    //Add comments and their replies
                     var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text, CommentorsName = comment.Commenter.FullName, Replies = AddReplies(comment.Replies) };
                     detailedExchange.Comments.Add(commentDetail);
                 }
