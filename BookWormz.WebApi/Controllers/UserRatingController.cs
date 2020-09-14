@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace BookWormz.WebApi.Controllers
 {
     /// <summary>
-    /// CRUD for user ratings
+    /// Crud For User Ratings
     /// </summary>
     [Authorize]    
     public class UserRatingController : ApiController
@@ -24,7 +24,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Used to Post New Rating
+        /// Used To Post New Rating
         /// </summary>
         /// <param name="rating"> Rating Paramaters </param>
         /// <returns></returns>
@@ -55,7 +55,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets all ratings of the logged in user
+        /// Gets All Ratings Of The Logged In User
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -67,7 +67,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get user Rating By exchange Id
+        /// Get User Rating By Exchange ID
         /// </summary>
         /// <param name="id">Exchange Id of rating to lookup</param>
         /// <returns>rating info of selected exchange</returns>
@@ -80,7 +80,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get Ratings for individual Users
+        /// Get Ratings For Individual Users By UserId
         /// </summary>
         /// <param name="userId">Users user Id</param>
         /// <returns></returns>
@@ -93,7 +93,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Update Rating By Exchange Id
+        /// Update Rating By Exchange ID
         /// </summary>
         /// <param name="id">Exchange Id to update rating for</param>
         /// <param name="updatedRating"></param>
@@ -121,7 +121,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Delete Rating by rating Id
+        /// Delete Rating By Rating ID
         /// </summary>
         /// <param name="id">Rating Id to be deleted</param>
         /// <returns></returns>

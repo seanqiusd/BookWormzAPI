@@ -22,7 +22,7 @@ using System.Web.Http.Cors;
 namespace BookWormz.WebApi.Controllers
 {
     /// <summary>
-    /// Create and manage Accounts
+    /// Create And Manage Accounts
     /// </summary>
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -122,7 +122,7 @@ namespace BookWormz.WebApi.Controllers
 
         // POST api/Account/ChangePassword
         /// <summary>
-        /// Allows for change of password
+        /// Allows For Change Of Password
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -330,7 +330,7 @@ namespace BookWormz.WebApi.Controllers
         //}
 
         /// <summary>
-        /// Get logged in Users UserRating
+        /// Get Logged In Users UserRating
         /// </summary>
         /// <returns></returns>
         [Route("GetUserRating")]
@@ -343,7 +343,7 @@ namespace BookWormz.WebApi.Controllers
         }
 
         /// <summary>
-        /// Register login
+        /// Register Login
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -358,7 +358,7 @@ namespace BookWormz.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Address = model.Address };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, State = model.State };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

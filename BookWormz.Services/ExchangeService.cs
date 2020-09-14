@@ -31,6 +31,9 @@ namespace BookWormz.Services
                     IsAvailable = true
                 };
 
+            if (entity.ReceiverId != null)
+                entity.IsAvailable = false;
+
             using (var ctx = new ApplicationDbContext())
             {
                 entity.SenderUser = ctx.Users.Where(e => e.Id == _userId).First();
@@ -71,7 +74,7 @@ namespace BookWormz.Services
                     ctx
                     .Exchanges
                     .Single(e => e.Id == id);
-                return
+                var detailedExchange = 
                     new ExchangeDetail
                     {
                         Id = entity.Id,
@@ -79,9 +82,69 @@ namespace BookWormz.Services
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };
+                foreach (Comment comment in entity.Comments)
+                {
+                    detailedExchange.Comments.Add(new CommentDetail { Id = comment.Id, Text = comment.Text });
+                }
+                return detailedExchange;
             }
         }
 
+
+
+        // Get available books by state
+        public List<ExchangeListItem> GetExchangesByState(string state)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entities = ctx.Exchanges.Where(e => e.SenderUser.State.ToLower() == state.ToLower());
+                List<ExchangeListItem> exchanges = new List<ExchangeListItem>();
+                foreach (var entity in entities)
+                {
+                    var exchangeListItem =
+                       new ExchangeListItem
+                       {
+                           Id = entity.Id,
+                           BookId = entity.BookId,
+                           Posted = entity.Posted,
+                           SentDate = entity.SentDate
+                       };
+                    exchanges.Add(exchangeListItem);
+                }
+                return exchanges;
+            }
+        }
+
+        public int UpdateExchangeById(int id, ExchangeCreate newExchange)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+            if (exchange == null)
+            {
+                return 2;
+            }
+            if (exchange.SenderId != _userId)
+            {
+                return 3;
+            }
+            
+            exchange.BookId = newExchange.BookId;
+            exchange.Posted = newExchange.Posted;
+            exchange.SentDate = newExchange.SentDate;
+            exchange.ReceiverId = newExchange.ReceiverUser;
+
+            if (newExchange.ReceiverUser == null)
+                exchange.IsAvailable = true;
+            else
+                exchange.IsAvailable = false;
+            
+            var num = _context.SaveChanges();
+            if (num == 1)           
+                return 0;
+            //If no changes are saved
+            if (num == 0)
+                return 4;
+            return 1;
+        }
         public int RequestExchange(int id)
         {
             Exchange exchange = _context.Exchanges.Find(id);
@@ -100,6 +163,23 @@ namespace BookWormz.Services
             exchange.IsAvailable = false;
             exchange.ReceiverId = _userId;
             return _context.SaveChanges() == 1 ? 0 : 1;
+        }
+
+        public int DeleteExchangeById(int id)
+        {
+            Exchange exchange = _context.Exchanges.Find(id);
+
+            if (exchange == null)
+            {
+                return 2;
+            }
+
+            _context.Exchanges.Remove(exchange);
+            if (_context.SaveChanges() == 1)
+            {
+                return 0;
+            }
+            return 1;
         }
     }
 }

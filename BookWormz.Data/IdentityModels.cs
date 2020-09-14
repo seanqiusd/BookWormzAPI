@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
@@ -32,7 +33,7 @@ namespace BookWormz.Data
             }
         }
         [Required]
-        public string Address { get; set; }
+        public string State { get; set; }
 
 
         //[Required]
@@ -45,9 +46,9 @@ namespace BookWormz.Data
                 double eR = 0;
                 foreach (UserRating userRating in UserRatings)
                 {
-                    eR += userRating.ExchangeRating;
+                    eR += userRating.ExchangeRating;                    
                 }
-                return eR / UserRatings.Count;
+                return Math.Round(eR / UserRatings.Count, 2);
             }
         }
 
@@ -71,6 +72,8 @@ namespace BookWormz.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
         public DbSet<UserRating> UserRatings { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Reply> Replies { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

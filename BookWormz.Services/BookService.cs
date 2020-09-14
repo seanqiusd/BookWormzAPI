@@ -17,7 +17,6 @@ namespace BookWormz.Services
         {
             _userId = userId;
         }
-
         // Post -- Create
         public bool CreateBook(BookCreate book)
         {
@@ -37,7 +36,6 @@ namespace BookWormz.Services
                 ctx.Books.Add(entity);
                 return ctx.SaveChanges() == 1;
             }
-
         }
 
         // Get --All
@@ -61,8 +59,7 @@ namespace BookWormz.Services
                             NumberAvailable = e.NumberAvailable
                         }
                         );
-                return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api
-                    
+                return query.ToArray(); // returning BookListItem, remember don't ever return raw data from data layer; transform beforehand in service layer before sending to api                    
             }
         }
 
@@ -83,31 +80,45 @@ namespace BookWormz.Services
                     Description = entity.Description,
                     NumberAvailable = entity.NumberAvailable
                 };
-                foreach(Exchange exchange in entity.Exchanges)  // To Display All the exchanges
+                foreach (Exchange exchange in entity.Exchanges)  // To Display All the exchanges
                 {
                     detailedBook.ExchangeListItems.Add(new ExchangeSmListItem { Id = exchange.Id, IsAvailable = exchange.IsAvailable, Posted = exchange.Posted, SenderName = exchange.SenderUser.FirstName, SenderRating = exchange.SenderUser.ExchangeRating });
                 }
-
-
                 return detailedBook;
             }
-            
+        }
 
+        //Update
+        public int UpdateBookByISBN(string ISBN, BookUpdate newBook)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                Book book = ctx.Books.Find(ISBN);
+                if (book == null)
+                {
+                    return 2;
+                }
+                book.BookTitle = newBook.BookTitle;
+                book.AuthorFirstName = newBook.AuthorFirstName;
+                book.AuthorLastName = newBook.AuthorLastName;
+                book.GenreOfBook = newBook.GenreOfBook;
+                book.Description = newBook.Description;
+                if (ctx.SaveChanges() == 1)
+                    return 0;
+                return 1;
+            }
         }
 
         // Delete
-        public bool  DeleteBook(string ISBN)
+        public bool DeleteBook(string ISBN)
         {
-
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx.Books.Single(e => e.ISBN == ISBN);
                 ctx.Books.Remove(entity);
 
                 return ctx.SaveChanges() == 1;
-
             }
-
         }
     }
 }
