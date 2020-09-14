@@ -538,7 +538,7 @@
             <param name="ISBN"></param>
             <returns></returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.BookController.Put(System.String,BookWormz.Data.Book)">
+        <member name="M:BookWormz.WebApi.Controllers.BookController.Put(System.String,BookWormz.Models.BookUpdate)">
             <summary>
             Update Existing Book In Database
             </summary>
@@ -603,7 +603,14 @@
             <param name="id"></param>
             <returns>ExchangeDetail model</returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Data.Exchange)">
+        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Get(System.String)">
+            <summary>
+            Get List Of exchanges By State
+            </summary>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Models.ExchangeCreate)">
             <summary>
             Update Exchange By Exchange ID
             </summary>

@@ -17,8 +17,6 @@ namespace BookWormz.WebApi.Controllers
     [Authorize]
     public class ExchangeController : ApiController
     {
-        private ApplicationDbContext _context = new ApplicationDbContext();
-
         private ExchangeService CreateExchangeService()
         {
             var userId = User.Identity.GetUserId();
@@ -72,6 +70,20 @@ namespace BookWormz.WebApi.Controllers
             return Ok(exchange);
         }
 
+        //Get by State
+        /// <summary>
+        /// Get List Of exchanges By State
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult Get(string state)
+        {
+            var exchangeService = CreateExchangeService();
+            var exchanges = exchangeService.GetExchangesByState(state);
+            return Ok(exchanges);
+        }
+
 
         // Put by ID
         /// <summary>
@@ -80,23 +92,28 @@ namespace BookWormz.WebApi.Controllers
         /// <param name="id">Id of exchange to update</param>
         /// <param name="newExchange">Updated exchange information</param>
         /// <returns></returns>
-        public IHttpActionResult Put([FromUri] int id, [FromBody] Exchange newExchange)
+        public IHttpActionResult Put([FromUri] int id, [FromBody] ExchangeCreate newExchange)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Exchange exchange = _context.Exchanges.Find(id);
-                if (exchange == null)
-                {
-                    return BadRequest("Exchange not found");
-                }
-                exchange.BookId = newExchange.BookId;
-                exchange.Posted = newExchange.Posted;
-                exchange.SentDate = newExchange.SentDate;
-
-                _context.SaveChanges();
-                return Ok();
+                return BadRequest(ModelState);
             }
-            return NotFound();
+            var service = CreateExchangeService();
+            switch (service.UpdateExchangeById(id, newExchange))
+            {
+                case 0:
+                    return Ok("Exchange Updated");
+                case 1:
+                    return InternalServerError();
+                case 2:
+                    return BadRequest("Exchange Not Found");
+                case 3:
+                    return BadRequest("You cannot update other users exchanges");
+                case 4:
+                    return BadRequest("No Changes Made");
+                default:
+                    return InternalServerError();
+            }
         }
 
         //Request Book By ExchangeId
@@ -141,29 +158,19 @@ namespace BookWormz.WebApi.Controllers
         /// <returns></returns>
         public IHttpActionResult Delete(int id)
         {
-            Exchange exchange = _context.Exchanges.Find(id);
+            var service = CreateExchangeService();
 
-            if (exchange == null)
+            switch (service.DeleteExchangeById(id))
             {
-                return NotFound();
+                case 0:
+                    return Ok("Exchange has been deleted");
+                case 1:
+                    return InternalServerError();
+                case 2:
+                    return NotFound();
+                default:
+                    return InternalServerError();
             }
-
-            _context.Exchanges.Remove(exchange);
-            if (_context.SaveChanges() == 1)
-            {
-                return Ok("Exchange has been deleted");
-            }
-            return InternalServerError();
         }
-
-        //Get by State
-        [HttpGet]
-        public IHttpActionResult Get(string state)
-        {
-            var exchangeService = CreateExchangeService();
-            var exchanges = exchangeService.GetExchangesByState(state);
-            return Ok(exchanges);
-        }
-
     }
 }
