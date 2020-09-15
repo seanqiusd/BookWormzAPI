@@ -97,25 +97,26 @@ namespace BookWormz.UI
                     "\n" +
                     "--- Exchanges ---\n" +
                     "12.) View Exchanges\n" +
-                    "13.) Add Exchange\n" +
-                    "14.) Update Exchange\n" +
-                    "15.) Request Exchange\n" +
-                    "16.) Delete Exchange\n" +
+                    "13.) View Exchange By ID\n" +
+                    "14.) Add Exchange\n" +
+                    "15.) Update Exchange\n" +
+                    "16.) Request Exchange\n" +
+                    "17.) Delete Exchange\n" +
                     "\n" +
                     "\n" +
                     "--- Comment on Exchanges ---\n" +
-                    "17.) Add Comment\n" +
-                    "18.) Reply to Comment\n" +
+                    "18.) Add Comment\n" +
+                    "19.) Reply to Comment\n" +
                     "\n" +
                     "--- Exit ---\n" +
-                    "19.) Exit Program");
+                    "20.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":                       
+                    case "1":
                         ViewAllBooks();
                         break;
 
@@ -164,28 +165,32 @@ namespace BookWormz.UI
                         break;
 
                     case "13":
-                        AddExchange();
+                        GetExchangeById();
                         break;
 
                     case "14":
+                        AddExchange();
+                        break;
+
+                    case "15":
                         UpdateExchange();
                         break;
-                    case "15":
+                    case "16":
                         RequestExchange();
                         break;
-                    case "16":
+                    case "17":
                         DeleteExchange();
                         break;
 
-                    case "17":
+                    case "18":
                         AddComment();
                         break;
 
-                    case "18":
+                    case "19":
                         AddReply();
                         break;
 
-                    case "19":
+                    case "20":
                         return;
 
                     default:
@@ -633,6 +638,74 @@ namespace BookWormz.UI
             }
         }
 
+        private static async Task GetExchangeById()
+        {
+            Console.Clear();
+            Console.Write("Exchange ID to lookup:");
+            string userInput = Console.ReadLine();
+            Console.Clear();
+
+            var response = await _httpClient.GetAsync($"https://localhost:44331/api/Exchange/{userInput}");
+
+            if (response is null)
+            {
+                Console.WriteLine($"No exchange found with ID: {userInput}");
+                return;
+            }
+
+            ExchangeDetail exchange = response.Content.ReadAsAsync<ExchangeDetail>().Result;
+
+            Console.WriteLine($"" +
+                $"Exchange ID: {exchange.Id}\n" +
+                $"Book ISBN: {exchange.BookId}\n" +
+                $"Book Title: {exchange.BookTitle}\n" +
+                $"Posting User: {exchange.PostingUser}\n" +
+                $"Users Rating: {exchange.PostersRating}\n" +
+                $"Exchange Posted Date: {exchange.Posted}\n");
+            if (exchange.Comments.Count > 0)
+            {
+                Console.WriteLine("\n\n" +
+                    "_____________________\n" +
+                    "Comments: \n" +
+                    "_____________________");
+                foreach (var comment in exchange.Comments)
+                {
+                    string indentation = "     ";
+                    Console.WriteLine($"{indentation}Comment By:{comment.CommentersName}\n" +
+                        $"{indentation}Comment ID:{comment.Id}\n" +
+                        $"{indentation}{comment.Text}\n\n");
+                    if (comment.Replies.Count > 0)
+                    {
+                        Console.WriteLine(indentation +
+                            $"Replies to {comment.CommentersName}:");
+                        PrintReplies(comment.Replies, indentation);
+                    }
+                    Console.WriteLine("_____________________");
+                }
+            }
+        }
+
+        //Recursive method to print replies to comments and replies
+        private static void PrintReplies(ICollection<ReplyDetail> replies, string indent)
+        {
+            indent += "     ";
+            foreach (var reply in replies)
+            {
+                Console.WriteLine($"" +
+                    $"{indent}_____________________________\n" +
+                    $"{indent}Reply by: {reply.CommentorsName}\n" +
+                    $"{indent}Reply ID: {reply.Id}\n" +
+                    $"{indent}{reply.Text}");
+                if (reply.Replies.Count > 0)
+                {
+                    Console.WriteLine($"" +
+                        $"{indent}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                        $"{indent}Replies to {reply.CommentorsName}:");
+                    PrintReplies(reply.Replies, indent);
+                }
+            }
+        }
+
 
         // Add Exchange
         private static async Task AddExchange()
@@ -708,7 +781,7 @@ namespace BookWormz.UI
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Book Requested");
-            else 
+            else
                 Console.WriteLine("There was a problem with your exchange");
         }
 
@@ -777,7 +850,7 @@ namespace BookWormz.UI
             }
             List<UserRatingListItem> ratings = await ratingsresponse.Content.ReadAsAsync<List<UserRatingListItem>>();
             double? rating = await userresponse.Content.ReadAsAsync<double?>();
-            foreach(var r in ratings)
+            foreach (var r in ratings)
             {
                 Console.WriteLine($"\n" +
                     $"Exchange Id: {r.ExchangeId}\n" +
@@ -966,7 +1039,7 @@ namespace BookWormz.UI
                 {
                     Console.WriteLine($"ID: {comment.Id}\n" +
                         $"Comment: {comment.Text}\n" +
-                        $"Commenter: {comment.CommentorsName}\n" +
+                        $"Commenter: {comment.CommentersName}\n" +
                         $"Replies: {comment.Replies.Count}\n" +
                         $"\n");
                 }

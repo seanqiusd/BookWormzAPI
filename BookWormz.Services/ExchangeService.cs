@@ -79,6 +79,10 @@ namespace BookWormz.Services
                     {
                         Id = entity.Id,
                         BookId = entity.BookId,
+                        BookTitle = entity.Book.BookTitle,
+                        //using ternaries incase of null senderUser
+                        PostingUser = entity.SenderUser != null ? entity.SenderUser.FullName : null,
+                        PostersRating = entity.SenderUser != null ? entity.SenderUser.ExchangeRating : null,
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };
@@ -90,7 +94,7 @@ namespace BookWormz.Services
                     //Add comments and their replies
                     var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text,
                         //Using ternary incase of null commenter
-                        CommentorsName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
+                        CommentersName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
                         //Using recursive Method to populate replies
                         Replies = AddReplies(comment.Replies) };
                     detailedExchange.Comments.Add(commentDetail);

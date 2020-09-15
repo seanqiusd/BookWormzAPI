@@ -83,10 +83,14 @@ namespace BookWormz.Services
 
         // Put -- Update Reply by Id
         public bool UpdateReply(int id, ReplyUpdate reply)
-        {
+        {            
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx.Replies.Single(e => e.Id == id);
+
+                //Make sure only original commenter can update comment
+                if (entity.CommenterId != _userId)
+                    return false;
 
                 entity.Text = reply.CommentText;
 
@@ -100,6 +104,11 @@ namespace BookWormz.Services
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx.Replies.Single(e => e.Id == Id);
+
+                //Make sure only commenter can delete comment
+                if (entity.CommenterId != _userId)
+                    return false;
+
                 ctx.Comments.Remove(entity);
 
                 return ctx.SaveChanges() == 1;
@@ -108,7 +117,7 @@ namespace BookWormz.Services
 
 
 
-        //Recursive function to Add replies
+        //Recursive function to populate replies list replies
         private List<ReplyDetail> AddReplies(ICollection<Reply> replies)
         {
             if (replies.Count == 0)
