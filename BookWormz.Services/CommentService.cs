@@ -30,9 +30,6 @@ namespace BookWormz.Services
 
             using (var ctx = new ApplicationDbContext())
             {
-                foreach (Comment comment in ctx.Comments)
-                    if (comment.Id == entity.ExchangeId)
-                        return false;
 
                 ctx.Comments.Add(entity);
                 return ctx.SaveChanges() == 1;
