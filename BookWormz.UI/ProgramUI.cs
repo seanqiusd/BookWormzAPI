@@ -101,8 +101,13 @@ namespace BookWormz.UI
                     "14.) Update Exchange\n" +
                     "15.) Request Exchange\n" +
                     "16.) Delete Exchange\n" +
+                    "\n" +
+                    "\n" +
+                    "--- Comment on Exchanges ---\n" +
+                    "17.) Add Comment\n" +
+                    "\n" +
                     "--- Exit ---\n" +
-                    "17.) Exit Program");
+                    "18.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
@@ -172,6 +177,10 @@ namespace BookWormz.UI
                         break;
 
                     case "17":
+                        AddComment();
+                        break;
+
+                    case "18":
                         return;
 
                     default:
@@ -894,7 +903,46 @@ namespace BookWormz.UI
             else
                 Console.WriteLine("Book could not be deleted");
         }
+
+
+
+        // Create Comment
+        private static async Task AddComment()
+        {
+
+            GetExchanges().Wait();
+
+            Console.WriteLine("Enter your Exchange ID and and Comment below\n");
+            Console.Write("Exchange ID: ");
+            Dictionary<string, string> comment = new Dictionary<string, string>();
+
+            string exchangeIdInput = Console.ReadLine();
+            comment.Add("ExchangeId", exchangeIdInput);
+
+            Console.Write("Comment: ");
+            string commentInput = Console.ReadLine();
+            comment.Add("CommentText", commentInput);
+
+
+
+
+
+            //HttpClient httpClient = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Comment");
+            request.Content = new FormUrlEncodedContent(comment.AsEnumerable());
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Comment was added");
+            else
+                Console.WriteLine("There was a problem adding your Comment");
+
+        }
     }
+
+
 
     // Helper class for token
     public class Token
