@@ -94,7 +94,7 @@ namespace BookWormz.Services
                     //Add comments and their replies
                     var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text,
                         //Using ternary incase of null commenter
-                        CommentorsName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
+                        CommentersName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
                         //Using recursive Method to populate replies
                         Replies = AddReplies(comment.Replies) };
                     detailedExchange.Comments.Add(commentDetail);

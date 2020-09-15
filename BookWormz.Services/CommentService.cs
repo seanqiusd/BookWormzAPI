@@ -77,7 +77,7 @@ namespace BookWormz.Services
                     Id = entity.Id,
                     Text = entity.Text,
                     //Using ternary incase of nulled commenter
-                    CommentorsName = entity.Commenter != null ? entity.Commenter.FullName : "Unknown",
+                    CommentersName = entity.Commenter != null ? entity.Commenter.FullName : "Unknown",
                     Replies = AddReplies(entity.Replies)
                 };
                 return detailedComment;

@@ -671,13 +671,13 @@ namespace BookWormz.UI
                 foreach (var comment in exchange.Comments)
                 {
                     string indentation = "     ";
-                    Console.WriteLine($"{indentation}Comment By:{comment.CommentorsName}\n" +
+                    Console.WriteLine($"{indentation}Comment By:{comment.CommentersName}\n" +
                         $"{indentation}Comment ID:{comment.Id}\n" +
                         $"{indentation}{comment.Text}\n\n");
                     if (comment.Replies.Count > 0)
                     {
                         Console.WriteLine(indentation +
-                            $"Replies to {comment.CommentorsName}:");
+                            $"Replies to {comment.CommentersName}:");
                         PrintReplies(comment.Replies, indentation);
                     }
                     Console.WriteLine("_____________________");
@@ -1039,7 +1039,7 @@ namespace BookWormz.UI
                 {
                     Console.WriteLine($"ID: {comment.Id}\n" +
                         $"Comment: {comment.Text}\n" +
-                        $"Commenter: {comment.CommentorsName}\n" +
+                        $"Commenter: {comment.CommentersName}\n" +
                         $"Replies: {comment.Replies.Count}\n" +
                         $"\n");
                 }
