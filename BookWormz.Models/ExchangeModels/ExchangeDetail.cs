@@ -15,10 +15,19 @@ namespace BookWormz.Models
         [Display(Name = "Book ID")]
         public string BookId { get; set; }
 
+        [Display(Name = "Book Title")]
+        public string BookTitle { get; set; }
+
+        [Display(Name = "Posting User")]
+        public string PostingUser { get; set; }
+
+        [Display(Name = "Poster's Rating")]
+        public double? PostersRating { get; set; }
+
         [Display(Name = "Date Posted")]
         public DateTime Posted { get; set; }
 
-        [Display(Name ="Sent Date")]
+        [Display(Name = "Sent Date")]
         public DateTime? SentDate { get; set; }
 
         public virtual ICollection<CommentDetail> Comments { get; set; } = new List<CommentDetail>();

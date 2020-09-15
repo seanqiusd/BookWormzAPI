@@ -79,6 +79,9 @@ namespace BookWormz.Services
                     {
                         Id = entity.Id,
                         BookId = entity.BookId,
+                        BookTitle = entity.Book.BookTitle,
+                        PostingUser = entity.SenderUser.FullName,
+                        PostersRating = entity.SenderUser.ExchangeRating,
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };

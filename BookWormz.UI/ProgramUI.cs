@@ -114,7 +114,7 @@ namespace BookWormz.UI
                 string userInput = Console.ReadLine();
                 switch (userInput)
                 {
-                    case "1":                       
+                    case "1":
                         ViewAllBooks();
                         break;
 
@@ -628,6 +628,72 @@ namespace BookWormz.UI
             }
         }
 
+        private static async Task GetExchangeById()
+        {
+            Console.Clear();
+            Console.Write("Exchange ID to lookup:");
+            string userInput = Console.ReadLine();
+            Console.Clear();
+
+            var response = await _httpClient.GetAsync($"https://localhost:44331/api/Exchange/{userInput}");
+
+            if (response is null)
+            {
+                Console.WriteLine($"No exchange found with ID: {userInput}");
+                return;
+            }
+
+            ExchangeDetail exchange = response.Content.ReadAsAsync<ExchangeDetail>().Result;
+
+            Console.WriteLine($"" +
+                $"Exchange ID: {exchange.Id}\n" +
+                $"Book ISBN: {exchange.BookId}\n" +
+                $"Book Title: {exchange.BookTitle}\n" +
+                $"Posting User: {exchange.PostingUser}\n" +
+                $"Users Rating: {exchange.PostersRating}\n" +
+                $"Exchange Posted Date: {exchange.Posted}\n");
+            if (exchange.Comments.Count > 0)
+            {
+                Console.WriteLine("\n\n" +
+                    "_____________________\n" +
+                    "Comments: \n" +
+                    "_____________________");
+                foreach (var comment in exchange.Comments)
+                {
+                    string indentation = "     ";
+                    Console.WriteLine($"{indentation}Comment By:{comment.CommentorsName}\n" +
+                        $"{indentation}{comment.Text}\n\n");
+                    if (comment.Replies.Count > 0)
+                    {
+                        Console.WriteLine(indentation +
+                            $"Replies to {comment.CommentorsName}:");
+                        PrintReplies(comment.Replies, indentation);
+                    }
+                    Console.WriteLine("_____________________");
+                }
+            }
+        }
+
+        //Recursive method to print replies to comments and replies
+        private static void PrintReplies(ICollection<ReplyDetail> replies, string indent)
+        {
+            indent += "     ";
+            foreach (var reply in replies)
+            {
+                Console.WriteLine($"" +
+                    $"{indent}_____________________________\n" +
+                    $"{indent}Reply by: {reply.CommentorsName}\n" +
+                    $"{indent}{reply.Text}");
+                if (reply.Replies.Count > 0)
+                {
+                    Console.WriteLine($"" +
+                        $"{indent}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                        $"{indent}Replies to {reply.CommentorsName}:");
+                    PrintReplies(reply.Replies, indent);
+                }
+            }
+        }
+
 
         // Add Exchange
         private static async Task AddExchange()
@@ -703,7 +769,7 @@ namespace BookWormz.UI
 
             if (response.IsSuccessStatusCode)
                 Console.WriteLine("Book Requested");
-            else 
+            else
                 Console.WriteLine("There was a problem with your exchange");
         }
 
@@ -772,7 +838,7 @@ namespace BookWormz.UI
             }
             List<UserRatingListItem> ratings = await ratingsresponse.Content.ReadAsAsync<List<UserRatingListItem>>();
             double? rating = await userresponse.Content.ReadAsAsync<double?>();
-            foreach(var r in ratings)
+            foreach (var r in ratings)
             {
                 Console.WriteLine($"\n" +
                     $"Exchange Id: {r.ExchangeId}\n" +
