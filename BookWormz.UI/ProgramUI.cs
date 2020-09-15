@@ -105,9 +105,10 @@ namespace BookWormz.UI
                     "\n" +
                     "--- Comment on Exchanges ---\n" +
                     "17.) Add Comment\n" +
+                    "18.) Reply to Comment\n" +
                     "\n" +
                     "--- Exit ---\n" +
-                    "18.) Exit Program");
+                    "19.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
@@ -181,6 +182,10 @@ namespace BookWormz.UI
                         break;
 
                     case "18":
+                        AddReply();
+                        break;
+
+                    case "19":
                         return;
 
                     default:
@@ -1006,6 +1011,61 @@ namespace BookWormz.UI
                 Console.WriteLine("There was a problem adding your Comment");
 
         }
+
+
+
+        // Get Comments
+        private static async Task GetComments()
+        {
+            Console.Clear();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:44331/api/Comment");
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response != null)
+            {
+                var json = response.Content.ReadAsStringAsync().Result;
+                var list = JsonConvert.DeserializeObject<List<CommentDetail>>(json);
+
+                foreach (CommentDetail comment in list)
+                {
+                    Console.WriteLine($"ID: {comment.Id}\n" +
+                        $"Comment: {comment.Text}\n" +
+                        $"Commenter: {comment.CommentorsName}\n" +
+                        $"Replies: {comment.Replies.Count}\n" +
+                        $"\n");
+                }
+            }
+        }
+
+        // Create Reply with list of comments
+        private static async Task AddReply()
+        {
+
+            GetComments().Wait();
+
+            Console.Write("Enter Comment ID you'd like to reply too: ");
+            Dictionary<string, string> reply = new Dictionary<string, string>();
+
+            string commentIdInput = Console.ReadLine();
+            reply.Add("CommentId", commentIdInput);
+
+            Console.Write("Reply: ");
+            string replyInput = Console.ReadLine();
+            reply.Add("CommentText", replyInput);
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44331/api/Reply");
+            request.Content = new FormUrlEncodedContent(reply.AsEnumerable());
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+                Console.WriteLine("Reply was added");
+            else
+                Console.WriteLine("There was a problem adding your Reply");
+        }
+
     }
 
 
