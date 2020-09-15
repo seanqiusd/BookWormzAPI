@@ -843,8 +843,6 @@ namespace BookWormz.UI
             Dictionary<string, string> rating = new Dictionary<string, string>();
 
             string exchangeIdInput = Console.ReadLine();
-            rating.Add("ExchangeId", exchangeIdInput);
-
             Console.Write("Exchange Rating: ");
             string exchangeRatingInput = Console.ReadLine();
             rating.Add("ExchangeRating", exchangeRatingInput);
