@@ -97,18 +97,19 @@ namespace BookWormz.UI
                     "\n" +
                     "--- Exchanges ---\n" +
                     "12.) View Exchanges\n" +
-                    "13.) Add Exchange\n" +
-                    "14.) Update Exchange\n" +
-                    "15.) Request Exchange\n" +
-                    "16.) Delete Exchange\n" +
+                    "13.) View Exchange By ID\n" +
+                    "14.) Add Exchange\n" +
+                    "15.) Update Exchange\n" +
+                    "16.) Request Exchange\n" +
+                    "17.) Delete Exchange\n" +
                     "\n" +
                     "\n" +
                     "--- Comment on Exchanges ---\n" +
-                    "17.) Add Comment\n" +
-                    "18.) Reply to Comment\n" +
+                    "18.) Add Comment\n" +
+                    "19.) Reply to Comment\n" +
                     "\n" +
                     "--- Exit ---\n" +
-                    "19.) Exit Program");
+                    "20.) Exit Program");
 
                 Console.Write("Enter a #: ");
 
@@ -164,28 +165,32 @@ namespace BookWormz.UI
                         break;
 
                     case "13":
-                        AddExchange();
+                        GetExchangeById();
                         break;
 
                     case "14":
+                        AddExchange();
+                        break;
+
+                    case "15":
                         UpdateExchange();
                         break;
-                    case "15":
+                    case "16":
                         RequestExchange();
                         break;
-                    case "16":
+                    case "17":
                         DeleteExchange();
                         break;
 
-                    case "17":
+                    case "18":
                         AddComment();
                         break;
 
-                    case "18":
+                    case "19":
                         AddReply();
                         break;
 
-                    case "19":
+                    case "20":
                         return;
 
                     default:
@@ -667,6 +672,7 @@ namespace BookWormz.UI
                 {
                     string indentation = "     ";
                     Console.WriteLine($"{indentation}Comment By:{comment.CommentorsName}\n" +
+                        $"{indentation}Comment ID:{comment.Id}\n" +
                         $"{indentation}{comment.Text}\n\n");
                     if (comment.Replies.Count > 0)
                     {
@@ -688,6 +694,7 @@ namespace BookWormz.UI
                 Console.WriteLine($"" +
                     $"{indent}_____________________________\n" +
                     $"{indent}Reply by: {reply.CommentorsName}\n" +
+                    $"{indent}Reply ID: {reply.Id}\n" +
                     $"{indent}{reply.Text}");
                 if (reply.Replies.Count > 0)
                 {

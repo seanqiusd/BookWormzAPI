@@ -80,8 +80,9 @@ namespace BookWormz.Services
                         Id = entity.Id,
                         BookId = entity.BookId,
                         BookTitle = entity.Book.BookTitle,
-                        PostingUser = entity.SenderUser.FullName,
-                        PostersRating = entity.SenderUser.ExchangeRating,
+                        //using ternaries incase of null senderUser
+                        PostingUser = entity.SenderUser != null ? entity.SenderUser.FullName : null,
+                        PostersRating = entity.SenderUser != null ? entity.SenderUser.ExchangeRating : null,
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };
