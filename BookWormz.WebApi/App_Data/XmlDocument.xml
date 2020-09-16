@@ -624,7 +624,7 @@
             <param name="state"></param>
             <returns></returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Models.ExchangeCreate)">
+        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Models.ExchangeModels.ExchangeUpdate)">
             <summary>
             Update Exchange By Exchange ID
             </summary>
