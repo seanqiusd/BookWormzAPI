@@ -1,5 +1,6 @@
 ﻿using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.ExchangeModels;
 using BookWormz.Services;
 using Microsoft.AspNet.Identity;
 using System;
@@ -92,7 +93,7 @@ namespace BookWormz.WebApi.Controllers
         /// <param name="id">Id of exchange to update</param>
         /// <param name="newExchange">Updated exchange information</param>
         /// <returns></returns>
-        public IHttpActionResult Put([FromUri] int id, [FromBody] ExchangeCreate newExchange)
+        public IHttpActionResult Put([FromUri] int id, [FromBody] ExchangeUpdate newExchange)
         {
             if (!ModelState.IsValid)
             {

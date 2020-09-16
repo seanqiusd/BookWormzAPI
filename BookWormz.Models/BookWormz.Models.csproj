@@ -72,6 +72,7 @@
     <Compile Include="ExchangeModels\ExchangeDetail.cs" />
     <Compile Include="ExchangeModels\ExchangeListItem.cs" />
     <Compile Include="ExchangeModels\ExchangeSmListItem.cs" />
+    <Compile Include="ExchangeModels\ExchangeUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplyModels\ReplyCreate.cs" />
     <Compile Include="ReplyModels\ReplyDetail.cs" />

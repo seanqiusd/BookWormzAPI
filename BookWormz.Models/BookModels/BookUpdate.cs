@@ -10,20 +10,15 @@ namespace BookWormz.Models
 {
     public class BookUpdate
     {
-        [Required]
         [MinLength(1, ErrorMessage = "At least 1 character")]
         public string BookTitle { get; set; }
 
-        [Required]
         public string AuthorFirstName { get; set; }
 
-        [Required]
         public string AuthorLastName { get; set; }
 
-        [Required]
-        public BookGenre GenreOfBook { get; set; }
+        public BookGenre? GenreOfBook { get; set; }
 
-        [Required]
         [MinLength(15, ErrorMessage = "At least 15 characters")]
         public string Description { get; set; }
     }

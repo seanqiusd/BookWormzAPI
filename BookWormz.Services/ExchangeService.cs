@@ -1,5 +1,6 @@
 ﻿using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.ExchangeModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,7 +129,7 @@ namespace BookWormz.Services
             }
         }
 
-        public int UpdateExchangeById(int id, ExchangeCreate newExchange)
+        public int UpdateExchangeById(int id, ExchangeUpdate newExchange)
         {
             Exchange exchange = _context.Exchanges.Find(id);
             if (exchange == null)
@@ -139,13 +140,14 @@ namespace BookWormz.Services
             {
                 return 3;
             }
-            
-            exchange.BookId = newExchange.BookId;
-            exchange.Posted = newExchange.Posted;
-            exchange.SentDate = newExchange.SentDate;
-            exchange.ReceiverId = newExchange.ReceiverUser;
 
-            if (newExchange.ReceiverUser == null)
+            //Using null-coalescing operator ?? to check if information entered to update
+            exchange.BookId = newExchange.BookId ?? exchange.BookId;
+            exchange.Posted = newExchange.Posted ?? exchange.Posted;
+            exchange.SentDate = newExchange.SentDate ?? exchange.SentDate;
+            exchange.ReceiverId = newExchange.ReceiverId ?? exchange.ReceiverId;
+
+            if (newExchange.ReceiverId == null)
                 exchange.IsAvailable = true;
             else
                 exchange.IsAvailable = false;
@@ -156,6 +158,7 @@ namespace BookWormz.Services
             //If no changes are saved
             if (num == 0)
                 return 4;
+
             return 1;
         }
         public int RequestExchange(int id)
