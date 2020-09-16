@@ -486,6 +486,12 @@
             Create And Manage Accounts
             </summary>
         </member>
+        <member name="M:BookWormz.WebApi.Controllers.AccountController.GetUserInfo">
+            <summary>
+            Gets base userinfo 
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:BookWormz.WebApi.Controllers.AccountController.ChangePassword(BookWormz.WebApi.Models.ChangePasswordBindingModel)">
             <summary>
             Allows For Change Of Password
