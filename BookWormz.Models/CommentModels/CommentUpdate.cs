@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models
 {
-    public class ReplyDetail
+    public class CommentUpdate
     {
-        [Display(Name ="Id")]
-        public int Id { get; set; }
-
-        [Display(Name ="Reply")]
-        public string Text { get; set; }
-
-
-
+        [Required]
+        [MaxLength(8000)]
+        public string CommentText { get; set; }
     }
 }

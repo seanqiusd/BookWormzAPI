@@ -486,6 +486,12 @@
             Create And Manage Accounts
             </summary>
         </member>
+        <member name="M:BookWormz.WebApi.Controllers.AccountController.GetUserInfo">
+            <summary>
+            Gets base userinfo 
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:BookWormz.WebApi.Controllers.AccountController.ChangePassword(BookWormz.WebApi.Models.ChangePasswordBindingModel)">
             <summary>
             Allows For Change Of Password
@@ -511,18 +517,18 @@
             Crud For Book Entities
             </summary>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.BookController.Get">
-            <summary>
-            Get All Books
-            </summary>
-            <returns>Returns BookListItem Object of all books in database</returns>
-        </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Post(BookWormz.Models.BookCreate)">
             <summary>
             Create New Book In Database
             </summary>
             <param name="book"></param>
             <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.BookController.Get">
+            <summary>
+            Get All Books
+            </summary>
+            <returns>Returns BookListItem Object of all books in database</returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Get(System.String)">
             <summary>
@@ -531,19 +537,19 @@
             <param name="ISBN"></param>
             <returns>Returns BookDetail Model</returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.BookController.Delete(System.String)">
-            <summary>
-            Remove Book From Database
-            </summary>
-            <param name="ISBN"></param>
-            <returns></returns>
-        </member>
         <member name="M:BookWormz.WebApi.Controllers.BookController.Put(System.String,BookWormz.Models.BookUpdate)">
             <summary>
             Update Existing Book In Database
             </summary>
             <param name="ISBN"></param>
             <param name="newBook"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.BookController.Delete(System.String)">
+            <summary>
+            Remove Book From Database
+            </summary>
+            <param name="ISBN"></param>
             <returns></returns>
         </member>
         <member name="T:BookWormz.WebApi.Controllers.CommentController">
@@ -570,6 +576,14 @@
             </summary>
             <param name="Id"></param>
             <returns>Returns CommentDetail Model</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.CommentController.UpdateComment(System.Int32,BookWormz.Models.CommentUpdate)">
+            <summary>
+            Update Comment Text By Id
+            </summary>
+            <param name="id"></param>
+            <param name="commentUpdate"></param>
+            <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.CommentController.Delete(System.Int32)">
             <summary>
@@ -610,7 +624,7 @@
             <param name="state"></param>
             <returns></returns>
         </member>
-        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Models.ExchangeCreate)">
+        <member name="M:BookWormz.WebApi.Controllers.ExchangeController.Put(System.Int32,BookWormz.Models.ExchangeModels.ExchangeUpdate)">
             <summary>
             Update Exchange By Exchange ID
             </summary>
@@ -656,6 +670,14 @@
             </summary>
             <param name="Id"></param>
             <returns>Returns ReplyDetail Model</returns>
+        </member>
+        <member name="M:BookWormz.WebApi.Controllers.ReplyController.UpdateReply(System.Int32,BookWormz.Models.ReplyModels.ReplyUpdate)">
+            <summary>
+            Update Reply text By Id
+            </summary>
+            <param name="id"></param>
+            <param name="reply"></param>
+            <returns></returns>
         </member>
         <member name="M:BookWormz.WebApi.Controllers.ReplyController.Delete(System.Int32)">
             <summary>

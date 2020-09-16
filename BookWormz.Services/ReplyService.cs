@@ -1,5 +1,6 @@
 ﻿using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.ReplyModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace BookWormz.Services
 {
     public class ReplyService
     {
-        private readonly Guid _userId;
+        private readonly string _userId;
 
-        public ReplyService(Guid userId)
+        public ReplyService(string userId)
         {
             _userId = userId;
         }
@@ -24,14 +25,14 @@ namespace BookWormz.Services
             {
                 Text = model.CommentText,
                 CommentId = model.CommentId,
-                ExchangeId = model.ExchangeId
+                //Using user Id to identify commenter
+                CommenterId = _userId
             };
 
             using (var ctx = new ApplicationDbContext())
             {
-                foreach (Reply reply in ctx.Replies)
-                    if (reply.Id == entity.ExchangeId)
-                        return false;
+                // grabbing exchange Id from comment
+                entity.ExchangeId = ctx.Comments.Single(e => e.Id == entity.CommentId).ExchangeId;                
 
                 ctx.Comments.Add(entity);
                 return ctx.SaveChanges() == 1; 
@@ -54,6 +55,7 @@ namespace BookWormz.Services
                         {
                             ExchangeId = e.ExchangeId,
                             Text = e.Text,
+                            RepliersName = e.Commenter != null ? e.Commenter.FullName : "unknown"
                         }
                         );
                 return query.ToArray();
@@ -71,9 +73,28 @@ namespace BookWormz.Services
                 var detailedReply = new ReplyDetail
                 {
                     Id = entity.Id,
-                    Text = entity.Text
+                    Text = entity.Text,
+                    CommentorsName = entity.Commenter != null ? entity.Commenter.FullName : "unknown",
+                    Replies = AddReplies(entity.Replies)
                 };
                 return detailedReply;
+            }
+        }
+
+        // Put -- Update Reply by Id
+        public bool UpdateReply(int id, ReplyUpdate reply)
+        {            
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity = ctx.Replies.Single(e => e.Id == id);
+
+                //Make sure only original commenter can update comment
+                if (entity.CommenterId != _userId)
+                    return false;
+
+                entity.Text = reply.CommentText;
+
+                return ctx.SaveChanges() == 1;
             }
         }
 
@@ -83,10 +104,43 @@ namespace BookWormz.Services
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx.Replies.Single(e => e.Id == Id);
+
+                //Make sure only commenter can delete comment
+                if (entity.CommenterId != _userId)
+                    return false;
+
                 ctx.Comments.Remove(entity);
 
                 return ctx.SaveChanges() == 1;
             }
         }
+
+
+
+        //Recursive function to populate replies list replies
+        private List<ReplyDetail> AddReplies(ICollection<Reply> replies)
+        {
+            if (replies.Count == 0)
+                return new List<ReplyDetail>();
+
+            var DetailedReplies = new List<ReplyDetail>();
+
+            foreach (var reply in replies)
+            {
+                var DetailedReply = new ReplyDetail
+                {
+                    Id = reply.Id,
+                    Text = reply.Text,
+                    //Using ternary incase of comment not having author(corrupt data)
+                    CommentorsName = (reply.Comment != null ? reply.Commenter.FullName : "Unknown")
+                };
+                DetailedReply.Replies = AddReplies(reply.Replies);
+                DetailedReplies.Add(DetailedReply);
+            }
+            return DetailedReplies;
+        }
+
+
+        ///testingsomething
     }
 }

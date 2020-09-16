@@ -98,11 +98,12 @@ namespace BookWormz.Services
                 {
                     return 2;
                 }
-                book.BookTitle = newBook.BookTitle;
-                book.AuthorFirstName = newBook.AuthorFirstName;
-                book.AuthorLastName = newBook.AuthorLastName;
-                book.GenreOfBook = newBook.GenreOfBook;
-                book.Description = newBook.Description;
+                //Using null-coalescing operator ?? to check if information entered to update
+                book.BookTitle = newBook.BookTitle ?? book.BookTitle;
+                book.AuthorFirstName = newBook.AuthorFirstName ?? book.AuthorFirstName;
+                book.AuthorLastName = newBook.AuthorLastName ?? book.AuthorLastName;
+                book.GenreOfBook = newBook.GenreOfBook ?? book.GenreOfBook;
+                book.Description = newBook.Description ?? book.Description; 
                 if (ctx.SaveChanges() == 1)
                     return 0;
                 return 1;

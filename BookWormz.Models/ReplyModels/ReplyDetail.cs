@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace BookWormz.Models
 {
-    public class CommentDetail
+    public class ReplyDetail
     {
-        [Display(Name = "Id")]
+        [Display(Name ="Id")]
         public int Id { get; set; }
 
-        [Display(Name ="Comment")]
+        [Display(Name ="Reply")]
         public string Text { get; set; }
 
-        public virtual ICollection<ReplyDetail> Replies { get; set; } = new List<ReplyDetail>();
+        [Display(Name ="Commentor's Name")]
+        public string CommentorsName { get; set; }
+
+        public List<ReplyDetail> Replies { get; set; } = new List<ReplyDetail>();
     }
 }

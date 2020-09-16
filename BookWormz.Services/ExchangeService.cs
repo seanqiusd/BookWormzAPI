@@ -1,5 +1,6 @@
 ﻿using BookWormz.Data;
 using BookWormz.Models;
+using BookWormz.Models.ExchangeModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,12 +80,25 @@ namespace BookWormz.Services
                     {
                         Id = entity.Id,
                         BookId = entity.BookId,
+                        BookTitle = entity.Book.BookTitle,
+                        //using ternaries incase of null senderUser
+                        PostingUser = entity.SenderUser != null ? entity.SenderUser.FullName : null,
+                        PostersRating = entity.SenderUser != null ? entity.SenderUser.ExchangeRating : null,
                         Posted = entity.Posted,
                         SentDate = entity.SentDate
                     };
                 foreach (Comment comment in entity.Comments)
                 {
-                    detailedExchange.Comments.Add(new CommentDetail { Id = comment.Id, Text = comment.Text });
+                    //If comment is Reply it will attach to its comment so can be skipped
+                    if (comment is Reply)
+                        continue;
+                    //Add comments and their replies
+                    var commentDetail = new CommentDetail { Id = comment.Id, Text = comment.Text,
+                        //Using ternary incase of null commenter
+                        CommentersName = comment.Commenter != null ? comment.Commenter.FullName : "Unknown",
+                        //Using recursive Method to populate replies
+                        Replies = AddReplies(comment.Replies) };
+                    detailedExchange.Comments.Add(commentDetail);
                 }
                 return detailedExchange;
             }
@@ -115,7 +129,7 @@ namespace BookWormz.Services
             }
         }
 
-        public int UpdateExchangeById(int id, ExchangeCreate newExchange)
+        public int UpdateExchangeById(int id, ExchangeUpdate newExchange)
         {
             Exchange exchange = _context.Exchanges.Find(id);
             if (exchange == null)
@@ -126,13 +140,14 @@ namespace BookWormz.Services
             {
                 return 3;
             }
-            
-            exchange.BookId = newExchange.BookId;
-            exchange.Posted = newExchange.Posted;
-            exchange.SentDate = newExchange.SentDate;
-            exchange.ReceiverId = newExchange.ReceiverUser;
 
-            if (newExchange.ReceiverUser == null)
+            //Using null-coalescing operator ?? to check if information entered to update
+            exchange.BookId = newExchange.BookId ?? exchange.BookId;
+            exchange.Posted = newExchange.Posted ?? exchange.Posted;
+            exchange.SentDate = newExchange.SentDate ?? exchange.SentDate;
+            exchange.ReceiverId = newExchange.ReceiverId ?? exchange.ReceiverId;
+
+            if (newExchange.ReceiverId == null)
                 exchange.IsAvailable = true;
             else
                 exchange.IsAvailable = false;
@@ -143,6 +158,7 @@ namespace BookWormz.Services
             //If no changes are saved
             if (num == 0)
                 return 4;
+
             return 1;
         }
         public int RequestExchange(int id)
@@ -180,6 +196,24 @@ namespace BookWormz.Services
                 return 0;
             }
             return 1;
+        }
+
+        //Recursive function to Add replies
+        private List<ReplyDetail> AddReplies(ICollection<Reply> replies)
+        {
+            if (replies.Count == 0)
+                return new List<ReplyDetail>();
+
+            var DetailedReplies = new List<ReplyDetail>();
+
+            foreach (var reply in replies)
+            {
+                var DetailedReply = new ReplyDetail { Id = reply.Id, Text = reply.Text,
+                    CommentorsName = reply.Commenter != null ? reply.Commenter.FullName : "Unknown"};
+                DetailedReply.Replies = AddReplies(reply.Replies);
+                DetailedReplies.Add(DetailedReply);
+            }
+            return DetailedReplies;
         }
     }
 }

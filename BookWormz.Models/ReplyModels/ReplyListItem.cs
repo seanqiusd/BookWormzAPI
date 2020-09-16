@@ -9,12 +9,13 @@ namespace BookWormz.Models
 {
     public class ReplyListItem
     {
-        public int Id { get; set; }
-        [Display(Name = "Exchange Id")]
         public int ExchangeId { get; set; }
 
         [Display(Name = "Text")]
         public string Text { get; set; }
+
+        [Display(Name ="Replier")]
+        public string RepliersName { get; set; }
 
     }
 }

@@ -71,6 +71,23 @@ namespace BookWormz.WebApi.Controllers
             return Ok(comment);
         }
 
+
+        // Update comment
+        /// <summary>
+        /// Update Comment Text By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="commentUpdate"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public IHttpActionResult UpdateComment([FromUri]int id, [FromBody] CommentUpdate commentUpdate)
+        {
+            var service = CreateCommentService();
+            if (service.UpdateComment(id, commentUpdate))
+                return Ok("Reply Updated");
+            return InternalServerError();
+        }
+
         // Delete comment
         /// <summary>
         /// Remove Comment From Database By ID
@@ -86,9 +103,5 @@ namespace BookWormz.WebApi.Controllers
             }
             return Ok($"Comment Id: {Id} has been deleted");
         }
-
-
-
-
     }
 }
